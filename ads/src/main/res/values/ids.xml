@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="native_ad_main_image" type="id"/>
+    <item name="native_ad_icon_image" type="id"/>
+    <item name="native_ad_title" type="id"/>
+    <item name="native_ad_text" type="id"/>
+    <item name="native_ad_call_to_action" type="id"/>
+    <item name="native_ad_privacy_information_icon_image" type="id"/>
+    <item name="native_ad_media_layout" type="id"/>
+    <item name="native_ad_choices_relative_layout" type="id"/>
+    <item name="native_ad_fb_media" type="id"/>
+    <item name="native_ad_fb_icon_image" type="id"/>
+</resources>
