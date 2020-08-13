@@ -17,8 +17,8 @@ import mobi.idealabs.ads.report.ActivityLifeManager
 import mobi.idealabs.ads.report.utils.LogUtil
 import java.lang.ref.WeakReference
 
-class AdInterstitial(activity: Activity, adUnitId: String) :
-    MoPubInterstitial(activity, adUnitId) {
+class AdInterstitial(activity: Activity, val adsUnitId: String) :
+    MoPubInterstitial(activity, adsUnitId) {
     private val adInterstitialView: AdInterstitialView
     private var mCustomEventInterstitialAdapter: CustomEventInterstitialAdapter? = null
 
@@ -32,7 +32,7 @@ class AdInterstitial(activity: Activity, adUnitId: String) :
                 if (currentActivity != null) {
                     updateActivity(currentActivity)
                 } else {
-                    AdSdk.findAdPlacement(adUnitId)?.also {
+                    AdSdk.findAdPlacement(adsUnitId)?.also {
                         AdInterstitialController.destroyAdPlacement(it)
                     }
                 }
@@ -54,7 +54,7 @@ class AdInterstitial(activity: Activity, adUnitId: String) :
     init {
         adInterstitialView =
             AdInterstitialView(activity.application).apply {
-                this.adUnitId = this@AdInterstitial.adUnitId
+                this.adUnitId = this@AdInterstitial.adsUnitId
             }
         updateActivity(activity)
         clearMopubInterstitial()
@@ -85,7 +85,8 @@ class AdInterstitial(activity: Activity, adUnitId: String) :
     }
 
 
-    inner class AdInterstitialView(context: Context) : MoPubInterstitial.MoPubInterstitialView(context) {
+    inner class AdInterstitialView(context: Context) :
+        MoPubInterstitial.MoPubInterstitialView(context) {
         override fun loadCustomEvent(
             customEventClassName: String?,
             serverExtras: MutableMap<String, String>?

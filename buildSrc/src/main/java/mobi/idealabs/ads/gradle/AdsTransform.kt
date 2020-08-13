@@ -2,6 +2,7 @@ package mobi.idealabs.ads.gradle
 
 import com.android.build.api.transform.*
 import com.android.build.gradle.internal.pipeline.TransformManager
+import mobi.idealabs.ads.asm.MopubClassChecker
 import mobi.idealabs.ads.asm.MopubMethodAdapter
 import org.apache.commons.codec.digest.DigestUtils
 import org.apache.commons.io.FileUtils
@@ -9,6 +10,7 @@ import org.apache.commons.io.IOUtils
 import org.gradle.api.Project
 import org.objectweb.asm.ClassReader
 import org.objectweb.asm.ClassWriter
+import org.objectweb.asm.Opcodes
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -140,16 +142,16 @@ class AdsTransform(val project: Project) : Transform() {
 
     private fun processClass(fileInputStream: InputStream): ByteArray {
         val classReader = ClassReader(fileInputStream)
-        val classWriter = ClassWriter(classReader, ClassWriter.COMPUTE_MAXS)
+        val classWriter = ClassWriter(classReader, 0)
         //创建类访问器   并交给它去处理
-        val adapter = MopubMethodAdapter(classVisitor = classWriter)
-        classReader.accept(adapter, ClassReader.EXPAND_FRAMES)
+        val adapter = MopubMethodAdapter(api = Opcodes.ASM7, classVisitor = classWriter)
+        classReader.accept(adapter, ClassReader.SKIP_FRAMES)
         return classWriter.toByteArray()
     }
 
     private fun isProcessClass(name: String): Boolean {
-        println("class name: $name")
-        return false
+        return MopubClassChecker.isModifyClass(name)
+
     }
 
     fun File.eachFileRecurse(function: (File) -> Unit) {

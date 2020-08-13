@@ -28,12 +28,11 @@ class MopubMethodAdapter constructor(api: Int = Opcodes.ASM7, classVisitor: Clas
         version: Int,
         access: Int,
         name: String,
-        signature: String,
-        superName: String,
-        interfaces: Array<String>
+        signature: String?,
+        superName: String?,
+        interfaces: Array<String>?
     ) {
         super.visit(version, access, name, signature, superName, interfaces)
-        println("$access , $name , $superName")
     }
 
     /**
@@ -49,9 +48,9 @@ class MopubMethodAdapter constructor(api: Int = Opcodes.ASM7, classVisitor: Clas
     override fun visitMethod(
         access: Int,
         name: String,
-        descriptor: String,
-        signature: String,
-        exceptions: Array<String>
+        descriptor: String?,
+        signature: String?,
+        exceptions: Array<String>?
     ): MethodVisitor? {
         return try {
             super.visitMethod(access, name, descriptor, signature, exceptions)

@@ -1,3 +1,5 @@
+import mobi.idealabs.ads.gradle.AdsPlugin
+
 // Copyright 2018-2020 Twitter, Inc.
 // Licensed under the MoPub SDK License Agreement
 // http://www.mopub.com/legal/sdk-license-agreement/
@@ -23,6 +25,7 @@ repositories {
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: AdsPlugin
 
 project.group = 'com.mopub'
 project.description = '''MoPub Sample App'''
