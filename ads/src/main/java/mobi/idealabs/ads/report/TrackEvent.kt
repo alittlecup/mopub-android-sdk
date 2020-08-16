@@ -3,6 +3,7 @@ package mobi.idealabs.ads.report
 import android.util.Log
 import androidx.annotation.Keep
 import com.mopub.mobileads.MoPubError
+import com.mopub.mobileads.MoPubErrorCode
 import com.mopub.network.AdResponse
 import mobi.idealabs.ads.bean.EventMeta
 import mobi.idealabs.ads.manage.AdManager
@@ -14,75 +15,53 @@ import mobi.idealabs.ads.report.utils.VendorUtil
  * 统一的数据收集和上报类
  */
 @Keep
-class TrackEvent(private val adUnitId: String, private val requestId: String) : EventInterface {
+class TrackEvent(private val adUnitId: String, private val requestId: String) {
     private val requestMetas = mutableMapOf<String, EventMeta>()
     private val showTimeMap = mutableMapOf<Int, Long>()
     private val clickTimeMap = mutableMapOf<Int, Long>()
-
-    init {
-        Log.d("TrackEvent", "init: $adUnitId-$requestId")
-    }
-
-    override fun trackMoPubRequestStart() {
-        Log.d("TrackEvent", "trackMoPubRequestStart: ")
-        findAdPlacement(adUnitId)?.apply {
-            AdManager.mGlobalAdListener?.onAdStartLoad(this)
-            this.findActiveListeners(this).forEach { it.onAdStartLoad(this) }
-        }
-    }
 
 
     private fun reportRequestSummaryInfo() {
         AdTracking.reportRequestSummary(requestMetas)
     }
 
-    override fun trackEventStart(
-        adUnitId: String,
-        eventName: String,
-        adResponse: AdResponse
-    ) {
-        Log.d("TrackEvent", "trackEventStart:$requestId- $adUnitId-$eventName-$adResponse")
+    fun trackEventStart(adResponse: AdResponse) {
         findAdPlacement(this.adUnitId)?.apply {
-            requestMetas[eventName] = EventMeta(
+            val key = generateAdResponseKey(adResponse)
+            requestMetas[key] = EventMeta(
                 requestID = requestId,
                 placementName = name,
                 adTypeIL = this.adType.type,
                 adItemIdIL = VendorUtil.findIDFromServerExtras(
                     adResponse,
-                    eventName,
                     adUnitId
                 ),
                 startTimeIL = System.currentTimeMillis(),
-                adVendorNameIL = eventName
+                adVendorNameIL = adResponse.customEventClassName
             )
         }
 
     }
 
-    override fun getCurrentRequestId(): String {
-        return requestId
-    }
-
-
-    override fun trackWaterFallItemFail(
-        key: String?,
-        errorCode: MoPubError
+    fun trackWaterFallItemFail(
+        adResponse: AdResponse,
+        errorCode: MoPubErrorCode
     ) {
-        Log.d("TrackEvent", "trackWaterFallItemFail: $key")
-        var containsKey = requestMetas.containsKey(key)
+        Log.d("TrackEvent", "trackWaterFallItemFail: $adResponse")
+        var containsKey = requestMetas.containsKey(generateAdResponseKey(adResponse))
         if (containsKey) {
-            requestMetas[key]?.also {
+            requestMetas[generateAdResponseKey(adResponse)]?.also {
                 it.requestResultIL = "${errorCode}-${errorCode.intCode}"
                 it.endTimeIL = System.currentTimeMillis()
             }
         }
     }
 
-    override fun trackWaterFallSuccess(key: String) {
-        Log.d("TrackEvent", "trackWaterFallSuccess: $key - $requestId")
-        var containsKey = requestMetas.containsKey(key)
+    fun trackWaterFallSuccess(adResponse: AdResponse) {
+        Log.d("TrackEvent", "trackWaterFallSuccess: $adResponse")
+        var containsKey = requestMetas.containsKey(generateAdResponseKey(adResponse))
         if (containsKey) {
-            requestMetas[key]?.apply {
+            requestMetas[generateAdResponseKey(adResponse)]?.apply {
                 this.requestResultIL = "match"
                 this.endTimeIL = System.currentTimeMillis()
             }
@@ -90,16 +69,13 @@ class TrackEvent(private val adUnitId: String, private val requestId: String) : 
         reportRequestSummaryInfo()
     }
 
-    override fun trackWaterFallFail() {
+    fun trackWaterFallFail() {
         Log.d("TrackEvent", "trackWaterFallFail: $requestId")
         reportRequestSummaryInfo()
     }
 
-    override fun trackMoPubRequestSuccess() {
-        Log.d("TrackEvent", "trackMoPubRequestResponseSuccess: $requestId")
-    }
 
-    override fun reportChance() {
+    fun reportChance() {
         findAdPlacement(adUnitId)?.apply {
             var eventMeta = EventMeta(
                 requestId,
@@ -112,16 +88,9 @@ class TrackEvent(private val adUnitId: String, private val requestId: String) : 
         }
     }
 
-    override fun reportRequestSummary() {
-        Log.d("TrackEvent", "reportRequestSummary: ")
-        reportRequestSummaryInfo()
-    }
 
-    override fun reportReward(customRewardClassName: String) {
-        Log.d(
-            "TrackEvent",
-            "reportReward: $customRewardClassName : ${customRewardClassName.isNullOrEmpty()}"
-        )
+    fun reportReward(customRewardClassName: String) {
+
         findAdPlacement(adUnitId)?.apply {
             var duration = 0
             if (showTimeMap.isNotEmpty()) {
@@ -147,7 +116,7 @@ class TrackEvent(private val adUnitId: String, private val requestId: String) : 
 
     }
 
-    override fun reportClick(adResponse: AdResponse) {
+    fun reportClick(adResponse: AdResponse) {
         val hashCode = adResponse.hashCode()
         LogUtil.d("TrackEvent", "reportClick: $hashCode")
         val showTime = showTimeMap[hashCode]
@@ -164,7 +133,7 @@ class TrackEvent(private val adUnitId: String, private val requestId: String) : 
         }
     }
 
-    override fun reportImpression(adResponse: AdResponse) {
+    fun reportImpression(adResponse: AdResponse) {
         val hashCode = adResponse.hashCode()
         LogUtil.d("TrackEvent", "reportImpression: $hashCode")
         showTimeMap[hashCode] = System.currentTimeMillis()
@@ -189,7 +158,6 @@ class TrackEvent(private val adUnitId: String, private val requestId: String) : 
                 this.adType.type,
                 VendorUtil.findIDFromServerExtras(
                     adResponse,
-                    customEventClassName,
                     adUnitId
                 ),
                 customEventClassName,
@@ -213,7 +181,6 @@ class TrackEvent(private val adUnitId: String, private val requestId: String) : 
                 this.adType.type,
                 VendorUtil.findIDFromServerExtras(
                     adResponse,
-                    customEventClassName,
                     adUnitId
                 ),
                 customEventClassName,
@@ -221,6 +188,10 @@ class TrackEvent(private val adUnitId: String, private val requestId: String) : 
             )
             AdTracking.reportAdImpression(eventMeta)
         }
+    }
+
+    private fun generateAdResponseKey(adResponse: AdResponse): String {
+        return "${adResponse.customEventClassName}_${adResponse.hashCode()}"
     }
 
 }

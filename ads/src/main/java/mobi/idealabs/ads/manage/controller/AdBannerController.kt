@@ -15,8 +15,6 @@ import mobi.idealabs.ads.manage.AdSdk
 import mobi.idealabs.ads.report.AdTracking
 import mobi.idealabs.ads.report.utils.LogUtil
 import mobi.idealabs.ads.view.AdBanner
-import mobi.idealabs.ads.view.AdBannerListener
-import mobi.idealabs.ads.view.MopubBannerAdListener
 
 object AdBannerController {
 
@@ -95,7 +93,7 @@ object AdBannerController {
     }
     internal val defaultBannerAdListener = object : MopubBannerAdListener {
 
-        override fun onBannerLoaded(banner: MoPubView?) {
+        override fun onBannerLoaded(banner: MoPubView) {
             LogUtil.d("AdBanner", "onBannerLoaded: ")
             defaultAdBannerListener.onBannerLoaded(banner as AdBanner)
         }
@@ -170,7 +168,7 @@ object AdBannerController {
             if (lifecycleOwner is Activity) lifecycleOwner else if (lifecycleOwner is Fragment) lifecycleOwner.activity else null
 
         if (activity != null) {
-            adBanner.setmContext(activity)
+//            adBanner.setmContext(activity)
         } else {
             return false
         }
@@ -229,7 +227,7 @@ object AdBannerController {
     private fun destroyAdBanner(adBanner: AdBanner) {
         clearParent(adBanner)
         adBanner.destroy()
-        adBanner.setmContext(null)
+//        adBanner.setmContext(null)
         adBanner.bannerAdListener = null
     }
 

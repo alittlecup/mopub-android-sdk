@@ -6,14 +6,12 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import com.mopub.mobileads.MoPubErrorCode
 import com.mopub.mobileads.MoPubInterstitial
-import com.mopub.network.RequestRateTracker
-import mobi.idealabs.ads.bean.AdPlacement
-import mobi.idealabs.ads.core.bean.*
-import mobi.idealabs.ads.core.network.AdTracking
-import mobi.idealabs.ads.core.utils.LogUtil
+import mobi.idealabs.ads.bean.*
 import mobi.idealabs.ads.view.AdInterstitial
 import mobi.idealabs.ads.manage.AdManager
 import mobi.idealabs.ads.manage.AdSdk
+import mobi.idealabs.ads.report.ActivityLifeManager
+import mobi.idealabs.ads.report.AdTracking
 import mobi.idealabs.ads.report.utils.LogUtil
 import kotlin.collections.set
 
@@ -28,7 +26,7 @@ internal object AdInterstitialController {
 
         override fun onInterstitialLoaded(interstitial: MoPubInterstitial?) {
             LogUtil.d("AdInterstitial", "onInterstitialLoaded: ")
-            getAdByAdUnit((interstitial as AdInterstitial).adUnitId)
+            getAdByAdUnit((interstitial as AdInterstitial).adsUnitId)
                 ?.apply {
                     AdManager.mGlobalAdListener?.onAdLoaded(this)
 
@@ -40,7 +38,7 @@ internal object AdInterstitialController {
         override fun onInterstitialShown(interstitial: MoPubInterstitial?) {
             if (interstitial == null) return
             LogUtil.d("AdInterstitial", "onInterstitialShown:")
-            getAdByAdUnit((interstitial as AdInterstitial).adUnitId)
+            getAdByAdUnit((interstitial as AdInterstitial).adsUnitId)
                 ?.apply {
                     AdManager.mGlobalAdListener?.onAdShown(this)
                     this.findActiveListeners(this).forEach { it.onAdShown(this) }
@@ -54,12 +52,11 @@ internal object AdInterstitialController {
             errorCode: MoPubErrorCode?
         ) {
             LogUtil.d("AdInterstitial", "onInterstitialFailed: ")
-            getAdByAdUnit((interstitial as AdInterstitial).adUnitId)
+            getAdByAdUnit((interstitial as AdInterstitial).adsUnitId)
                 ?.apply {
                     if (interstitialLoadMap[interstitial] == true && AdSdk.canRetry) {
                         interstitialLoadMap[interstitial] = false
-                        RequestRateTracker.getInstance()
-                            .registerRateLimit(adUnitId, null, null)
+//                        RequestRateTracker.getInstance().registerRateLimit(adUnitId, null, null)
                         interstitial.load()
                     } else {
                         AdManager.mGlobalAdListener?.onAdFailed(
@@ -79,7 +76,7 @@ internal object AdInterstitialController {
 
         override fun onInterstitialDismissed(interstitial: MoPubInterstitial?) {
             LogUtil.d("AdInterstitial", "onInterstitialDismissed: ")
-            getAdByAdUnit((interstitial as AdInterstitial).adUnitId)
+            getAdByAdUnit((interstitial as AdInterstitial).adsUnitId)
                 ?.apply {
                     destroyAdPlacement(this)
                     AdManager.mGlobalAdListener?.onAdDismissed(this)
@@ -89,7 +86,7 @@ internal object AdInterstitialController {
 
         override fun onInterstitialClicked(interstitial: MoPubInterstitial?) {
             LogUtil.d("AdInterstitial", "onInterstitialClicked: ")
-            getAdByAdUnit((interstitial as AdInterstitial).adUnitId)
+            getAdByAdUnit((interstitial as AdInterstitial).adsUnitId)
                 ?.apply {
                     AdManager.mGlobalAdListener?.onAdClicked(this)
 

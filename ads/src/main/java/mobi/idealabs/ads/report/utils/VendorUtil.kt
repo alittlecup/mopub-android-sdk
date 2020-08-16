@@ -20,14 +20,13 @@ object VendorUtil {
 
     fun findIDFromServerExtras(
         adResponse: AdResponse,
-        vendorName: String,
         mopubId: String
     ): String {
         var id = ""
         val serverExtras = adResponse.serverExtras
         if (serverExtras.isNullOrEmpty()) return id
 
-        val simpleVendorName = changeVendorName(vendorName)
+        val simpleVendorName = changeVendorName(adResponse.customEventClassName)
         val vendorAdTypeId = getVendorAdTypeId(simpleVendorName, adResponse, mopubId)
 
         Log.d("VendorUtil", "findIDFromServerExtras: $serverExtras")
@@ -36,12 +35,12 @@ object VendorUtil {
     }
 
     private fun getVendorAdTypeId(
-        vendorName: String,
+        simpleVendorName: String,
         adResponse: AdResponse,
         mopubId: String
     ): String {
         val serverExtras = adResponse.serverExtras
-        return when (vendorName) {
+        return when (simpleVendorName) {
             "admob" -> {
                 var adUnitID = serverExtras["adUnitID"]
                 if (adUnitID.isNullOrEmpty()) {

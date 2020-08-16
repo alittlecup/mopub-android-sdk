@@ -52,10 +52,15 @@ class MopubMethodAdapter constructor(api: Int = Opcodes.ASM7, classVisitor: Clas
         signature: String?,
         exceptions: Array<String>?
     ): MethodVisitor? {
-        return try {
+        val visitMethod = if (name == "registerRateLimit") {
+            super.visitMethod(Opcodes.ACC_PUBLIC, name, descriptor, signature, exceptions)
+        } else {
             super.visitMethod(access, name, descriptor, signature, exceptions)
-        } catch (e: Exception) {
-            null
+        }
+        return if (MopubClassChecker.isModifyClassMethod(name)) {
+            MopubMethodVisitor(methodVisitor = visitMethod)
+        } else {
+            visitMethod
         }
     }
 }

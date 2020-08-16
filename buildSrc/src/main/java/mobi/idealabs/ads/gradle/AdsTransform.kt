@@ -97,7 +97,7 @@ class AdsTransform(val project: Project) : Transform() {
                     //class文件处理
                     println("----------- jar class  <$entryName> -----------")
                     jarOutputStream.putNextEntry(zipEntry)
-                    jarOutputStream.write(processClass(inputStream))
+                    jarOutputStream.write(processClass(entryName, inputStream))
                 } else {
                     jarOutputStream.putNextEntry(zipEntry)
                     jarOutputStream.write(IOUtils.toByteArray(inputStream))
@@ -117,13 +117,22 @@ class AdsTransform(val project: Project) : Transform() {
         }
     }
 
+    private fun buildTransformSrc(): String {
+        val absolutePath = project.buildDir.absolutePath
+        val path = project.path.removePrefix(":")
+        return absolutePath.replace(
+            path,
+            "buildSrc"
+        ) + "/intermediates/transforms/AdsTransform/class/"
+    }
+
     //遍历directoryInputs  得到对应的class  交给ASM处理
     private fun handDirectoryInput(input: DirectoryInput, outputProvider: TransformOutputProvider) {
         val file = input.file
         if (file.isDirectory) {
             file.eachFileRecurse { item ->
                 if (isProcessClass(item.name)) {
-                    val code = processClass(FileInputStream(item))
+                    val code = processClass(item.name, FileInputStream(item))
                     val fos = FileOutputStream(file.parentFile.absolutePath + File.separator + name)
                     fos.write(code)
                     fos.close()
@@ -140,17 +149,35 @@ class AdsTransform(val project: Project) : Transform() {
         }
     }
 
-    private fun processClass(fileInputStream: InputStream): ByteArray {
-        val classReader = ClassReader(fileInputStream)
+    private fun processClass(fileName: String, fileInputStream: InputStream): ByteArray {
+        val soruceByte = fileInputStream.readBytes()
+        val classReader = ClassReader(soruceByte)
         val classWriter = ClassWriter(classReader, 0)
         //创建类访问器   并交给它去处理
         val adapter = MopubMethodAdapter(api = Opcodes.ASM7, classVisitor = classWriter)
         classReader.accept(adapter, ClassReader.SKIP_FRAMES)
-        return classWriter.toByteArray()
+        val byteArray = classWriter.toByteArray()
+        val filePath = buildTransformSrc() + fileName
+
+        val lastIndexPoint = filePath.lastIndexOf(".")
+        val modifyFilePath = if (lastIndexPoint != -1) {
+            filePath.replaceRange(lastIndexPoint, filePath.length, "Modify.class")
+        } else {
+            filePath
+        }
+        var fileOutputStream = FileUtils.openOutputStream(File(filePath))
+        fileOutputStream.write(soruceByte)
+        fileOutputStream.close()
+
+        fileOutputStream = FileUtils.openOutputStream(File(modifyFilePath))
+        fileOutputStream.write(byteArray)
+        fileOutputStream.close()
+        return byteArray
     }
 
     private fun isProcessClass(name: String): Boolean {
-        return MopubClassChecker.isModifyClass(name)
+        val modifyClass = MopubClassChecker.isModifyClass(name)
+        return modifyClass
 
     }
 
