@@ -18,7 +18,7 @@ object MopubClassChecker {
 
     fun isModifyClass(classPathName: String): Boolean {
         for (moduleName in mopubModules) {
-            if (classPathName == moduleName.classPath) {
+            if (classPathName.contains(moduleName.classPath)) {
                 println("class $classPathName")
                 return true
             }

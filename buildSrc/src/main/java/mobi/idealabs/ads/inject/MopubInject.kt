@@ -15,12 +15,12 @@ object MopubInject {
         );
     }
 
-    fun injectWaterFallItemFail(clazzName:String, mv: MethodVisitor) {
+    fun injectWaterFallItemFail(clazzName:String, mv: MethodVisitor,adResponseName:String="mAdResponse") {
         mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(
             GETFIELD,
             clazzName,
-            "mAdResponse",
+            adResponseName,
             "Lcom/mopub/network/AdResponse;"
         );
         mv.visitVarInsn(ALOAD, 1);
@@ -33,12 +33,12 @@ object MopubInject {
         );
     }
 
-    fun injectWaterFallFail(clazzName:String,mv: MethodVisitor) {
+    fun injectWaterFallFail(clazzName:String,mv: MethodVisitor,adResponseName:String="mAdResponse") {
         mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(
             GETFIELD,
             clazzName,
-            "mAdResponse",
+            adResponseName,
             "Lcom/mopub/network/AdResponse;"
         );
         mv.visitMethodInsn(
@@ -51,12 +51,12 @@ object MopubInject {
 
     }
 
-    fun injectWaterFallSuccess(clazzName:String,mv: MethodVisitor) {
+    fun injectWaterFallSuccess(clazzName:String,mv: MethodVisitor,adResponseName:String="mAdResponse") {
         mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(
             GETFIELD,
             clazzName,
-            "mAdResponse",
+            adResponseName,
             "Lcom/mopub/network/AdResponse;"
         );
         mv.visitMethodInsn(
@@ -69,12 +69,12 @@ object MopubInject {
 
     }
 
-    fun injectClick(clazzName:String,mv: MethodVisitor) {
+    fun injectClick(clazzName:String,mv: MethodVisitor,adResponseName:String="mAdResponse") {
         mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(
             GETFIELD,
             clazzName,
-            "mAdResponse",
+            adResponseName,
             "Lcom/mopub/network/AdResponse;"
         );
         mv.visitMethodInsn(
@@ -87,12 +87,12 @@ object MopubInject {
 
     }
 
-    fun injectImpression(clazzName:String,mv: MethodVisitor) {
+    fun injectImpression(clazzName:String,mv: MethodVisitor,adResponseName:String="mAdResponse") {
         mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(
             GETFIELD,
             clazzName,
-            "mAdResponse",
+            adResponseName,
             "Lcom/mopub/network/AdResponse;"
         );
         mv.visitMethodInsn(

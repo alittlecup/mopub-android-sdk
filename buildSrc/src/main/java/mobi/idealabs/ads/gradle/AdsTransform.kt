@@ -5,6 +5,8 @@ import com.android.build.gradle.internal.pipeline.TransformManager
 import mobi.idealabs.ads.asm.MopubClassChecker
 import mobi.idealabs.ads.asm.MopubMethodAdapter
 import mobi.idealabs.ads.inject.AdViewControllerAdapter
+import mobi.idealabs.ads.inject.MoPubNativeAdapter
+import mobi.idealabs.ads.inject.NativeAdAdapter
 import org.apache.commons.codec.digest.DigestUtils
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
@@ -180,7 +182,13 @@ class AdsTransform(val project: Project) : Transform() {
         if (fileName.contains("AdViewController")) AdViewControllerAdapter(
             classVisitor = classWriter,
             className = fileName.removeSuffix(".class")
-        ) else MopubMethodAdapter(
+        )else if (fileName.contains("MoPubNative")) MoPubNativeAdapter(
+            classVisitor = classWriter,
+            className = fileName.removeSuffix(".class")
+        ) else if (fileName.contains("NativeAd")) NativeAdAdapter(
+            classVisitor = classWriter,
+            className = fileName.removeSuffix(".class")
+        )else MopubMethodAdapter(
             api = Opcodes.ASM7,
             classVisitor = classWriter
         )
