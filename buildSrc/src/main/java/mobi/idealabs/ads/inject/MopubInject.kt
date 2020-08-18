@@ -1,9 +1,9 @@
 package mobi.idealabs.ads.inject
 
 import groovyjarjarasm.asm.Opcodes.*
-import jdk.internal.org.objectweb.asm.MethodVisitor
+import org.objectweb.asm.MethodVisitor
 
-class MopubInject {
+object MopubInject {
     fun injectWaterFallItemStart(mv: MethodVisitor) {
         mv.visitVarInsn(ALOAD, 1);
         mv.visitMethodInsn(
@@ -15,11 +15,11 @@ class MopubInject {
         );
     }
 
-    fun injectWaterFallItemFail(mv: MethodVisitor) {
+    fun injectWaterFallItemFail(clazzName:String, mv: MethodVisitor) {
         mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(
             GETFIELD,
-            "mobi/idealabs/ads/report/TrackInject",
+            clazzName,
             "mAdResponse",
             "Lcom/mopub/network/AdResponse;"
         );
@@ -33,11 +33,11 @@ class MopubInject {
         );
     }
 
-    fun injectWaterFallFail(mv: MethodVisitor) {
+    fun injectWaterFallFail(clazzName:String,mv: MethodVisitor) {
         mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(
             GETFIELD,
-            "mobi/idealabs/ads/report/TrackInject",
+            clazzName,
             "mAdResponse",
             "Lcom/mopub/network/AdResponse;"
         );
@@ -51,11 +51,11 @@ class MopubInject {
 
     }
 
-    fun injectWaterFallSuccess(mv: MethodVisitor) {
+    fun injectWaterFallSuccess(clazzName:String,mv: MethodVisitor) {
         mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(
             GETFIELD,
-            "mobi/idealabs/ads/report/TrackInject",
+            clazzName,
             "mAdResponse",
             "Lcom/mopub/network/AdResponse;"
         );
@@ -69,12 +69,12 @@ class MopubInject {
 
     }
 
-    fun injectClick(mv: MethodVisitor) {
+    fun injectClick(clazzName:String,mv: MethodVisitor) {
         mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(
             GETFIELD,
-            "mobi/idealabs/ads/report/TrackInject",
-            "mLastDeliveredResponse",
+            clazzName,
+            "mAdResponse",
             "Lcom/mopub/network/AdResponse;"
         );
         mv.visitMethodInsn(
@@ -87,12 +87,12 @@ class MopubInject {
 
     }
 
-    fun injectImpression(mv: MethodVisitor) {
+    fun injectImpression(clazzName:String,mv: MethodVisitor) {
         mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(
             GETFIELD,
-            "mobi/idealabs/ads/report/TrackInject",
-            "mLastDeliveredResponse",
+            clazzName,
+            "mAdResponse",
             "Lcom/mopub/network/AdResponse;"
         );
         mv.visitMethodInsn(
@@ -104,5 +104,46 @@ class MopubInject {
         );
 
     }
+    /**
+     * *injectWaterFallItemStart*
+     *
+     * AdViewController -> onAdLoadSuccess (loadCustomEvent)
+     * MoPubNative -> onAdLoad (loadNativeAd)
+     * MoPubRewardedVideoManager -> onAdSuccess (updateAdUnitCustomEventMapping)
+     */
+
+    /**
+     * *injectWaterFallSuccess*
+     * AdViewController-> creativeDownloadSuccess(creativeDownloadSuccess)
+     * MoPubNative-> onAdLoad(creativeDownloadSuccess)
+     * MoPubRewardedVideoManager -> onRewardedVideoLoadSuccess (postToInstance)
+     */
+
+    /**
+     * *injectWaterFallItemFail*
+     * AdViewController-> loadFailUrl(loadNonJavascript)
+     * MoPubNative->onAdLoad(requestNativeAd)
+     * MoPubRewardedVideoManager->onRewardedVideoLoadFailure(postToInstance)
+     */
+
+    /**
+     * injectWaterFallFail
+     * AdViewController->onAdLoadError(adDidFail)
+     * MoPubNative->onAdError()
+     * MoPubRewardedVideoManager->onAdError()
+     */
+
+    /**
+     * injectClick
+     * AdViewController->registerClick(makeTrackingHttpRequest)
+     * NativeAd->handleClick(makeTrackingHttpRequest)
+     * AdLoaderRewardedVideo->trackClick()
+     */
+    /**
+     * injectImpression
+     * AdViewController->trackImpression(makeTrackingHttpRequest)
+     * NativeAd->recordImpression(makeTrackingHttpRequest)
+     * AdLoaderRewardedVideo->trackImpression()
+     */
 
 }

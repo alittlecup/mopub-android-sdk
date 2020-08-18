@@ -43,7 +43,7 @@ android {
     defaultConfig {
         versionCode 79
         versionName version
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 29
         multiDexEnabled true
         proguardFiles getDefaultProguardFile('proguard-android.txt')
@@ -138,6 +138,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-ads-identifier:17.0.0'
     implementation 'com.google.android.gms:play-services-base:17.1.0'
     implementation project(':mopub-sdk')
+    implementation project(':ads')
 
     // Instrumentation testing-only dependencies
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'

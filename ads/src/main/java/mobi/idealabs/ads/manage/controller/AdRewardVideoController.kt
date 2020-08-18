@@ -68,7 +68,7 @@ internal object AdRewardVideoController {
                 ?.apply {
                     if (rewardAdLoadMap[adUnitId] == true && AdSdk.canRetry) {
                         rewardAdLoadMap[adUnitId] = false
-                        RequestRateTracker.getInstance().registerRateLimit(adUnitId, null, null)
+//                        RequestRateTracker.getInstance().registerRateLimit(adUnitId, null, null)
                         loadAdPlacement(this)
                     } else {
                         AdManager.mGlobalAdListener?.onAdFailed(

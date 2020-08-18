@@ -1,5 +1,7 @@
 package mobi.idealabs.ads.report;
 
+import android.util.Log;
+
 import com.mopub.mobileads.MoPubErrorCode;
 import com.mopub.network.AdResponse;
 
@@ -16,6 +18,7 @@ public final class TrackEventManager {
      * @param adResponse 广告商的请求内容
      */
     public static void trackWaterFallItemStart(AdResponse adResponse) {
+        Log.d("TrackEventManager", "trackWaterFallItemStart: " + printAdResponse(adResponse));
         String requestId = adResponse.getRequestId();
         TrackEvent trackEvent = trackEventMap.get(requestId);
         if (trackEvent == null) {
@@ -31,6 +34,8 @@ public final class TrackEventManager {
      * @param
      */
     public static void trackWaterFallFail(AdResponse adResponse) {
+        Log.d("TrackEventManager", "trackWaterFallFail: " + printAdResponse(adResponse));
+
         TrackEvent trackEvent = trackEventMap.get(adResponse.getRequestId());
         if (trackEvent != null) {
             trackEvent.trackWaterFallFail();
@@ -42,6 +47,7 @@ public final class TrackEventManager {
      * 当某一个广告商请求成功时
      */
     public static void trackWaterFallSuccess(AdResponse adResponse) {
+        Log.d("TrackEventManager", "trackWaterFallSuccess: " + printAdResponse(adResponse));
         TrackEvent trackEvent = trackEventMap.get(adResponse.getRequestId());
         if (trackEvent != null) {
             trackEvent.trackWaterFallSuccess(adResponse);
@@ -52,6 +58,7 @@ public final class TrackEventManager {
      * 当某一个广告商请求失败时
      */
     public static void trackWaterFallItemFail(AdResponse adResponse, MoPubErrorCode errorCode) {
+        Log.d("TrackEventManager", "trackWaterFallItemFail: " + printAdResponse(adResponse));
         TrackEvent trackEvent = trackEventMap.get(adResponse.getRequestId());
         if (trackEvent != null) {
             trackEvent.trackWaterFallItemFail(adResponse, errorCode);
@@ -62,6 +69,7 @@ public final class TrackEventManager {
      * 单击事件跟踪
      */
     public static void trackClick(AdResponse adResponse) {
+        Log.d("TrackEventManager", "trackClick: " + printAdResponse(adResponse));
         TrackEvent trackEvent = trackEventMap.get(adResponse.getRequestId());
         if (trackEvent != null) {
             trackEvent.reportClick(adResponse);
@@ -72,6 +80,7 @@ public final class TrackEventManager {
      * 曝光事件跟踪
      */
     public static void trackImpression(AdResponse adResponse) {
+        Log.d("TrackEventManager", "trackImpression: " + printAdResponse(adResponse));
         TrackEvent trackEvent = trackEventMap.get(adResponse.getRequestId());
         if (trackEvent != null) {
             trackEvent.reportImpression(adResponse);
@@ -90,6 +99,10 @@ public final class TrackEventManager {
      */
     public static void trackReturn() {
 
+    }
+
+    private static String printAdResponse(AdResponse adResponse) {
+        return "AdResponse : {getRequestId: " + adResponse.getRequestId() + ", getAdUnitId: " + adResponse.getAdUnitId() + ", getCustomEventClassName: " + adResponse.getCustomEventClassName() + "}";
     }
 
 }

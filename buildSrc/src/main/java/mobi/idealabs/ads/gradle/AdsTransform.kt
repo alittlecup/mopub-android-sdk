@@ -4,6 +4,7 @@ import com.android.build.api.transform.*
 import com.android.build.gradle.internal.pipeline.TransformManager
 import mobi.idealabs.ads.asm.MopubClassChecker
 import mobi.idealabs.ads.asm.MopubMethodAdapter
+import mobi.idealabs.ads.inject.AdViewControllerAdapter
 import org.apache.commons.codec.digest.DigestUtils
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
@@ -154,7 +155,7 @@ class AdsTransform(val project: Project) : Transform() {
         val classReader = ClassReader(soruceByte)
         val classWriter = ClassWriter(classReader, 0)
         //创建类访问器   并交给它去处理
-        val adapter = MopubMethodAdapter(api = Opcodes.ASM7, classVisitor = classWriter)
+        val adapter = generateAdapter(fileName, classWriter)
         classReader.accept(adapter, ClassReader.SKIP_FRAMES)
         val byteArray = classWriter.toByteArray()
         val filePath = buildTransformSrc() + fileName
@@ -174,6 +175,15 @@ class AdsTransform(val project: Project) : Transform() {
         fileOutputStream.close()
         return byteArray
     }
+
+    private fun generateAdapter(fileName: String, classWriter: ClassWriter) =
+        if (fileName.contains("AdViewController")) AdViewControllerAdapter(
+            classVisitor = classWriter,
+            className = fileName.removeSuffix(".class")
+        ) else MopubMethodAdapter(
+            api = Opcodes.ASM7,
+            classVisitor = classWriter
+        )
 
     private fun isProcessClass(name: String): Boolean {
         return MopubClassChecker.isModifyClass(name)
