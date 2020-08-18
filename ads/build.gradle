@@ -1,3 +1,5 @@
+import mobi.idealabs.ads.asm.MopubClassChecker
+
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 

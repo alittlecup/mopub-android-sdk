@@ -28,10 +28,10 @@ public final class TrackEventManager {
     /**
      * 当全部广告商请求结束时
      *
-     * @param requestId
+     * @param
      */
-    public static void trackWaterFallFail(String requestId) {
-        TrackEvent trackEvent = trackEventMap.get(requestId);
+    public static void trackWaterFallFail(AdResponse adResponse) {
+        TrackEvent trackEvent = trackEventMap.get(adResponse.getRequestId());
         if (trackEvent != null) {
             trackEvent.trackWaterFallFail();
         }

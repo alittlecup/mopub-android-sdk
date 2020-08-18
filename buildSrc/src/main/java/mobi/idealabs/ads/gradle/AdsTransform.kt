@@ -176,8 +176,7 @@ class AdsTransform(val project: Project) : Transform() {
     }
 
     private fun isProcessClass(name: String): Boolean {
-        val modifyClass = MopubClassChecker.isModifyClass(name)
-        return modifyClass
+        return MopubClassChecker.isModifyClass(name)
 
     }
 

@@ -10,7 +10,10 @@ import java.util.*
  * 然后用自定义的ClassVisitor，进行修改符合特定条件的方法，
  * 最后返回修改后的字节数组
  */
-class MopubMethodAdapter constructor(api: Int = Opcodes.ASM7, classVisitor: ClassVisitor?) :
+open class MopubMethodAdapter constructor(
+    api: Int = Opcodes.ASM7,
+    classVisitor: ClassVisitor?
+) :
     ClassVisitor(api, classVisitor), Opcodes {
 
 

@@ -5,12 +5,29 @@ import com.mopub.network.AdResponse
 
 class TrackInject {
     private val mAdResponse: AdResponse? = null
+    private val mLastDeliveredResponse: AdResponse? = null
 
-    fun injectStart(adResponse: AdResponse) {
+    fun trackWaterFallItemStart(adResponse: AdResponse) {
         TrackEventManager.trackWaterFallItemStart(adResponse)
     }
 
-    fun injectFail(errorCode: MoPubErrorCode) {
+    fun trackWaterFallItemFail(errorCode: MoPubErrorCode) {
         TrackEventManager.trackWaterFallItemFail(mAdResponse, errorCode)
+    }
+
+    fun trackWaterFallFail() {
+       TrackEventManager.trackWaterFallFail(mAdResponse)
+    }
+
+    fun trackWaterFallSuccess() {
+        TrackEventManager.trackWaterFallSuccess(mAdResponse)
+    }
+
+    fun trackClick() {
+        TrackEventManager.trackClick(mLastDeliveredResponse)
+    }
+
+    fun trackImpression() {
+        TrackEventManager.trackImpression(mLastDeliveredResponse)
     }
 }
