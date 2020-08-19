@@ -1,17 +1,17 @@
 package mobi.idealabs.ads.inject
 
+import com.squareup.javapoet.ClassName
 import org.objectweb.asm.ClassVisitor
-import org.objectweb.asm.FieldVisitor
 import org.objectweb.asm.MethodVisitor
 import org.objectweb.asm.Opcodes
 
-class MoPubNativeAdapter(
+class AdLoaderRewardedVideoAdapter(
     val className: String,
     api: Int = Opcodes.ASM7,
     classVisitor: ClassVisitor?
 ) : ClassVisitor(api, classVisitor) {
     init {
-        println("moPubNative: $className")
+        println("adViewController: $className")
     }
 
     override fun visitMethod(
@@ -22,32 +22,27 @@ class MoPubNativeAdapter(
         exceptions: Array<out String>?
     ): MethodVisitor {
         val visitMethod = super.visitMethod(access, name, descriptor, signature, exceptions)
-        return MoPubNativeMethodVisitor(
+        return AdLoaderRewardedVideoAdapterMethodVisitor(
             className = className,
             methodName = name!!, methodVisitor = visitMethod
         )
     }
 }
 
-class MoPubNativeMethodVisitor(
+class AdLoaderRewardedVideoAdapterMethodVisitor(
     val className: String,
     val methodName: String,
     api: Int = Opcodes.ASM7,
     methodVisitor: MethodVisitor
 ) :
     MethodVisitor(api, methodVisitor) {
-
-    override fun visitMethodInsn(
-        opcode: Int,
-        owner: String?,
-        name: String?,
-        descriptor: String?,
-        isInterface: Boolean
-    ) {
-        if (methodName == "onAdLoad" && name == "loadNativeAd") {
-        } else if (methodName == "onNativeAdLoaded" && name == "onNativeLoad") {
-        } else if (methodName == "onNativeAdFailed" && name == "requestNativeAd") {
+    override fun visitCode() {
+        println("methodName: $methodName")
+        if (methodName == "trackClick") {
+            MopubInject.injectClick(className, mv,"mLastDeliveredResponse")
+        } else if (methodName == "trackImpression") {
+            MopubInject.injectImpression(className, mv,"mLastDeliveredResponse")
         }
-        super.visitMethodInsn(opcode, owner, name, descriptor, isInterface)
+        super.visitCode()
     }
 }

@@ -43,11 +43,7 @@ class AdViewControllerMethodVisitor(
         descriptor: String?,
         isInterface: Boolean
     ) {
-        if (methodName == "onAdLoadSuccess" && name == "loadCustomEvent") {
-        } else if (methodName == "creativeDownloadSuccess" && name == "creativeDownloadSuccess") {
-        } else if (methodName == "loadFailUrl" && name == "loadNonJavascript") {
-        } else if (methodName == "onAdLoadError" && name == "adDidFail") {
-        } else if (methodName == "registerClick" && name == "makeTrackingHttpRequest") {
+        if (methodName == "registerClick" && name == "makeTrackingHttpRequest") {
             MopubInject.injectClick(className, mv)
         } else if (methodName == "trackImpression" && name == "makeTrackingHttpRequest") {
             MopubInject.injectImpression(className, mv)

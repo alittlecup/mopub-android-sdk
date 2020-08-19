@@ -2,6 +2,7 @@ package mobi.idealabs.ads.report;
 
 import android.util.Log;
 
+import com.mopub.mobileads.MoPubError;
 import com.mopub.mobileads.MoPubErrorCode;
 import com.mopub.network.AdResponse;
 
@@ -57,7 +58,7 @@ public final class TrackEventManager {
     /**
      * 当某一个广告商请求失败时
      */
-    public static void trackWaterFallItemFail(AdResponse adResponse, MoPubErrorCode errorCode) {
+    public static void trackWaterFallItemFail(AdResponse adResponse, MoPubError errorCode) {
         Log.d("TrackEventManager", "trackWaterFallItemFail: " + printAdResponse(adResponse));
         TrackEvent trackEvent = trackEventMap.get(adResponse.getRequestId());
         if (trackEvent != null) {

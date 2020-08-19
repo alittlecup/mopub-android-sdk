@@ -45,7 +45,7 @@ class TrackEvent(private val adUnitId: String, private val requestId: String) {
 
     fun trackWaterFallItemFail(
         adResponse: AdResponse,
-        errorCode: MoPubErrorCode
+        errorCode: MoPubError
     ) {
         Log.d("TrackEvent", "trackWaterFallItemFail: $adResponse")
         var containsKey = requestMetas.containsKey(generateAdResponseKey(adResponse))

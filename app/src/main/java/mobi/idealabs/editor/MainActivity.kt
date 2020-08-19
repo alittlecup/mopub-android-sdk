@@ -93,9 +93,9 @@ class MainActivity : AppCompatActivity() {
                 "com.mopub.mobileads.IronSourceAdapterConfiguration",
                 mapOf("applicationKey" to "d01ee1b5")
             )
-            .withAdditionalNetwork("com.idealabs.editor.SmaatoAdapterConfiguration")
+            .withAdditionalNetwork("mobi.idealabs.editor.SmaatoAdapterConfiguration")
             .withMediatedNetworkConfiguration(
-                "com.idealabs.editor.SmaatoAdapterConfiguration",
+                "mobi.idealabs.editor.SmaatoAdapterConfiguration",
                 mapOf("publishId" to "1100044852")
             )
             .build()
