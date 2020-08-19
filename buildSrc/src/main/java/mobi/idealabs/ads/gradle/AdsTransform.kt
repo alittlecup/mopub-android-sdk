@@ -4,6 +4,7 @@ import com.android.build.api.transform.*
 import com.android.build.gradle.internal.pipeline.TransformManager
 import mobi.idealabs.ads.asm.MopubClassChecker
 import mobi.idealabs.ads.asm.MopubMethodAdapter
+import mobi.idealabs.ads.inject.AdLoaderAdapter
 import mobi.idealabs.ads.inject.AdViewControllerAdapter
 import mobi.idealabs.ads.inject.MoPubNativeAdapter
 import mobi.idealabs.ads.inject.NativeAdAdapter
@@ -179,16 +180,21 @@ class AdsTransform(val project: Project) : Transform() {
     }
 
     private fun generateAdapter(fileName: String, classWriter: ClassWriter) =
-        if (fileName.contains("AdViewController")) AdViewControllerAdapter(
+//        if (fileName.contains("AdViewController")) AdViewControllerAdapter(
+//            classVisitor = classWriter,
+//            className = fileName.removeSuffix(".class")
+//        )else if (fileName.contains("MoPubNative")) MoPubNativeAdapter(
+//            classVisitor = classWriter,
+//            className = fileName.removeSuffix(".class")
+//        ) else if (fileName.contains("NativeAd")) NativeAdAdapter(
+//            classVisitor = classWriter,
+//            className = fileName.removeSuffix(".class")
+//        ) else
+
+        if (fileName.contains("AdLoader")) AdLoaderAdapter(
             classVisitor = classWriter,
             className = fileName.removeSuffix(".class")
-        )else if (fileName.contains("MoPubNative")) MoPubNativeAdapter(
-            classVisitor = classWriter,
-            className = fileName.removeSuffix(".class")
-        ) else if (fileName.contains("NativeAd")) NativeAdAdapter(
-            classVisitor = classWriter,
-            className = fileName.removeSuffix(".class")
-        )else MopubMethodAdapter(
+        ) else MopubMethodAdapter(
             api = Opcodes.ASM7,
             classVisitor = classWriter
         )

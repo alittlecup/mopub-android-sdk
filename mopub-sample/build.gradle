@@ -22,10 +22,18 @@ repositories {
     maven { url "https://s3.amazonaws.com/moat-sdk-builds" }
 }
 
-apply plugin: 'com.android.application'
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+def isApp = properties.getProperty('mopub-sample.isApp')
+
+if (isApp == "true") {
+    apply plugin: 'com.android.application'
+    apply plugin: AdsPlugin
+} else {
+    apply plugin: 'com.android.library'
+}
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: AdsPlugin
 
 project.group = 'com.mopub'
 project.description = '''MoPub Sample App'''
@@ -138,8 +146,6 @@ dependencies {
     implementation 'com.google.android.gms:play-services-ads-identifier:17.0.0'
     implementation 'com.google.android.gms:play-services-base:17.1.0'
     implementation project(':mopub-sdk')
-    implementation project(':ads')
-
     // Instrumentation testing-only dependencies
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test:rules:1.2.0'

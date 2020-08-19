@@ -45,19 +45,9 @@ class MoPubNativeMethodVisitor(
         isInterface: Boolean
     ) {
         if (methodName == "onAdLoad" && name == "loadNativeAd") {
-            MopubInject.injectWaterFallItemStart(mv)
         } else if (methodName == "onNativeAdLoaded" && name == "onNativeLoad") {
-            MopubInject.injectWaterFallSuccess(className, mv, adResponseName = "val\$response")
         } else if (methodName == "onNativeAdFailed" && name == "requestNativeAd") {
-            MopubInject.injectWaterFallItemFail(className, mv, adResponseName = "val\$response")
         }
         super.visitMethodInsn(opcode, owner, name, descriptor, isInterface)
-    }
-
-    override fun visitCode() {
-        if (methodName == "onAdError") {
-            MopubInject.injectWaterFallFail(className, mv, "response")
-        }
-        super.visitCode()
     }
 }

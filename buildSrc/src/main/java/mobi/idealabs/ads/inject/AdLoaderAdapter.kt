@@ -5,13 +5,13 @@ import org.objectweb.asm.ClassVisitor
 import org.objectweb.asm.MethodVisitor
 import org.objectweb.asm.Opcodes
 
-class AdViewControllerAdapter(
+class AdLoaderAdapter(
     val className: String,
     api: Int = Opcodes.ASM7,
     classVisitor: ClassVisitor?
 ) : ClassVisitor(api, classVisitor) {
     init {
-        println("adViewController: $className")
+        println("adLoader: $className")
     }
 
     override fun visitMethod(
@@ -22,14 +22,14 @@ class AdViewControllerAdapter(
         exceptions: Array<out String>?
     ): MethodVisitor {
         val visitMethod = super.visitMethod(access, name, descriptor, signature, exceptions)
-        return AdViewControllerMethodVisitor(
+        return AdLoaderMethodVisitor(
             className = className,
             methodName = name!!, methodVisitor = visitMethod
         )
     }
 }
 
-class AdViewControllerMethodVisitor(
+class AdLoaderMethodVisitor(
     val className: String,
     val methodName: String,
     api: Int = Opcodes.ASM7,
@@ -43,16 +43,21 @@ class AdViewControllerMethodVisitor(
         descriptor: String?,
         isInterface: Boolean
     ) {
-        if (methodName == "onAdLoadSuccess" && name == "loadCustomEvent") {
-        } else if (methodName == "creativeDownloadSuccess" && name == "creativeDownloadSuccess") {
-        } else if (methodName == "loadFailUrl" && name == "loadNonJavascript") {
-        } else if (methodName == "onAdLoadError" && name == "adDidFail") {
-        } else if (methodName == "registerClick" && name == "makeTrackingHttpRequest") {
-            MopubInject.injectClick(className, mv)
-        } else if (methodName == "trackImpression" && name == "makeTrackingHttpRequest") {
-            MopubInject.injectImpression(className, mv)
+        if (methodName == "deliverResponse" && name == "onSuccess") {
+            MopubInject.injectWaterFallItemStart(mv)
+        } else if (methodName == "deliverError" && name == "checkNotNull") {
+            MopubInject.injectWaterFallFail(className, mv, "mLastDeliveredResponse")
         }
-
         super.visitMethodInsn(opcode, owner, name, descriptor, isInterface)
+    }
+
+    override fun visitCode() {
+        if (methodName == "creativeDownloadSuccess") {
+            MopubInject.injectWaterFallSuccess(className,mv,"mLastDeliveredResponse")
+
+        }else if(methodName=="creativeDownloadFailed"){
+            MopubInject.injectWaterFallItemFail(className,mv,"mLastDeliveredResponse")
+
+        }
     }
 }

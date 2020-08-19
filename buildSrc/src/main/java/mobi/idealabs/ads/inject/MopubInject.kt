@@ -28,7 +28,7 @@ object MopubInject {
             INVOKESTATIC,
             "mobi/idealabs/ads/report/TrackEventManager",
             "trackWaterFallItemFail",
-            "(Lcom/mopub/network/AdResponse;Lcom/mopub/mobileads/MoPubErrorCode;)V",
+            "(Lcom/mopub/network/AdResponse;Lcom/mopub/mobileads/MoPubError;)V",
             false
         );
     }
@@ -107,6 +107,9 @@ object MopubInject {
     /**
      * *injectWaterFallItemStart*
      *
+     * AdLoader-> deliverResponse(onSuccess)
+     *
+     *
      * AdViewController -> onAdLoadSuccess (loadCustomEvent)
      * MoPubNative -> onAdLoad (loadNativeAd)
      * MoPubRewardedVideoManager -> onAdSuccess (updateAdUnitCustomEventMapping)
@@ -128,6 +131,9 @@ object MopubInject {
 
     /**
      * injectWaterFallFail
+     *
+     * AdLoader - > deliverError(checkNotNull)
+     *
      * AdViewController->onAdLoadError(adDidFail)
      * MoPubNative->onAdError()
      * MoPubRewardedVideoManager->onAdError()

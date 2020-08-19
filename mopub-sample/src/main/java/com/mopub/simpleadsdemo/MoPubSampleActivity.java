@@ -292,37 +292,31 @@ public class MoPubSampleActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_impressions:
-                onImpressionsMenu();
-                return true;
-            case R.id.action_clear_logs:
-                onClearLogs();
-                return true;
-            default:
-                return super.onContextItemSelected(item);
+        int itemId = item.getItemId();
+        if (itemId == R.id.action_impressions) {
+            onImpressionsMenu();
+            return true;
+        } else if (itemId == R.id.action_clear_logs) {
+            onClearLogs();
+            return true;
         }
+        return super.onContextItemSelected(item);
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         SampleActivityInternalUtils.handleEndpointMenuSelection(menuItem);
-        switch (menuItem.getItemId()) {
-            case R.id.nav_privacy_info:
-                onNavPrivacyInfo();
-                break;
-            case R.id.nav_privacy_grant:
-                onNavChangeConsent(true);
-                break;
-            case R.id.nav_privacy_revoke:
-                onNavChangeConsent(false);
-                break;
-            case R.id.nav_force_gdpr:
-                onNavForceGdpr();
-                break;
-            case R.id.nav_adapters_info:
-                onNavAdaptersInfo();
-                break;
+        int itemId = menuItem.getItemId();
+        if (itemId == R.id.nav_privacy_info) {
+            onNavPrivacyInfo();
+        } else if (itemId == R.id.nav_privacy_grant) {
+            onNavChangeConsent(true);
+        } else if (itemId == R.id.nav_privacy_revoke) {
+            onNavChangeConsent(false);
+        } else if (itemId == R.id.nav_force_gdpr) {
+            onNavForceGdpr();
+        } else if (itemId == R.id.nav_adapters_info) {
+            onNavAdaptersInfo();
         }
 
         syncNavigationMenu();
