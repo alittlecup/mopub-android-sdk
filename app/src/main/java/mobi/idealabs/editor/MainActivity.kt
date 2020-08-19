@@ -24,7 +24,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main1)
         initAd()
-        startActivity(Intent(this, MoPubSampleActivity::class.java))
 
     }
 
@@ -41,6 +40,7 @@ class MainActivity : AppCompatActivity() {
         Log.d("MainActivity", "initAd: $loadCustomUserId")
         AdSdk.initAdSdk(this, sdkConfig) {
             toast(" Ads initSuccess ")
+            startActivity(Intent(this, MoPubSampleActivity::class.java))
             AdManager.mGlobalAdListener = object : AdListener {
                 override fun onAdStartLoad(adPlacement: AdPlacement?) {
                     toast("START_LOAD $adPlacement")

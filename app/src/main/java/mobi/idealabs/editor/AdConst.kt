@@ -48,19 +48,19 @@ object AdConst {
 
 
     val BannerAdPlacement =
-        AdPlacement("banner", TestBannerID, AdType.BANNER, adSize = BannerAdSize.HEIGHT_250)
+        AdPlacement("banner", Banner, AdType.BANNER, adSize = BannerAdSize.HEIGHT_250)
     val InterstitialAdPlacement = AdPlacement(
         "intersititial",
-        TestInterstitialID,
+        Interstitial,
         AdType.INTERSTITIAL
     )
     val NativeAdPlacement =
-        AdPlacement("native", TestNativeID, AdType.NATIVE).apply {
+        AdPlacement("native", Native, AdType.NATIVE).apply {
             chanceName = "chanceName"
         }
     val RewardVideoAdPlacement = AdPlacement(
         "rewardVideo",
-        TestRewardVideoID,
+        RewardedPlayable,
         AdType.REWARDED_VIDEO
     )
 
