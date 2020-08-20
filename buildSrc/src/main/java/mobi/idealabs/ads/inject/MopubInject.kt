@@ -102,6 +102,23 @@ object MopubInject {
             "(Lcom/mopub/network/AdResponse;)V",
             false
         );
+    }
+    fun injectReward(mv: MethodVisitor){
+        mv.visitFieldInsn(GETSTATIC, "com/mopub/mobileads/MoPubRewardedVideoManager", "sInstance", "Lcom/mopub/mobileads/MoPubRewardedVideoManager;");
+        mv.visitFieldInsn(GETFIELD, "com/mopub/mobileads/MoPubRewardedVideoManager", "rewardedAdsLoaders", "Lcom/mopub/mobileads/RewardedAdsLoaders;");
+        mv.visitTypeInsn(NEW, "java/lang/StringBuilder");
+        mv.visitInsn(DUP);
+        mv.visitMethodInsn(INVOKESPECIAL, "java/lang/StringBuilder", "<init>", "()V", false);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Class", "getName", "()Ljava/lang/String;", false);
+        mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder", "append", "(Ljava/lang/String;)Ljava/lang/StringBuilder;", false);
+        mv.visitLdcInsn("_");
+        mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder", "append", "(Ljava/lang/String;)Ljava/lang/StringBuilder;", false);
+        mv.visitVarInsn(ALOAD, 1);
+        mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder", "append", "(Ljava/lang/String;)Ljava/lang/StringBuilder;", false);
+        mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder", "toString", "()Ljava/lang/String;", false);
+        mv.visitVarInsn(ALOAD, 3);
+        mv.visitMethodInsn(INVOKESTATIC, "mobi/idealabs/ads/report/TrackEventManager", "injectReward", "(Lcom/mopub/mobileads/RewardedAdsLoaders;Ljava/lang/String;Ljava/lang/String;)V", false);
 
     }
     /**

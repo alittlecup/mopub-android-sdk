@@ -89,14 +89,13 @@ class TrackEvent(private val adUnitId: String, private val requestId: String) {
     }
 
 
-    fun reportReward(customRewardClassName: String) {
-
+    fun reportReward(rewardKey: String, currentUnitId: String?) {
         findAdPlacement(adUnitId)?.apply {
             var duration = 0
             if (showTimeMap.isNotEmpty()) {
                 duration = (System.currentTimeMillis() - showTimeMap.entries.first().value).toInt()
             }
-            val eventMeta = requestMetas[customRewardClassName]
+            val eventMeta = requestMetas[rewardKey]
             if (eventMeta != null) {
                 AdTracking.reportAdReward(
                     EventMeta(
@@ -107,7 +106,7 @@ class TrackEvent(private val adUnitId: String, private val requestId: String) {
                         eventMeta.adItemIdIL,
                         eventMeta.adVendorNameIL,
                         duration = duration,
-                        finish = if (customRewardClassName.isNullOrEmpty()) 1 else 0
+                        finish = if (currentUnitId.isNullOrEmpty()) 1 else 0
                     )
                 )
             }
@@ -122,8 +121,7 @@ class TrackEvent(private val adUnitId: String, private val requestId: String) {
         val showTime = showTimeMap[hashCode]
         if (showTime != null) {
             trackClick(
-                (System.currentTimeMillis() - showTime).toInt()
-                , adResponse
+                (System.currentTimeMillis() - showTime).toInt(), adResponse
             )
         } else {
             if (!clickTimeMap.containsKey(hashCode)) {
@@ -191,7 +189,12 @@ class TrackEvent(private val adUnitId: String, private val requestId: String) {
     }
 
     private fun generateAdResponseKey(adResponse: AdResponse): String {
-        return "${adResponse.customEventClassName}_${adResponse.hashCode()}"
+        return "${adResponse.customEventClassName}_${
+            VendorUtil.findIDFromServerExtras(
+                adResponse,
+                adResponse.adUnitId!!
+            )
+        }"
     }
 
 }

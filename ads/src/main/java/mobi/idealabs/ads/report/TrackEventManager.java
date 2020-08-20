@@ -3,7 +3,6 @@ package mobi.idealabs.ads.report;
 import android.util.Log;
 
 import com.mopub.mobileads.MoPubError;
-import com.mopub.mobileads.MoPubErrorCode;
 import com.mopub.network.AdResponse;
 
 import java.util.HashMap;
@@ -91,16 +90,25 @@ public final class TrackEventManager {
     /**
      * 激励事件跟踪
      */
-    public static void trackReward() {
+//    public static void trackReward(RewardedAdsLoaders loaders, String key, String adUnitId) {
+//        Map<String, AdLoaderRewardedVideo> loadersLoadersMap = loaders.getLoadersMap();
+//        AdLoaderRewardedVideo adLoaderRewardedVideo = loadersLoadersMap.get(adUnitId);
+//        AdResponse adResponse = null;
+//        if (adLoaderRewardedVideo != null) {
+//            adResponse = adLoaderRewardedVideo.getLastDeliveredResponse();
+//        } else if (!loadersLoadersMap.isEmpty()) {
+//            adResponse = loadersLoadersMap.values().iterator().next().getLastDeliveredResponse();
+//        }
+//        if (adResponse == null) return;
+//        String requestId = adResponse.getRequestId();
+//        TrackEvent trackEvent = trackEventMap.get(requestId);
+//        if (trackEvent != null) {
+//            trackEvent.reportReward(key,adUnitId);
+//        }
 
-    }
+//    }
 
-    /**
-     * 点击广告之后返回事件跟踪
-     */
-    public static void trackReturn() {
 
-    }
 
     private static String printAdResponse(AdResponse adResponse) {
         return "AdResponse : {getRequestId: " + adResponse.getRequestId() + ", getAdUnitId: " + adResponse.getAdUnitId() + ", getCustomEventClassName: " + adResponse.getCustomEventClassName() + "}";

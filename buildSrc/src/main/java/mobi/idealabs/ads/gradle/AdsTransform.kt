@@ -4,10 +4,7 @@ import com.android.build.api.transform.*
 import com.android.build.gradle.internal.pipeline.TransformManager
 import mobi.idealabs.ads.asm.MopubClassChecker
 import mobi.idealabs.ads.asm.MopubMethodAdapter
-import mobi.idealabs.ads.inject.AdLoaderAdapter
-import mobi.idealabs.ads.inject.AdLoaderRewardedVideoAdapter
-import mobi.idealabs.ads.inject.AdViewControllerAdapter
-import mobi.idealabs.ads.inject.NativeAdAdapter
+import mobi.idealabs.ads.inject.*
 import org.apache.commons.codec.digest.DigestUtils
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
@@ -187,6 +184,12 @@ class AdsTransform(val project: Project) : Transform() {
             classVisitor = classWriter,
             className = fileName.removeSuffix(".class")
         ) else if (fileName.contains("AdLoaderRewardedVideo")) AdLoaderRewardedVideoAdapter(
+            classVisitor = classWriter,
+            className = fileName.removeSuffix(".class")
+        ) else if (fileName.contains("MoPubRewardedVideoManager")) MoPubRewardVideoManagerAdapter(
+            classVisitor = classWriter,
+            className = fileName.removeSuffix(".class")
+        ) else if (fileName.contains("RewardedAdsLoaders")) RewardedAdsLoadersAdapter(
             classVisitor = classWriter,
             className = fileName.removeSuffix(".class")
         ) else if (fileName.contains("AdLoader")) AdLoaderAdapter(
