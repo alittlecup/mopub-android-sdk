@@ -28,7 +28,7 @@ import static com.mopub.simpleadsdemo.MoPubSQLiteHelper.COLUMN_USER_GENERATED;
 import static com.mopub.simpleadsdemo.MoPubSQLiteHelper.TABLE_AD_CONFIGURATIONS;
 import static com.mopub.simpleadsdemo.MoPubSampleAdUnit.AdType;
 
-class AdUnitDataSource {
+public class AdUnitDataSource {
     private Context mContext;
     private MoPubSQLiteHelper mDatabaseHelper;
     private String[] mAllColumns = {
@@ -40,7 +40,7 @@ class AdUnitDataSource {
             COLUMN_KEYWORDS
     };
 
-    AdUnitDataSource(final Context context) {
+    public AdUnitDataSource(final Context context) {
         mContext = context.getApplicationContext();
         mDatabaseHelper = new MoPubSQLiteHelper(context);
         populateDefaultSampleAdUnits();
@@ -50,12 +50,12 @@ class AdUnitDataSource {
         return createSampleAdUnit(sampleAdUnit, false);
     }
 
-    MoPubSampleAdUnit createSampleAdUnit(final MoPubSampleAdUnit sampleAdUnit) {
+    public MoPubSampleAdUnit createSampleAdUnit(final MoPubSampleAdUnit sampleAdUnit) {
         return createSampleAdUnit(sampleAdUnit, true);
     }
 
     private MoPubSampleAdUnit createSampleAdUnit(final MoPubSampleAdUnit sampleAdUnit,
-            final boolean isUserGenerated) {
+                                                 final boolean isUserGenerated) {
         deleteAllAdUnitsWithAdUnitIdAndAdTypeAndKeywords(sampleAdUnit.getAdUnitId(),
                 sampleAdUnit.getFragmentClassName(),
                 sampleAdUnit.getKeywords(),

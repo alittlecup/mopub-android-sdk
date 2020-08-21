@@ -2,17 +2,20 @@ package mobi.idealabs.editor
 
 import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.mopub.common.SdkConfiguration
 import com.mopub.common.logging.MoPubLog
+import com.mopub.simpleadsdemo.AdUnitDataSource
 import com.mopub.simpleadsdemo.MoPubSampleActivity
+import com.mopub.simpleadsdemo.MoPubSampleAdUnit
 import mobi.idealabs.ads.bean.AdErrorCode
 import mobi.idealabs.ads.bean.AdListener
 import mobi.idealabs.ads.bean.AdPlacement
+import mobi.idealabs.ads.bean.AdType
 import mobi.idealabs.ads.manage.AdManager
 import mobi.idealabs.ads.manage.AdSdk
 import mobi.idealabs.ads.manage.AdSdkInitConfig
@@ -40,6 +43,7 @@ class MainActivity : AppCompatActivity() {
         Log.d("MainActivity", "initAd: $loadCustomUserId")
         AdSdk.initAdSdk(this, sdkConfig) {
             toast(" Ads initSuccess ")
+            insertAdsAdPlacement()
             startActivity(Intent(this, MoPubSampleActivity::class.java))
             AdManager.mGlobalAdListener = object : AdListener {
                 override fun onAdStartLoad(adPlacement: AdPlacement?) {
@@ -77,6 +81,26 @@ class MainActivity : AppCompatActivity() {
                 }
 
             }
+        }
+    }
+
+    private fun insertAdsAdPlacement() {
+        val adUnitDataSource = AdUnitDataSource(this)
+        AdConst.adPlacements.forEach {
+            val build = MoPubSampleAdUnit.Builder(it.adUnitId, chanageType(it.adType))
+                .description(it.name)
+                .isUserDefined(true)
+                .build()
+            adUnitDataSource.createSampleAdUnit(build)
+        }
+    }
+
+    private fun chanageType(adType: AdType): MoPubSampleAdUnit.AdType? {
+       return when(adType){
+            AdType.BANNER->MoPubSampleAdUnit.AdType.BANNER
+            AdType.INTERSTITIAL->MoPubSampleAdUnit.AdType.INTERSTITIAL
+            AdType.NATIVE->MoPubSampleAdUnit.AdType.MANUAL_NATIVE
+            AdType.REWARDED_VIDEO->MoPubSampleAdUnit.AdType.REWARDED_VIDEO
         }
     }
 

@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment;
 import java.util.Comparator;
 import java.util.Locale;
 
-class MoPubSampleAdUnit implements Comparable<MoPubSampleAdUnit> {
+public class MoPubSampleAdUnit implements Comparable<MoPubSampleAdUnit> {
 
     private static final String AD_UNIT_ID = "adUnitId";
     static final String DESCRIPTION = "description";
@@ -22,7 +22,7 @@ class MoPubSampleAdUnit implements Comparable<MoPubSampleAdUnit> {
     private static final String ID = "id";
 
     // Note that entries are also sorted in this order
-    enum AdType {
+    public enum AdType {
         BANNER("Banner", BannerDetailFragment.class),
         MEDIUM_RECTANGLE("Medium Rectangle", MediumRectangleDetailFragment.class),
         INTERSTITIAL("Interstitial", InterstitialDetailFragment.class),
@@ -96,7 +96,7 @@ class MoPubSampleAdUnit implements Comparable<MoPubSampleAdUnit> {
                 }
             };
 
-    static class Builder {
+    public static class Builder {
         private final String mAdUnitId;
         private final AdType mAdType;
 
@@ -105,14 +105,14 @@ class MoPubSampleAdUnit implements Comparable<MoPubSampleAdUnit> {
         private boolean mIsUserDefined;
         private long mId;
 
-        Builder(final String adUnitId, final AdType adType) {
+        public Builder(final String adUnitId, final AdType adType) {
             mAdUnitId = adUnitId;
             mAdType = adType;
             mId = -1;
             mKeywords = "";
         }
 
-        Builder description(final String description) {
+        public Builder description(final String description) {
             mDescription = description;
             return this;
         }
@@ -122,17 +122,17 @@ class MoPubSampleAdUnit implements Comparable<MoPubSampleAdUnit> {
             return this;
         }
 
-        Builder isUserDefined(boolean userDefined) {
+        public Builder isUserDefined(boolean userDefined) {
             mIsUserDefined = userDefined;
             return this;
         }
 
-        Builder id(final long id) {
+        public Builder id(final long id) {
             mId = id;
             return this;
         }
 
-        MoPubSampleAdUnit build() {
+        public MoPubSampleAdUnit build() {
             return new MoPubSampleAdUnit(this);
         }
     }

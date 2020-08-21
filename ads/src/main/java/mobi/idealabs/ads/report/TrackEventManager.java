@@ -95,7 +95,7 @@ public final class TrackEventManager {
      * 激励事件跟踪
      */
     public static void trackReward(RewardedAdsLoaders loaders, String key, String adUnitId) {
-        Log.d("TAG", "trackReward: " + key + ", " + adUnitId);
+        Log.d("TrackEventManager", "trackReward: " + key + ", " + adUnitId);
         Map<String, AdLoaderRewardedVideo> loadersLoadersMap = loaders.getLoadersMap();
         AdLoaderRewardedVideo adLoaderRewardedVideo = loadersLoadersMap.get(adUnitId);
         AdResponse adResponse = null;

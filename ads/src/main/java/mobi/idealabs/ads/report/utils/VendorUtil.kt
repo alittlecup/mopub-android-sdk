@@ -49,10 +49,11 @@ object VendorUtil {
                 adUnitID ?: ""
             }
             "unity" -> {
-                var placementId = serverExtras["placementId"]
                 var gameId = serverExtras["gameId"]
-                if (placementId.isNullOrEmpty()) {
-                    placementId = serverExtras["zoneId"]
+                var placementId = when {
+                    serverExtras.containsKey("placementId") -> serverExtras["placementId"]
+                    serverExtras.containsKey("zoneId") -> serverExtras["zoneId"]
+                    else -> ""
                 }
                 "${placementId}_${gameId}"
             }

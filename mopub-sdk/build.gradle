@@ -21,6 +21,13 @@ dependencies {
     embed project(path: ':mopub-sdk:mopub-sdk-native-static', configuration: 'default')
     embed project(path: ':mopub-sdk:mopub-sdk-native-video', configuration: 'default')
     embed 'com.mopub.volley:mopub-volley:2.1.0'
+    embed('com.google.android.exoplayer:exoplayer:2.11.0') {
+        exclude group: 'androidx.core'
+        exclude group: 'androidx.lifecycle'
+        exclude group: 'androidx.media'
+        exclude group: 'androidx.versionedparcelable'
+        transitive = false
+    }
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.robolectric:robolectric:4.3'
     testImplementation 'org.robolectric:shadows-httpclient:4.3'
@@ -33,7 +40,7 @@ dependencies {
      'powermock-module-junit4',
      'powermock-module-junit4-rule',
      'powermock-classloading-xstream'].each {
-        testImplementation ("org.powermock:${it}:1.7.4") {
+        testImplementation("org.powermock:${it}:1.7.4") {
             exclude group: 'org.mockito', module: 'mockito-core'
         }
     }

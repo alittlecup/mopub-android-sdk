@@ -96,7 +96,8 @@ class TrackEvent(private val adUnitId: String, private val requestId: String) {
             if (showTimeMap.isNotEmpty()) {
                 duration = (System.currentTimeMillis() - showTimeMap.entries.first().value).toInt()
             }
-            val eventMeta = requestMetas[rewardKey]
+            val key = requestMetas.keys.find { it.contains(rewardKey) }
+            val eventMeta = requestMetas[key]
             if (eventMeta != null) {
                 AdTracking.reportAdReward(
                     EventMeta(
