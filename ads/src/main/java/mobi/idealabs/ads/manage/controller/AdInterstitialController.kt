@@ -6,6 +6,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import com.mopub.mobileads.MoPubErrorCode
 import com.mopub.mobileads.MoPubInterstitial
+import com.mopub.network.RequestRateTracker
 import mobi.idealabs.ads.bean.*
 import mobi.idealabs.ads.view.AdInterstitial
 import mobi.idealabs.ads.manage.AdManager
@@ -17,8 +18,6 @@ import kotlin.collections.set
 
 internal object AdInterstitialController {
 
-    fun initWithActivity(activity: ComponentActivity) {
-    }
 
 
     private val mInterstitialMap = LinkedHashMap<AdPlacement, AdInterstitial>(4, 0.57f, true)
@@ -56,7 +55,7 @@ internal object AdInterstitialController {
                 ?.apply {
                     if (interstitialLoadMap[interstitial] == true && AdSdk.canRetry) {
                         interstitialLoadMap[interstitial] = false
-//                        RequestRateTracker.getInstance().registerRateLimit(adUnitId, null, null)
+                        RequestRateTracker.getInstance().registerRateLimit(adUnitId, null, null)
                         interstitial.load()
                     } else {
                         AdManager.mGlobalAdListener?.onAdFailed(

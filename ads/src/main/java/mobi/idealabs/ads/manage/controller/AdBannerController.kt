@@ -1,6 +1,7 @@
 package mobi.idealabs.ads.manage.controller
 
 import android.app.Activity
+import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -19,9 +20,6 @@ import mobi.idealabs.ads.view.AdBanner
 object AdBannerController {
 
     private val matchLayoutParams = FrameLayout.LayoutParams(-1, -1)
-
-    internal fun initWithActivity(activity: ComponentActivity) {
-    }
 
 
     internal val defaultAdBannerListener = object : AdBannerListener {
@@ -134,13 +132,6 @@ object AdBannerController {
 
     private val mBannerMap = LinkedHashMap<AdPlacement, AdBanner>(8, 0.57f, true)
 
-    fun loadAdPlacement(adPlacement: AdPlacement) {
-        loadAdBanner(adPlacement)?.loadAd()
-    }
-
-    private fun loadAdBanner(adPlacement: AdPlacement): AdBanner? {
-        return findAdBannerFromContainer(adPlacement) ?: createAdBanner(adPlacement)
-    }
 
     fun showAdPlacement(
         lifecycleOwner: LifecycleOwner,
@@ -149,11 +140,14 @@ object AdBannerController {
         adListener: AdListener
     ): Boolean {
         var adBanner = findAdBannerFromContainer(adPlacement)
+        val activity: Activity? =
+            if (lifecycleOwner is Activity) lifecycleOwner else if (lifecycleOwner is Fragment) lifecycleOwner.activity else null
+
         if (adBanner != null && adBanner.parent == viewGroup) {
             return true
         } else {
             destroyAdPlacement(adPlacement)
-            adBanner = createAdBanner(adPlacement)
+            adBanner = createAdBanner(activity, adPlacement)
         }
         if (adBanner == null) return false
 
@@ -164,12 +158,8 @@ object AdBannerController {
                 adListener
             )
         )
-        val activity: Activity? =
-            if (lifecycleOwner is Activity) lifecycleOwner else if (lifecycleOwner is Fragment) lifecycleOwner.activity else null
 
-        if (activity != null) {
-//            adBanner.setmContext(activity)
-        } else {
+        if (activity == null) {
             return false
         }
 
@@ -191,12 +181,12 @@ object AdBannerController {
     }
 
 
-    private fun createAdBanner(adPlacement: AdPlacement): AdBanner? {
+    private fun createAdBanner(context: Context?, adPlacement: AdPlacement): AdBanner? {
         require(adPlacement.adType == AdType.BANNER) {
             "create Banner must be Banner Type "
         }
-        return if (AdSdk.application != null) {
-            val adBanner = AdBanner(AdSdk.application!!)
+        return if (context != null) {
+            val adBanner = AdBanner(context)
                 .apply {
                     this.adSize = MoPubView.MoPubAdSize.valueOf(adPlacement.adSize.adSize)
                     this.adUnitId = adPlacement.adUnitId
@@ -227,7 +217,6 @@ object AdBannerController {
     private fun destroyAdBanner(adBanner: AdBanner) {
         clearParent(adBanner)
         adBanner.destroy()
-//        adBanner.setmContext(null)
         adBanner.bannerAdListener = null
     }
 

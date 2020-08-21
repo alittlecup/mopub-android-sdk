@@ -16,7 +16,6 @@ object AdManager {
     var enable = false
     internal fun initWithActivity(activity: ComponentActivity) {
         enable = true
-        AdBannerController.initWithActivity(activity)
         AdInterstitialController.initWithActivity(activity)
         AdRewardVideoController.initWithActivity(activity)
     }

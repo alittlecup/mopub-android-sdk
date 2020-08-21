@@ -17,11 +17,6 @@ import mobi.idealabs.ads.report.utils.LogUtil
 import mobi.idealabs.ads.view.AdRewardVideo
 
 internal object AdRewardVideoController {
-
-    fun initWithActivity(activity: ComponentActivity) {
-    }
-
-
     val mopubRewardVideoListener = object : MoPubRewardedVideoListener {
         override fun onRewardedVideoClosed(adUnitId: String) {
             LogUtil.d("AdRewardVideoController", "onRewardedVideoClosed: ")
@@ -68,7 +63,7 @@ internal object AdRewardVideoController {
                 ?.apply {
                     if (rewardAdLoadMap[adUnitId] == true && AdSdk.canRetry) {
                         rewardAdLoadMap[adUnitId] = false
-//                        RequestRateTracker.getInstance().registerRateLimit(adUnitId, null, null)
+                        RequestRateTracker.getInstance().registerRateLimit(adUnitId, null, null)
                         loadAdPlacement(this)
                     } else {
                         AdManager.mGlobalAdListener?.onAdFailed(

@@ -16,10 +16,6 @@ object AdNativeController {
 
     private val nativeAdPlacementMap = LinkedHashMap<AdPlacement, AdNative>(8, 0.75f, true)
 
-    internal fun initWithActivity(activity: ComponentActivity) {
-
-    }
-
     private val adNativeListener = object : AdNativeListener {
         override fun onNativeDestroy(adNative: AdNative) {
             findAdPlacement(adNative.adUnitId)?.apply {
@@ -33,10 +29,8 @@ object AdNativeController {
         override fun onNativeLoaded(adNative: AdNative) {
             findAdPlacement(adNative.adUnitId)?.apply {
                 AdManager.mGlobalAdListener?.onAdLoaded(this)
-                var hasActiveListener = false
                 this.findActiveListeners(this).forEach {
                     it.onAdLoaded(this)
-                    hasActiveListener = true
                 }
             }
         }

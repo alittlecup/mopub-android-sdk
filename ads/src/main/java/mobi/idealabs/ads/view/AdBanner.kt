@@ -19,12 +19,9 @@ class AdBanner(context: Context, attributeSet: AttributeSet? = null) :
     }
 
 
-    private var hasListenBannerLoadStartByLoad = false
     override fun loadAd() {
-//        if (getmContext() == null) return
         if (bannerAdListener is MopubBannerAdListener) {
             (bannerAdListener as MopubBannerAdListener).onBannerLoadStart(this)
-            hasListenBannerLoadStartByLoad = true
         }
         super.loadAd()
     }
@@ -37,16 +34,4 @@ class AdBanner(context: Context, attributeSet: AttributeSet? = null) :
     override fun resolveAdSize(): Point {
         return super.resolveAdSize().apply { x = 0 }
     }
-
-
-//    override fun onMoPubRequestRealStart() {
-//        Log.d("AdBanner", "onMoPubRequestRealStart: ")
-//        if (bannerAdListener is MopubBannerAdListener) {
-//            if (!hasListenBannerLoadStartByLoad) {
-//                (bannerAdListener as MopubBannerAdListener).onBannerLoadStart(this)
-//            } else {
-//                hasListenBannerLoadStartByLoad = false
-//            }
-//        }
-//    }
 }
