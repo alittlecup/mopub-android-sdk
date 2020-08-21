@@ -202,6 +202,9 @@ class AdsTransform(val project: Project) : Transform() {
         ) else if (fileName.contains("RewardedAdsLoaders")) RewardedAdsLoadersAdapter(
             classVisitor = classWriter,
             className = fileName.removeSuffix(".class")
+        )  else if (fileName.contains("RequestRateTracker")) RequestRateTrackerAdapter(
+            classVisitor = classWriter,
+            className = fileName.removeSuffix(".class")
         ) else if (fileName.contains("AdLoader")) AdLoaderAdapter(
             classVisitor = classWriter,
             className = fileName.removeSuffix(".class")
