@@ -118,7 +118,7 @@ object MopubInject {
         mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder", "append", "(Ljava/lang/String;)Ljava/lang/StringBuilder;", false);
         mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder", "toString", "()Ljava/lang/String;", false);
         mv.visitVarInsn(ALOAD, 3);
-        mv.visitMethodInsn(INVOKESTATIC, "mobi/idealabs/ads/report/TrackEventManager", "injectReward", "(Lcom/mopub/mobileads/RewardedAdsLoaders;Ljava/lang/String;Ljava/lang/String;)V", false);
+        mv.visitMethodInsn(INVOKESTATIC, "mobi/idealabs/ads/report/TrackEventManager", "trackReward", "(Lcom/mopub/mobileads/RewardedAdsLoaders;Ljava/lang/String;Ljava/lang/String;)V", false);
 
     }
     /**

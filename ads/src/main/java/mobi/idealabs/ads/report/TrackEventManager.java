@@ -2,6 +2,8 @@ package mobi.idealabs.ads.report;
 
 import android.util.Log;
 
+import androidx.annotation.Keep;
+
 import com.mopub.mobileads.AdLoaderRewardedVideo;
 import com.mopub.mobileads.MoPubError;
 import com.mopub.mobileads.RewardedAdsLoaders;
@@ -10,7 +12,7 @@ import com.mopub.network.AdResponse;
 import java.util.HashMap;
 import java.util.Map;
 
-
+@Keep
 public final class TrackEventManager {
     private static Map<String, TrackEvent> trackEventMap = new HashMap<String, TrackEvent>();
 
@@ -93,6 +95,7 @@ public final class TrackEventManager {
      * 激励事件跟踪
      */
     public static void trackReward(RewardedAdsLoaders loaders, String key, String adUnitId) {
+        Log.d("TAG", "trackReward: " + key + ", " + adUnitId);
         Map<String, AdLoaderRewardedVideo> loadersLoadersMap = loaders.getLoadersMap();
         AdLoaderRewardedVideo adLoaderRewardedVideo = loadersLoadersMap.get(adUnitId);
         AdResponse adResponse = null;
@@ -105,11 +108,10 @@ public final class TrackEventManager {
         String requestId = adResponse.getRequestId();
         TrackEvent trackEvent = trackEventMap.get(requestId);
         if (trackEvent != null) {
-            trackEvent.reportReward(key,adUnitId);
+            trackEvent.reportReward(key, adUnitId);
         }
 
     }
-
 
 
     private static String printAdResponse(AdResponse adResponse) {

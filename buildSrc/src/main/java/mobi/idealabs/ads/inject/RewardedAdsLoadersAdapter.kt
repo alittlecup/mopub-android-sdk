@@ -23,7 +23,12 @@ class RewardedAdsLoadersAdapter(
         superName: String?,
         interfaces: Array<out String>?
     ) {
-        super.visit(version, ACC_PUBLIC, name, signature, superName, interfaces)
+        println("visit name : $name")
+        if (name?.endsWith("RewardedAdsLoaders") == true) {
+            super.visit(version, ACC_PUBLIC, name, signature, superName, interfaces)
+        } else {
+            super.visit(version, access, name, signature, superName, interfaces)
+        }
     }
 
     override fun visitMethod(
@@ -33,7 +38,12 @@ class RewardedAdsLoadersAdapter(
         signature: String?,
         exceptions: Array<out String>?
     ): MethodVisitor {
-        return super.visitMethod(ACC_PUBLIC, name, descriptor, signature, exceptions)
+        if (name == "getLoadersMap") {
+            return super.visitMethod(ACC_PUBLIC, name, descriptor, signature, exceptions)
+        } else {
+            return super.visitMethod(access, name, descriptor, signature, exceptions)
+
+        }
     }
 }
 

@@ -21,7 +21,11 @@ class AdLoaderRewardedVideoAdapter(
         signature: String?,
         exceptions: Array<out String>?
     ): MethodVisitor {
-        val visitMethod = super.visitMethod( Opcodes.ACC_PUBLIC, name, descriptor, signature, exceptions)
+        val visitMethod = if (name == "getLastDeliveredResponse") {
+            super.visitMethod(Opcodes.ACC_PUBLIC, name, descriptor, signature, exceptions)
+        } else {
+            super.visitMethod(access, name, descriptor, signature, exceptions)
+        }
         return AdLoaderRewardedVideoAdapterMethodVisitor(
             className = className,
             methodName = name!!, methodVisitor = visitMethod
@@ -36,7 +40,12 @@ class AdLoaderRewardedVideoAdapter(
         superName: String?,
         interfaces: Array<out String>?
     ) {
-        super.visit(version, Opcodes.ACC_PUBLIC, name, signature, superName, interfaces)
+        if (name?.endsWith("AdLoaderRewardedVideo")==true) {
+            super.visit(version, Opcodes.ACC_PUBLIC, name, signature, superName, interfaces)
+        } else {
+            super.visit(version, access, name, signature, superName, interfaces)
+
+        }
     }
 }
 
@@ -50,9 +59,9 @@ class AdLoaderRewardedVideoAdapterMethodVisitor(
     override fun visitCode() {
         println("methodName: $methodName")
         if (methodName == "trackClick") {
-            MopubInject.injectClick(className, mv,"mLastDeliveredResponse")
+            MopubInject.injectClick(className, mv, "mLastDeliveredResponse")
         } else if (methodName == "trackImpression") {
-            MopubInject.injectImpression(className, mv,"mLastDeliveredResponse")
+            MopubInject.injectImpression(className, mv, "mLastDeliveredResponse")
         }
         super.visitCode()
     }

@@ -90,6 +90,7 @@ class TrackEvent(private val adUnitId: String, private val requestId: String) {
 
 
     fun reportReward(rewardKey: String, currentUnitId: String?) {
+        Log.d("TrackEvent", "reportReward: $rewardKey,$currentUnitId")
         findAdPlacement(adUnitId)?.apply {
             var duration = 0
             if (showTimeMap.isNotEmpty()) {
