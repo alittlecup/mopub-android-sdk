@@ -136,8 +136,11 @@ class AdsTransform(val project: Project) : Transform() {
         if (file.isDirectory) {
             file.eachFileRecurse { item ->
                 if (isProcessClass(item.name)) {
-                    println("file name:"+item.absolutePath)
-                    val code = processClass(item.name, FileInputStream(item))
+                    println("file name:" + item.absolutePath)
+                    val code = processClass(
+                        MopubClassChecker.getPackagePath(item.name),
+                        FileInputStream(item)
+                    )
                     var outPath = item.parentFile.absolutePath + File.separator + item.name
                     println("outFile: $outPath")
                     val fos = FileOutputStream(outPath)
@@ -152,7 +155,7 @@ class AdsTransform(val project: Project) : Transform() {
                 input.scopes,
                 Format.DIRECTORY
             )
-            println("output： $dest")
+            println("dir output： $dest")
             FileUtils.copyDirectory(input.file, dest)
         }
     }

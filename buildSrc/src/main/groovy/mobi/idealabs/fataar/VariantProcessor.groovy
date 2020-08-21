@@ -143,7 +143,6 @@ class VariantProcessor {
                 def group = artifact.getModuleVersion().id.group.capitalize()
                 def name = artifact.name.capitalize()
                 String taskName = "explode${group}${name}${mVariant.name.capitalize()}"
-                mProject.println("explodeTask: "+(artifact.file.absolutePath))
                 Task explodeTask = mProject.tasks.create(name: taskName, type: Copy) {
                     from mProject.zipTree(artifact.file.absolutePath)
                     into zipFolder

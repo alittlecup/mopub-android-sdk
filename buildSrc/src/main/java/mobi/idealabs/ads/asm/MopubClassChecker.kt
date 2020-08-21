@@ -26,6 +26,17 @@ object MopubClassChecker {
         return false
     }
 
+    fun getPackagePath(classPathName: String): String {
+        for (moduleName in mopubModules) {
+            if (classPathName.contains(moduleName.classPath)) {
+                println("class $classPathName")
+                return moduleName.packagePath
+            }
+        }
+        return classPathName
+    }
+
+
     fun isModifyClassMethod(methodName: String?): Boolean {
         for (moduleName in mopubModules) {
         }

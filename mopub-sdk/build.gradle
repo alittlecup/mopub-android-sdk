@@ -7,6 +7,7 @@ import mobi.idealabs.fataar.FatLibraryPlugin
 
 apply plugin: FatLibraryPlugin
 apply plugin: AdsPlugin
+configurations.embed.transitive = true
 repositories {
     flatDir {
         dirs 'libs'
@@ -19,7 +20,7 @@ dependencies {
     embed project(path: ':mopub-sdk:mopub-sdk-rewardedvideo', configuration: 'default')
     embed project(path: ':mopub-sdk:mopub-sdk-native-static', configuration: 'default')
     embed project(path: ':mopub-sdk:mopub-sdk-native-video', configuration: 'default')
-
+    embed 'com.mopub.volley:mopub-volley:2.1.0'
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.robolectric:robolectric:4.3'
     testImplementation 'org.robolectric:shadows-httpclient:4.3'

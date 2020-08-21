@@ -70,9 +70,10 @@ class RProcessor {
 
         reBundleAar.doLast {
             Utils.logAnytime("target: $mAarOutputPath")
+            File f = new File(mAdsAarPath)
             mProject.copy {
                 from new File(mAarOutputPath)
-                into new File(mAdsAarPath)
+                into f
             }
             Utils.logAnytime("copy to : " + f.absolutePath)
 
