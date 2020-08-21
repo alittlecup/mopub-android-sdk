@@ -1,4 +1,3 @@
-
 // Copyright 2018-2020 Twitter, Inc.
 // Licensed under the MoPub SDK License Agreement
 // http://www.mopub.com/legal/sdk-license-agreement/
@@ -143,7 +142,12 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'com.google.android.gms:play-services-ads-identifier:17.0.0'
     implementation 'com.google.android.gms:play-services-base:17.1.0'
-    implementation project(':mopub-sdk')
+    if (isApp == "true") {
+        implementation project(':mopub-sdk')
+    } else {
+        implementation files('../ads/libs/mopub-sdk-debug.aar')
+
+    }
     // Instrumentation testing-only dependencies
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test:rules:1.2.0'

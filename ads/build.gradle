@@ -43,7 +43,7 @@ dependencies {
 
     implementation 'com.mopub.mediation:facebookaudiencenetwork:5.6.0.0'
     implementation 'com.mopub.mediation:admob:18.3.0.0'
-    implementation files('libs/mopub-sdk-debug.aar')
+    api files('libs/mopub-sdk-debug.aar')
 }
 
 task buildAar(dependsOn: [':adlib:assembleRelease']) {

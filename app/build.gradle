@@ -68,7 +68,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
     implementation project(":ads")
-    implementation project(':mopub-sdk')
     implementation project(":mopub-sample")
 
 // AppLovin
@@ -89,8 +88,14 @@ dependencies {
     api 'com.mopub.mediation:facebookaudiencenetwork:5.6.0.0'
 
 //Smaato
-    implementation 'com.smaato.android.sdk:mopub-banner-adapter:21.5.2'
-    implementation 'com.smaato.android.sdk:mopub-interstitial-adapter:21.5.2'
-    implementation 'com.smaato.android.sdk:mopub-rewarded-video-adapter:21.5.2'
+    implementation ('com.smaato.android.sdk:mopub-banner-adapter:21.5.2'){
+        exclude group: 'com.mopub'//by  group
+    }
+    implementation ('com.smaato.android.sdk:mopub-interstitial-adapter:21.5.2'){
+        exclude group: 'com.mopub'//by  group
+    }
+    implementation ('com.smaato.android.sdk:mopub-rewarded-video-adapter:21.5.2'){
+        exclude group: 'com.mopub'//by  group
+    }
 
 }

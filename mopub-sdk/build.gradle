@@ -20,13 +20,6 @@ dependencies {
     embed project(path: ':mopub-sdk:mopub-sdk-native-static', configuration: 'default')
     embed project(path: ':mopub-sdk:mopub-sdk-native-video', configuration: 'default')
 
-    api project(':mopub-sdk:mopub-sdk-base')
-    api project(':mopub-sdk:mopub-sdk-banner')
-    api project(':mopub-sdk:mopub-sdk-interstitial')
-    api project(':mopub-sdk:mopub-sdk-rewardedvideo')
-    api project(':mopub-sdk:mopub-sdk-native-static')
-    api project(':mopub-sdk:mopub-sdk-native-video')
-
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.robolectric:robolectric:4.3'
     testImplementation 'org.robolectric:shadows-httpclient:4.3'
