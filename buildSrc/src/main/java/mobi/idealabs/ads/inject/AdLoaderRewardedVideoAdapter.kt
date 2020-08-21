@@ -21,11 +21,22 @@ class AdLoaderRewardedVideoAdapter(
         signature: String?,
         exceptions: Array<out String>?
     ): MethodVisitor {
-        val visitMethod = super.visitMethod(access, name, descriptor, signature, exceptions)
+        val visitMethod = super.visitMethod( Opcodes.ACC_PUBLIC, name, descriptor, signature, exceptions)
         return AdLoaderRewardedVideoAdapterMethodVisitor(
             className = className,
             methodName = name!!, methodVisitor = visitMethod
         )
+    }
+
+    override fun visit(
+        version: Int,
+        access: Int,
+        name: String?,
+        signature: String?,
+        superName: String?,
+        interfaces: Array<out String>?
+    ) {
+        super.visit(version, Opcodes.ACC_PUBLIC, name, signature, superName, interfaces)
     }
 }
 

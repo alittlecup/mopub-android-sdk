@@ -1,10 +1,25 @@
 // Copyright 2018-2020 Twitter, Inc.
 // Licensed under the MoPub SDK License Agreement
 // http://www.mopub.com/legal/sdk-license-agreement/
-
 apply from: 'shared-build.gradle'
+import mobi.idealabs.ads.gradle.AdsPlugin
+import mobi.idealabs.fataar.FatLibraryPlugin
 
+apply plugin: FatLibraryPlugin
+apply plugin: AdsPlugin
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
 dependencies {
+    embed project(path: ':mopub-sdk:mopub-sdk-base', configuration: 'default')
+    embed project(path: ':mopub-sdk:mopub-sdk-banner', configuration: 'default')
+    embed project(path: ':mopub-sdk:mopub-sdk-interstitial', configuration: 'default')
+    embed project(path: ':mopub-sdk:mopub-sdk-rewardedvideo', configuration: 'default')
+    embed project(path: ':mopub-sdk:mopub-sdk-native-static', configuration: 'default')
+    embed project(path: ':mopub-sdk:mopub-sdk-native-video', configuration: 'default')
+
     api project(':mopub-sdk:mopub-sdk-base')
     api project(':mopub-sdk:mopub-sdk-banner')
     api project(':mopub-sdk:mopub-sdk-interstitial')

@@ -65,7 +65,7 @@ class AdsTransform(val project: Project) : Transform() {
         TransformManager.CONTENT_CLASS
 
     override fun getScopes(): MutableSet<in QualifiedContent.Scope> {
-        return hashSetOf(QualifiedContent.Scope.SUB_PROJECTS)
+        return hashSetOf(QualifiedContent.Scope.PROJECT)
     }
 
     override fun isIncremental(): Boolean = true
@@ -73,6 +73,7 @@ class AdsTransform(val project: Project) : Transform() {
 
     //遍历jarInputs 得到对应的class 交给ASM处理
     private fun handJarInput(jarInput: JarInput, outputProvider: TransformOutputProvider) {
+        println("jar input: ${jarInput.name}")
         if (jarInput.file.absolutePath.endsWith(".jar")) {
             var jarName = jarInput.name
             val md5Name = DigestUtils.md5Hex(jarInput.file.absolutePath)
@@ -129,12 +130,17 @@ class AdsTransform(val project: Project) : Transform() {
 
     //遍历directoryInputs  得到对应的class  交给ASM处理
     private fun handDirectoryInput(input: DirectoryInput, outputProvider: TransformOutputProvider) {
+        println("dir input: ${input.name}")
+
         val file = input.file
         if (file.isDirectory) {
             file.eachFileRecurse { item ->
                 if (isProcessClass(item.name)) {
+                    println("file name:"+item.absolutePath)
                     val code = processClass(item.name, FileInputStream(item))
-                    val fos = FileOutputStream(file.parentFile.absolutePath + File.separator + name)
+                    var outPath = item.parentFile.absolutePath + File.separator + item.name
+                    println("outFile: $outPath")
+                    val fos = FileOutputStream(outPath)
                     fos.write(code)
                     fos.close()
                 }
@@ -146,6 +152,7 @@ class AdsTransform(val project: Project) : Transform() {
                 input.scopes,
                 Format.DIRECTORY
             )
+            println("output： $dest")
             FileUtils.copyDirectory(input.file, dest)
         }
     }

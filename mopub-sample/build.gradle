@@ -1,4 +1,3 @@
-import mobi.idealabs.ads.gradle.AdsPlugin
 
 // Copyright 2018-2020 Twitter, Inc.
 // Licensed under the MoPub SDK License Agreement
@@ -28,7 +27,6 @@ def isApp = properties.getProperty('mopub-sample.isApp')
 
 if (isApp == "true") {
     apply plugin: 'com.android.application'
-    apply plugin: AdsPlugin
 } else {
     apply plugin: 'com.android.library'
 }

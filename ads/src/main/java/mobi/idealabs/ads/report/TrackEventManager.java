@@ -2,7 +2,9 @@ package mobi.idealabs.ads.report;
 
 import android.util.Log;
 
+import com.mopub.mobileads.AdLoaderRewardedVideo;
 import com.mopub.mobileads.MoPubError;
+import com.mopub.mobileads.RewardedAdsLoaders;
 import com.mopub.network.AdResponse;
 
 import java.util.HashMap;
@@ -90,23 +92,23 @@ public final class TrackEventManager {
     /**
      * 激励事件跟踪
      */
-//    public static void trackReward(RewardedAdsLoaders loaders, String key, String adUnitId) {
-//        Map<String, AdLoaderRewardedVideo> loadersLoadersMap = loaders.getLoadersMap();
-//        AdLoaderRewardedVideo adLoaderRewardedVideo = loadersLoadersMap.get(adUnitId);
-//        AdResponse adResponse = null;
-//        if (adLoaderRewardedVideo != null) {
-//            adResponse = adLoaderRewardedVideo.getLastDeliveredResponse();
-//        } else if (!loadersLoadersMap.isEmpty()) {
-//            adResponse = loadersLoadersMap.values().iterator().next().getLastDeliveredResponse();
-//        }
-//        if (adResponse == null) return;
-//        String requestId = adResponse.getRequestId();
-//        TrackEvent trackEvent = trackEventMap.get(requestId);
-//        if (trackEvent != null) {
-//            trackEvent.reportReward(key,adUnitId);
-//        }
+    public static void trackReward(RewardedAdsLoaders loaders, String key, String adUnitId) {
+        Map<String, AdLoaderRewardedVideo> loadersLoadersMap = loaders.getLoadersMap();
+        AdLoaderRewardedVideo adLoaderRewardedVideo = loadersLoadersMap.get(adUnitId);
+        AdResponse adResponse = null;
+        if (adLoaderRewardedVideo != null) {
+            adResponse = adLoaderRewardedVideo.getLastDeliveredResponse();
+        } else if (!loadersLoadersMap.isEmpty()) {
+            adResponse = loadersLoadersMap.values().iterator().next().getLastDeliveredResponse();
+        }
+        if (adResponse == null) return;
+        String requestId = adResponse.getRequestId();
+        TrackEvent trackEvent = trackEventMap.get(requestId);
+        if (trackEvent != null) {
+            trackEvent.reportReward(key,adUnitId);
+        }
 
-//    }
+    }
 
 
 

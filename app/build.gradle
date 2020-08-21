@@ -1,5 +1,3 @@
-import mobi.idealabs.ads.gradle.AdsPlugin
-
 repositories {
     google()
     jcenter()
@@ -23,7 +21,6 @@ repositories {
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: AdsPlugin
 
 android {
     compileSdkVersion 29
