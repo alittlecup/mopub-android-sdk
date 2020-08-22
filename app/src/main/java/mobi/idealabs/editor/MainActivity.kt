@@ -12,14 +12,14 @@ import com.mopub.common.logging.MoPubLog
 import com.mopub.simpleadsdemo.AdUnitDataSource
 import com.mopub.simpleadsdemo.MoPubSampleActivity
 import com.mopub.simpleadsdemo.MoPubSampleAdUnit
-import mobi.idealabs.ads.bean.AdErrorCode
-import mobi.idealabs.ads.bean.AdListener
-import mobi.idealabs.ads.bean.AdPlacement
-import mobi.idealabs.ads.bean.AdType
-import mobi.idealabs.ads.manage.AdManager
-import mobi.idealabs.ads.manage.AdSdk
-import mobi.idealabs.ads.manage.AdSdkInitConfig
-import mobi.idealabs.ads.report.utils.SystemUtil
+import mobi.idealabs.ads.core.bean.AdErrorCode
+import mobi.idealabs.ads.core.bean.AdListener
+import mobi.idealabs.ads.core.bean.AdPlacement
+import mobi.idealabs.ads.core.bean.AdType
+import mobi.idealabs.ads.core.controller.AdManager
+import mobi.idealabs.ads.core.controller.AdSdk
+import mobi.idealabs.ads.core.controller.AdSdkInitConfig
+import mobi.idealabs.ads.core.utils.SystemUtil
 
 class MainActivity : AppCompatActivity() {
 

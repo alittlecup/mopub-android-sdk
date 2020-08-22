@@ -12,6 +12,8 @@ import com.mopub.network.AdResponse;
 import java.util.HashMap;
 import java.util.Map;
 
+import mobi.idealabs.ads.core.network.TrackEvent;
+
 @Keep
 public final class TrackEventManager {
     private static Map<String, TrackEvent> trackEventMap = new HashMap<String, TrackEvent>();

@@ -1,5 +1,3 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="mobi.idealabs.ads">
-
-    /
+    package="com.idealabs.adlib">
 </manifest>

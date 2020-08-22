@@ -13,8 +13,7 @@ import com.mopub.mobileads.MoPubErrorCode
 import com.smaato.sdk.core.Config
 import com.smaato.sdk.core.SmaatoSdk
 import com.smaato.sdk.core.log.LogLevel
-import mobi.idealabs.ads.BuildConfig
-import mobi.idealabs.ads.report.utils.SystemUtil
+import mobi.idealabs.ads.core.utils.SystemUtil
 
 @Keep
 @SuppressLint("RestrictedApi")

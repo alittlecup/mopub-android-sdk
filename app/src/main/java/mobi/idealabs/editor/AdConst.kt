@@ -1,8 +1,9 @@
 package mobi.idealabs.editor
 
-import mobi.idealabs.ads.bean.AdPlacement
-import mobi.idealabs.ads.bean.AdType
-import mobi.idealabs.ads.bean.BannerAdSize
+import mobi.idealabs.ads.core.bean.AdPlacement
+import mobi.idealabs.ads.core.bean.AdType
+import mobi.idealabs.ads.core.bean.BannerAdSize
+
 
 val debug = true
 

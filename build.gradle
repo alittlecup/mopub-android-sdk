@@ -7,6 +7,9 @@ buildscript {
     ext.media2_version = "1.0.1"
 
     repositories {
+        flatDir {
+            dirs 'libs';dirs '../ads/libs';dirs '../app/libs'
+        }
         jcenter()
         google()
         mavenCentral()
@@ -23,6 +26,9 @@ buildscript {
 }
 allprojects {
     repositories {
+        flatDir {
+            dirs 'libs';dirs '../ads/libs';dirs '../app/libs'
+        }
         google()
         jcenter()
         mavenCentral()

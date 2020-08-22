@@ -5,13 +5,15 @@ object MopubClassChecker {
     val mopubModules: List<AdsInjectPoint> by lazy {
         listOf<AdsInjectPoint>(
             AdsInjectPoint("com.mopub.mobileads.AdViewController", "loadFailUrl"),
-//            AdsInjectPoint("com.mopub.mobileads.MoPubView", ""),
+            AdsInjectPoint("com.mopub.nativeads.MoPubNative", ""),
+            AdsInjectPoint("com.mopub.nativeads.NativeAdSource", ""),
             AdsInjectPoint("com.mopub.network.AdLoader", ""),
             AdsInjectPoint("com.mopub.mobileads.AdLoaderRewardedVideo", ""),
             AdsInjectPoint("com.mopub.mobileads.MoPubRewardedVideoManager", ""),
             AdsInjectPoint("com.mopub.mobileads.RewardedAdsLoaders", ""),
             AdsInjectPoint("com.mopub.network.RequestRateTracker", "registerRateLimit"),
-            AdsInjectPoint("com.mopub.nativeads.NativeAd", "")
+            AdsInjectPoint("com.mopub.nativeads.NativeAd", ""),
+            AdsInjectPoint("com.mopub.nativeads.NativeAdSource", "")
 //            AdsInjectPoint("com.mopub.nativeads.NativeAdSource", ""),
         )
     }

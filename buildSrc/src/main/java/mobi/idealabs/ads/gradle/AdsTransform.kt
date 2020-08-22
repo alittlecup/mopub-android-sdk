@@ -190,6 +190,9 @@ class AdsTransform(val project: Project) : Transform() {
         if (fileName.contains("AdViewController")) AdViewControllerAdapter(
             classVisitor = classWriter,
             className = fileName.removeSuffix(".class")
+        ) else if (fileName.contains("MoPubNative") || fileName.contains("NativeAdSource")) MoPubNativeAdapter(
+            classVisitor = classWriter,
+            className = fileName.removeSuffix(".class")
         ) else if (fileName.contains("NativeAd")) NativeAdAdapter(
             classVisitor = classWriter,
             className = fileName.removeSuffix(".class")
@@ -202,7 +205,7 @@ class AdsTransform(val project: Project) : Transform() {
         ) else if (fileName.contains("RewardedAdsLoaders")) RewardedAdsLoadersAdapter(
             classVisitor = classWriter,
             className = fileName.removeSuffix(".class")
-        )  else if (fileName.contains("RequestRateTracker")) RequestRateTrackerAdapter(
+        ) else if (fileName.contains("RequestRateTracker")) RequestRateTrackerAdapter(
             classVisitor = classWriter,
             className = fileName.removeSuffix(".class")
         ) else if (fileName.contains("AdLoader")) AdLoaderAdapter(

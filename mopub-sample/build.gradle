@@ -145,7 +145,7 @@ dependencies {
     if (isApp == "true") {
         implementation project(':mopub-sdk')
     } else {
-        implementation files('../ads/libs/mopub-sdk-debug.aar')
+        compileOnly files('../ads/libs/mopub-sdk-release.aar')
 
     }
     // Instrumentation testing-only dependencies
