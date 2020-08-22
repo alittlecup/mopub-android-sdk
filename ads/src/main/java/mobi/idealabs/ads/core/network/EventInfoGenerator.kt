@@ -45,13 +45,13 @@ class EventInfoGenerator {
         if (name == EventType.REQUEST_SUMMARY) {
             addParams(event_meta, mapOf(request_list to body.toList().apply {
                 this.map {
-                    it.adVendorNameIL = VendorUtil.changeVendorName(it.adVendorNameIL)
+                    it.adVendorNameIL = VendorUtil.changeVendorName(it.adVendorNameIL?:"")
                 }
             }))
         } else {
             addParams(
                 event_meta,
-                body[0].apply { this.adVendorNameIL = VendorUtil.changeVendorName(adVendorNameIL) })
+                body[0].apply { this.adVendorNameIL = VendorUtil.changeVendorName(adVendorNameIL?:"") })
         }
         return gson.fromJson(gson.toJson(eventInfoMap), JsonObject::class.java)
 

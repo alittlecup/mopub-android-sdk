@@ -31,8 +31,7 @@ class TrackEvent(private val adUnitId: String, private val requestId: String) {
                 placementName = name,
                 adTypeIL = this.adType.type,
                 adItemIdIL = VendorUtil.findIDFromServerExtras(
-                    adResponse,
-                    adUnitId
+                    adResponse
                 ),
                 startTimeIL = System.currentTimeMillis(),
                 adVendorNameIL = adResponse.customEventClassName
@@ -71,21 +70,6 @@ class TrackEvent(private val adUnitId: String, private val requestId: String) {
         Log.d("TrackEvent", "trackWaterFallFail: $requestId")
         reportRequestSummaryInfo()
     }
-
-
-    fun reportChance() {
-        findAdPlacement(adUnitId)?.apply {
-            var eventMeta = EventMeta(
-                requestId,
-                name,
-                chanceName,
-                this.adType.type,
-                startTimeIL = System.currentTimeMillis()
-            )
-            AdTracking.reportAdChance(eventMeta)
-        }
-    }
-
 
     fun reportReward(rewardKey: String, currentUnitId: String?) {
         Log.d("TrackEvent", "reportReward: $rewardKey,$currentUnitId")
@@ -155,8 +139,7 @@ class TrackEvent(private val adUnitId: String, private val requestId: String) {
                 chanceName,
                 this.adType.type,
                 VendorUtil.findIDFromServerExtras(
-                    adResponse,
-                    adUnitId
+                    adResponse
                 ),
                 customEventClassName,
                 duration = duration
@@ -178,8 +161,7 @@ class TrackEvent(private val adUnitId: String, private val requestId: String) {
                 chanceName,
                 this.adType.type,
                 VendorUtil.findIDFromServerExtras(
-                    adResponse,
-                    adUnitId
+                    adResponse
                 ),
                 customEventClassName,
                 duration = duration
@@ -191,9 +173,7 @@ class TrackEvent(private val adUnitId: String, private val requestId: String) {
     private fun generateAdResponseKey(adResponse: AdResponse): String {
         return "${adResponse.customEventClassName}_${
             VendorUtil.findIDFromServerExtras(
-                adResponse,
-                adResponse.adUnitId!!
-            )
+                adResponse)
         }"
     }
 

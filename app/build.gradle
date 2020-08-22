@@ -71,12 +71,12 @@ dependencies {
     implementation project(":mopub-sample")
 
 // AppLovin
-    implementation 'com.applovin:applovin-sdk:9.10.2'
-    implementation 'com.mopub.mediation:applovin:9.10.2.0'
+    implementation 'com.applovin:applovin-sdk:9.12.6'
+    implementation 'com.mopub.mediation:applovin:9.12.6.0'
 
 // Google (AdMob & Ad Manager)
-    implementation 'com.google.android.gms:play-services-ads:18.3.0'
-    api 'com.mopub.mediation:admob:18.3.0.0'
+    implementation 'com.google.android.gms:play-services-ads:19.1.0'
+    api 'com.mopub.mediation:admob:19.1.0.0'
 
 
 // Unity Ads
@@ -84,8 +84,8 @@ dependencies {
     implementation 'com.mopub.mediation:unityads:3.4.2.0'
 
 //Facebook
-    implementation 'com.facebook.android:audience-network-sdk:5.6.0'
-    api 'com.mopub.mediation:facebookaudiencenetwork:5.6.0.0'
+    implementation 'com.facebook.android:audience-network-sdk:5.9.0'
+    api 'com.mopub.mediation:facebookaudiencenetwork:5.9.0.0'
 
 //Smaato
     implementation('com.smaato.android.sdk:mopub-banner-adapter:21.5.2') {
@@ -97,5 +97,8 @@ dependencies {
     implementation('com.smaato.android.sdk:mopub-rewarded-video-adapter:21.5.2') {
         exclude group: 'com.mopub'//by  group
     }
+    //ironSource
+    implementation 'com.ironsource.sdk:mediationsdk:6.16.0'
+    implementation 'com.mopub.mediation:ironsource:6.16.1.0'
 
 }

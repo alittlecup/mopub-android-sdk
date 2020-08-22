@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.mopub.common.SdkConfiguration
 import com.mopub.common.logging.MoPubLog
+import com.mopub.network.AdResponse
 import com.mopub.simpleadsdemo.AdUnitDataSource
 import com.mopub.simpleadsdemo.MoPubSampleActivity
 import com.mopub.simpleadsdemo.MoPubSampleAdUnit
@@ -20,6 +21,8 @@ import mobi.idealabs.ads.core.controller.AdManager
 import mobi.idealabs.ads.core.controller.AdSdk
 import mobi.idealabs.ads.core.controller.AdSdkInitConfig
 import mobi.idealabs.ads.core.utils.SystemUtil
+import mobi.idealabs.ads.core.utils.VendorIdStrategy
+import mobi.idealabs.ads.core.utils.VendorUtil
 
 class MainActivity : AppCompatActivity() {
 
