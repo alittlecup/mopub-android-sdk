@@ -15,6 +15,7 @@ import mobi.idealabs.ads.core.bean.EventType
 import mobi.idealabs.ads.core.controller.ActivityLifeManager
 import mobi.idealabs.ads.core.utils.LogUtil
 import mobi.idealabs.ads.core.utils.SystemUtil
+import mobi.idealabs.ads.report.LifecycleOwnerFragment
 
 object AdTracking {
     /**
@@ -36,7 +37,8 @@ object AdTracking {
         if (deviceInfo == null) return
         if (isDailyFirst(context)) {
             service.postDeviceInfo(
-                deviceInfo!!)
+                deviceInfo!!
+            )
                 .subscribeOn(Schedulers.io())
                 .subscribe({
                     LogUtil.d("AdTracking", "reportDeviceInfo: ${it.string()}")
@@ -180,8 +182,7 @@ object AdTracking {
     private val topActivityObserver = object : LifecycleEventObserver {
         override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
             Log.d(
-                "AdTracking",
-                "onStateChanged: $event ${source.lifecycle.currentState}  ${ActivityLifeManager.clickActivityName}"
+                "AdTracking", "onStateChanged: $event ${source.lifecycle.currentState}"
             )
             when (source.lifecycle.currentState) {
                 Lifecycle.State.CREATED -> {
@@ -195,16 +196,14 @@ object AdTracking {
                         Log.d("AdTracking", "onStateChanged: current Activity show")
                         tryReportReturn()
                         source.lifecycle.removeObserver(this)
-                        ActivityLifeManager.clickActivityName =""
                         inBackground = false
                     }
                 }
-                Lifecycle.State.DESTROYED->{
+                Lifecycle.State.DESTROYED -> {
                     if (inBackground) {
                         Log.d("AdTracking", "onStateChanged: current Activity destroy")
                         tryReportReturn()
                         source.lifecycle.removeObserver(this)
-                        ActivityLifeManager.clickActivityName =""
                         inBackground = false
                     }
                 }
@@ -230,10 +229,9 @@ object AdTracking {
             if (topActivity is LifecycleOwner) {
                 topActivity.lifecycle.addObserver(topActivityObserver)
             } else {
-                val name = topActivity::class.java.name
-                if (ActivityLifeManager.clickActivityName != name) {
-                    ActivityLifeManager.clickActivityName = name
-                    ActivityLifeManager.lifecycle.addObserver(topActivityObserver)
+                var reportFragment = LifecycleOwnerFragment.get(activity = topActivity)
+                if (reportFragment != null) {
+                    (reportFragment as LifecycleOwner).lifecycle.addObserver(topActivityObserver)
                 }
             }
         }
