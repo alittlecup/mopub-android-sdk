@@ -4,7 +4,7 @@ import android.net.Uri
 import com.mopub.network.AdResponse
 import com.mopub.network.ImpressionData
 
-sealed class VendorIdStrategy {
+public abstract class VendorIdStrategy {
     abstract fun vendorName(): String
     open fun isVendorCustomEventClass(customEventClassName: String): Boolean {
         return customEventClassName.contains(UnityVendorStrategy.vendorName(), true)

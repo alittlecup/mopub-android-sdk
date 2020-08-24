@@ -114,6 +114,7 @@ class AdsTransform(val project: Project) : Transform() {
                 jarName + md5Name,
                 jarInput.contentTypes, jarInput.scopes, Format.JAR
             )
+            println("jar output : $dest")
             FileUtils.copyFile(tmpFile, dest)
             tmpFile.delete()
         }

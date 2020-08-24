@@ -98,7 +98,7 @@ dependencies {
         exclude group: 'com.mopub'//by  group
     }
     //ironSource
-    implementation 'com.ironsource.sdk:mediationsdk:6.16.0'
-    implementation 'com.mopub.mediation:ironsource:6.16.1.0'
+//    implementation 'com.ironsource.sdk:mediationsdk:6.16.0'
+//    implementation 'com.mopub.mediation:ironsource:6.16.1.0'
 
 }
