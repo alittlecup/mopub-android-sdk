@@ -4,6 +4,7 @@ import android.util.Base64
 import com.google.gson.JsonObject
 import io.reactivex.Flowable
 import mobi.idealabs.ads.core.bean.DeviceInfo
+import mobi.idealabs.ads.core.bean.UserLevelResult
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -15,7 +16,9 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Query
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 import javax.crypto.Cipher
@@ -55,6 +58,17 @@ interface AdService {
 
     @POST("events")
     fun postEventInfo(@Body eventInfo: JsonObject): Flowable<ResponseBody>
+
+    /**
+     * @param bundle : android 包名 , ios bundleID
+     * @param device ad id : android gaid, ios idfa, 都为空则为 UUID
+     */
+    @GET("https://restrict.idealabs.mobi/i/app_state")
+    fun loadCurrentUserAdLevel(
+        @Query("bundle") bundle: String,
+        @Query("uuid") device: String,
+        @Query("ge_id") geId: String
+    ): Flowable<UserLevelResult>
 }
 
 class EncryptendIntenrceptor : Interceptor {
