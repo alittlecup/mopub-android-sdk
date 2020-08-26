@@ -57,11 +57,12 @@ class AdNative(
             )
         }
     }
+    private val renderList = mutableListOf<MoPubAdRenderer<*>>()
 
     init {
         val moPubNativeNetworkListener = moPubNativeNetworkListener
         if (moPubNativeNetworkListener is NativeNetworkListenerWrapper) {
-            moPubNativeNetworkListener.injectListeners=nativeNetWorkListener
+            moPubNativeNetworkListener.injectListeners = nativeNetWorkListener
         }
     }
 
@@ -84,12 +85,16 @@ class AdNative(
 
     fun loadAd(@LayoutRes layoutRes: Int) {
         if (!isReady() && !isLoading) {
+            renderList.clear()
             val mopubAdRender = createMopubStaticAdRender(layoutRes)
             val facebookAdRender = createFacebookAdRender(layoutRes)
             val googleAdRender = createGoogleAdRender(layoutRes)
             registerAdRenderer(mopubAdRender)
             registerAdRenderer(facebookAdRender as MoPubAdRenderer<*>)
             registerAdRenderer(googleAdRender as MoPubAdRenderer<*>)
+            renderList.add(mopubAdRender)
+            renderList.add(facebookAdRender)
+            renderList.add(googleAdRender)
             makeRequest()
             isLoading = true
         }
@@ -141,7 +146,15 @@ class AdNative(
                 null,
                 nativeAd
             )
-            nativeAd?.setMoPubNativeEventListener(nativeEventListener)
+            nativeAd?.let { nativeAd ->
+                val mopubRender = renderList.find { it.supports(nativeAd.baseNativeAd) }
+                if (mopubRender !is GooglePlayServicesAdRenderer) {
+                    adView.findViewById<View>(R.id.native_ad_media_layout).visibility = View.GONE
+                } else {
+                    adView.findViewById<View>(R.id.native_ad_media_layout).visibility = View.VISIBLE
+                }
+                nativeAd.setMoPubNativeEventListener(nativeEventListener)
+            }
             adView
         } else {
             if (tempFrameLayout == null) {
