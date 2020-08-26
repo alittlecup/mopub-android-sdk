@@ -10,6 +10,7 @@ object MopubClassChecker {
             AdsInjectPoint("com.mopub.network.AdLoader", ""),
             AdsInjectPoint("com.mopub.mobileads.AdLoaderRewardedVideo", ""),
             AdsInjectPoint("com.mopub.mobileads.MoPubRewardedVideoManager", ""),
+            AdsInjectPoint("com.mopub.mobileads.CustomEventBannerAdapter", ""),
             AdsInjectPoint("com.mopub.mobileads.RewardedAdsLoaders", ""),
             AdsInjectPoint("com.mopub.network.RequestRateTracker", "registerRateLimit"),
             AdsInjectPoint("com.mopub.nativeads.NativeAd", ""),

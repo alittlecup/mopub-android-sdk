@@ -57,7 +57,7 @@ class AdNative(
             )
         }
     }
-    private val renderList = mutableListOf<MoPubAdRenderer<*>>()
+    private val renderList: MutableList<MoPubAdRenderer<*>> = mutableListOf<MoPubAdRenderer<*>>()
 
     init {
         val moPubNativeNetworkListener = moPubNativeNetworkListener
