@@ -7,7 +7,7 @@ import com.mopub.network.ImpressionData
 public abstract class VendorIdStrategy {
     abstract fun vendorName(): String
     open fun isVendorCustomEventClass(customEventClassName: String): Boolean {
-        return customEventClassName.contains(UnityVendorStrategy.vendorName(), true)
+        return customEventClassName.contains(vendorName(), true)
     }
 
     abstract fun getVendorId(adResponse: AdResponse): String

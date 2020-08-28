@@ -7,6 +7,15 @@
 -keep public class com.mopub.**
 -keep public class android.webkit.JavascriptInterface {}
 
+-keep class com.mopub.** { *; }
+-keep class com.mopub.**$* {
+    *;
+}
+-keep class com.android.volley.** { *; }
+-keep class com.android.volley.**$* {
+    *;
+}
+
 # Explicitly keep any custom event classes in any package.
 -keep class * extends com.mopub.mobileads.CustomEventBanner {}
 -keep class * extends com.mopub.mobileads.CustomEventInterstitial {}

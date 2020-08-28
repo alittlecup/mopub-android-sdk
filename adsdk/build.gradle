@@ -1,4 +1,3 @@
-
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
@@ -49,14 +48,14 @@ dependencies {
 
 }
 
-task buildAar(dependsOn: [':adlib:assembleRelease']) {
+task buildAar(dependsOn: [':adsdk:assembleRelease']) {
     //声明顺序不代表执行顺序，默认是alpha字母从小到大执行
-    finalizedBy ':mopub-sdk-base:assembleRelease',
-            ':mopub-sdk-banner:assembleRelease',
-            ':mopub-sdk-interstitial:assembleRelease',
-            ':mopub-sdk-rewardedvideo:assembleRelease',
-            ':mopub-sdk-native-static:assembleRelease',
-            ':mopub-sdk-native-video:assembleRelease'
+    finalizedBy ':mopub-sdk:mopub-sdk-base:assembleRelease',
+            ':mopub-sdk:mopub-sdk-banner:assembleRelease',
+            ':mopub-sdk:mopub-sdk-interstitial:assembleRelease',
+            ':mopub-sdk:mopub-sdk-rewardedvideo:assembleRelease',
+            ':mopub-sdk:mopub-sdk-native-static:assembleRelease',
+            ':mopub-sdk:mopub-sdk-native-video:assembleRelease'
 }
 
 task buildSdk(type: Copy, dependsOn: buildAar) {
@@ -64,22 +63,22 @@ task buildSdk(type: Copy, dependsOn: buildAar) {
     from('build/outputs/aar') {
         include '*-release.aar'
     }
-    from('../mopub-sdk-base/build/outputs/aar') {
+    from('../mopub-sdk/mopub-sdk-base/build/outputs/aar') {
         include '*-release.aar'
     }
-    from('../mopub-sdk-banner/build/outputs/aar') {
+    from('../mopub-sdk/mopub-sdk-banner/build/outputs/aar') {
         include '*-release.aar'
     }
-    from('../mopub-sdk-interstitial/build/outputs/aar') {
+    from('../mopub-sdk/mopub-sdk-interstitial/build/outputs/aar') {
         include '*-release.aar'
     }
-    from('../mopub-sdk-rewardedvideo/build/outputs/aar') {
+    from('../mopub-sdk/mopub-sdk-rewardedvideo/build/outputs/aar') {
         include '*-release.aar'
     }
-    from('../mopub-sdk-native-static/build/outputs/aar') {
+    from('../mopub-sdk/mopub-sdk-native-static/build/outputs/aar') {
         include '*-release.aar'
     }
-    from('../mopub-sdk-native-video/build/outputs/aar') {
+    from('../mopub-sdk/mopub-sdk-native-video/build/outputs/aar') {
         include '*-release.aar'
     }
     into '../aar'

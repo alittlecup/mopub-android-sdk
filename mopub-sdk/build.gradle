@@ -2,32 +2,15 @@
 // Licensed under the MoPub SDK License Agreement
 // http://www.mopub.com/legal/sdk-license-agreement/
 apply from: 'shared-build.gradle'
-import mobi.idealabs.ads.gradle.AdsPlugin
-import mobi.idealabs.fataar.FatLibraryPlugin
 
-apply plugin: FatLibraryPlugin
-apply plugin: AdsPlugin
-configurations.embed.transitive = true
-repositories {
-    flatDir {
-        dirs 'libs'
-    }
-}
 dependencies {
-    embed project(path: ':mopub-sdk:mopub-sdk-base', configuration: 'default')
-    embed project(path: ':mopub-sdk:mopub-sdk-banner', configuration: 'default')
-    embed project(path: ':mopub-sdk:mopub-sdk-interstitial', configuration: 'default')
-    embed project(path: ':mopub-sdk:mopub-sdk-rewardedvideo', configuration: 'default')
-    embed project(path: ':mopub-sdk:mopub-sdk-native-static', configuration: 'default')
-    embed project(path: ':mopub-sdk:mopub-sdk-native-video', configuration: 'default')
-    embed 'com.mopub.volley:mopub-volley:2.1.0'
-    embed('com.google.android.exoplayer:exoplayer:2.11.0') {
-        exclude group: 'androidx.core'
-        exclude group: 'androidx.lifecycle'
-        exclude group: 'androidx.media'
-        exclude group: 'androidx.versionedparcelable'
-        transitive = false
-    }
+    api project(':mopub-sdk:mopub-sdk-base')
+    api project(':mopub-sdk:mopub-sdk-banner')
+    api project(':mopub-sdk:mopub-sdk-interstitial')
+    api project(':mopub-sdk:mopub-sdk-rewardedvideo')
+    api project(':mopub-sdk:mopub-sdk-native-static')
+    api project(':mopub-sdk:mopub-sdk-native-video')
+
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.robolectric:robolectric:4.3'
     testImplementation 'org.robolectric:shadows-httpclient:4.3'

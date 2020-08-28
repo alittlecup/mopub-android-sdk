@@ -5,7 +5,8 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-
+import mobi.idealabs.ads.gradle.AdsPlugin
+apply plugin: AdsPlugin
 repositories {
     google()
     jcenter()
@@ -63,7 +64,7 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'),
                     project(':mopub-sdk').file('proguard.txt')
         }

@@ -5,8 +5,8 @@ import android.util.Log
 import android.view.View
 import android.widget.FrameLayout
 import androidx.annotation.LayoutRes
-import com.idealabs.adlib.R
 import com.mopub.nativeads.*
+import mobi.idealabs.ads.R
 import mobi.idealabs.ads.core.bean.AdErrorCode
 import mobi.idealabs.ads.core.bean.AdNativeListener
 

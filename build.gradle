@@ -8,7 +8,7 @@ buildscript {
 
     repositories {
         flatDir {
-            dirs 'libs';dirs '../ads/libs';dirs '../app/libs'
+            dirs 'libs';dirs '../adsdk/libs';dirs '../app/libs'
         }
         jcenter()
         google()
@@ -27,7 +27,7 @@ buildscript {
 allprojects {
     repositories {
         flatDir {
-            dirs 'libs';dirs '../ads/libs';dirs '../app/libs'
+            dirs 'libs';dirs '../adsdk/libs';dirs '../app/libs'
         }
         google()
         jcenter()
