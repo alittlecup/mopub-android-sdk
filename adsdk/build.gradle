@@ -1,7 +1,12 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-
+ext {// ext is a gradle closure allowing the declaration of global properties
+    PUBLISH_GROUP_ID = "mobi.idealabs"
+    PUBLISH_ARTIFACT_ID = 'adsdk'
+    PUBLISH_VERSION = "1.0.0"
+}
+apply from: '../maven_aar.gradle'
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
