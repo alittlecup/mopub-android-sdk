@@ -121,6 +121,30 @@ object MopubInject {
         mv.visitMethodInsn(INVOKESTATIC, "mobi/idealabs/ads/report/TrackEventManager", "trackReward", "(Lcom/mopub/mobileads/RewardedAdsLoaders;Ljava/lang/String;Ljava/lang/String;)V", false);
 
     }
+    fun injectMoPubRecyclerViewBind(clazzName: String,mv:MethodVisitor){
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, "com/mopub/nativeads/MoPubRecyclerAdapter", "mAdLoadedListener", "Lcom/mopub/nativeads/MoPubNativeAdLoadedListener;");
+        mv.visitVarInsn(ALOAD, 2);
+        mv.visitMethodInsn(
+            INVOKESTATIC,
+            "mobi/idealabs/ads/report/TrackEventManager",
+            "trackMoPubRecyclerViewListenerBind",
+            "(Lcom/mopub/nativeads/MoPubNativeAdLoadedListener;I)V",
+            false
+        );
+    }
+    fun injectMoPubRecyclerViewShow(clazzName: String,mv:MethodVisitor){
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, "com/mopub/nativeads/MoPubRecyclerAdapter", "mAdLoadedListener", "Lcom/mopub/nativeads/MoPubNativeAdLoadedListener;");
+        mv.visitVarInsn(ALOAD, 2);
+        mv.visitMethodInsn(
+            INVOKESTATIC,
+            "mobi/idealabs/ads/report/TrackEventManager",
+            "trackMoPubRecyclerViewListenerShow",
+            "(Lcom/mopub/nativeads/MoPubNativeAdLoadedListener;I)V",
+            false
+        );
+    }
     /**
      * *injectWaterFallItemStart*
      *

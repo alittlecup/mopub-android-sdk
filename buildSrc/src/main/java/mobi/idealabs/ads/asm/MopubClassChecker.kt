@@ -14,6 +14,7 @@ object MopubClassChecker {
             AdsInjectPoint("com.mopub.mobileads.RewardedAdsLoaders", ""),
             AdsInjectPoint("com.mopub.network.RequestRateTracker", "registerRateLimit"),
             AdsInjectPoint("com.mopub.nativeads.NativeAd", ""),
+            AdsInjectPoint("com.mopub.nativeads.MoPubRecyclerAdapter", ""),
             AdsInjectPoint("com.mopub.nativeads.NativeAdSource", "")
 //            AdsInjectPoint("com.mopub.nativeads.NativeAdSource", ""),
         )

@@ -200,6 +200,9 @@ class AdsTransform(val project: Project) : Transform() {
         ) else if (fileName.contains("AdLoaderRewardedVideo")) AdLoaderRewardedVideoAdapter(
             classVisitor = classWriter,
             className = fileName.removeSuffix(".class")
+        ) else if (fileName.contains("MoPubRecyclerAdapter")) MoPubRecyclerAdapterAdapter(
+            classVisitor = classWriter,
+            className = fileName.removeSuffix(".class")
         )
         else if (fileName.contains("CustomEventBannerAdapter")) CustomEventBannerAdapterAdapter(
             classVisitor = classWriter,

@@ -13,6 +13,7 @@ import com.mopub.network.AdResponse;
 import java.util.HashMap;
 import java.util.Map;
 
+import mobi.idealabs.ads.core.bean.AdsNativeAdFeedListener;
 import mobi.idealabs.ads.core.network.TrackEvent;
 
 @Keep
@@ -44,6 +45,7 @@ public final class TrackEventManager {
     public static void trackWaterFallFail(AdResponse adResponse) {
         if (adResponse == null) return;
         Log.d("TrackEventManager", "trackWaterFallFail: " + printAdResponse(adResponse));
+
         TrackEvent trackEvent = trackEventMap.get(adResponse.getRequestId());
         if (trackEvent != null) {
             trackEvent.trackWaterFallFail();
@@ -122,11 +124,15 @@ public final class TrackEventManager {
     }
 
     public static void trackMoPubRecyclerViewListenerBind(MoPubNativeAdLoadedListener mAdLoadedListener, int position) {
-
+        if (mAdLoadedListener instanceof AdsNativeAdFeedListener) {
+            ((AdsNativeAdFeedListener) mAdLoadedListener).onAdBindView(position);
+        }
     }
 
     public static void trackMoPubRecyclerViewListenerShow(MoPubNativeAdLoadedListener mAdLoadedListener, int position) {
-
+        if (mAdLoadedListener instanceof AdsNativeAdFeedListener) {
+            ((AdsNativeAdFeedListener) mAdLoadedListener).onAdShown(position);
+        }
     }
 
 
