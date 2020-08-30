@@ -30,6 +30,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".TestActivity" />
+        <activity android:name=".AdSdkActivity" />
+        <activity android:name=".BannerActivity" />
+        <activity android:name=".NativeActivity" />
+        <activity android:name=".RewardActivity" />
+        <activity android:name=".IntersititalActivity" />
     </application>
 
 </manifest>

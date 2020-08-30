@@ -20,7 +20,8 @@ object AdManager {
         if (!enable) return
         try {
             when (adPlacement.adType) {
-                AdType.BANNER -> {}
+                AdType.BANNER -> {
+                }
                 AdType.INTERSTITIAL -> AdInterstitialController.loadAdPlacement(
                     adPlacement
                 )
@@ -64,7 +65,7 @@ object AdManager {
         adListener: AdListener = DefaultAdListener(), nativeLayoutRes: Int = -1
     ): Boolean {
         if (!enable) return false
-        var adPlacement = AdSdk.adPlacementFinder?.invoke(adChanceName)
+        var adPlacement = AdSdk.findAdPlacementByChanceName(adChanceName)
         return adPlacement?.let {
             adPlacement.chanceName = adChanceName
             showAdPlacement(

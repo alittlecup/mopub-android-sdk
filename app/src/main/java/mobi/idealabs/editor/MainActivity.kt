@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -18,7 +19,7 @@ import mobi.idealabs.ads.core.bean.AdPlacement
 import mobi.idealabs.ads.core.bean.AdType
 import mobi.idealabs.ads.core.controller.AdManager
 import mobi.idealabs.ads.core.controller.AdSdk
-import mobi.idealabs.ads.core.controller.AdSdkInitConfig
+import mobi.idealabs.ads.core.controller.DefaultAdSdkInitStrategy
 import mobi.idealabs.ads.core.utils.SystemUtil
 
 class MainActivity : AppCompatActivity() {
@@ -27,24 +28,23 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main1)
         initAd()
+        findViewById<Button>(R.id.btn_mopub).setOnClickListener {
+            startActivity(Intent(this, MoPubSampleActivity::class.java))
+        }
+        findViewById<Button>(R.id.btn_sdk).setOnClickListener {
+            startActivity(Intent(this, AdSdkActivity::class.java))
+        }
 
     }
 
     private fun initAd() {
-
-        val sdkConfig = AdSdkInitConfig(
-            createSdkConfig(true, AdConst.TestNativeID),
-            adPlacements = AdConst.adPlacements,
-            logAble = true
-        ) { chance ->
-            AdConst.InterstitialAdPlacement
-        }
         val loadCustomUserId = SystemUtil.loadCustomUserId(this)
+        val sdkConfiguration = createSdkConfig(true, AdConst.TestNativeID)
+
         Log.d("MainActivity", "initAd: $loadCustomUserId")
-        AdSdk.initAdSdk(this, sdkConfig) {
+        AdSdk.initAdSdk(this, sdkConfiguration, createDefaultAdSdkInitStrategy()) {
             toast(" Ads initSuccess ")
             insertAdsAdPlacement()
-            startActivity(Intent(this, MoPubSampleActivity::class.java))
             AdManager.mGlobalAdListener = object : AdListener {
                 override fun onAdStartLoad(adPlacement: AdPlacement?) {
                     toast("START_LOAD $adPlacement")
@@ -96,11 +96,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun chanageType(adType: AdType): MoPubSampleAdUnit.AdType? {
-       return when(adType){
-            AdType.BANNER->MoPubSampleAdUnit.AdType.BANNER
-            AdType.INTERSTITIAL->MoPubSampleAdUnit.AdType.INTERSTITIAL
-            AdType.NATIVE->MoPubSampleAdUnit.AdType.MANUAL_NATIVE
-            AdType.REWARDED_VIDEO->MoPubSampleAdUnit.AdType.REWARDED_VIDEO
+        return when (adType) {
+            AdType.BANNER -> MoPubSampleAdUnit.AdType.BANNER
+            AdType.INTERSTITIAL -> MoPubSampleAdUnit.AdType.INTERSTITIAL
+            AdType.NATIVE -> MoPubSampleAdUnit.AdType.MANUAL_NATIVE
+            AdType.REWARDED_VIDEO -> MoPubSampleAdUnit.AdType.REWARDED_VIDEO
         }
     }
 
@@ -123,6 +123,16 @@ class MainActivity : AppCompatActivity() {
                 mapOf("publishId" to "1100044852")
             )
             .build()
+    }
+
+    private fun createDefaultAdSdkInitStrategy(): DefaultAdSdkInitStrategy {
+        return object :
+            DefaultAdSdkInitStrategy(AdConst.adPlacements, logAble = true, canRetry = true) {
+            override fun findAdPlacementByChanceName(chanceName: String): AdPlacement? {
+                return adPlacements.find { it.name == chanceName }
+            }
+
+        }
     }
 }
 

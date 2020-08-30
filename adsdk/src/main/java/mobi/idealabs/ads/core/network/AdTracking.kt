@@ -48,7 +48,7 @@ object AdTracking {
         }
     }
 
-    private fun isDailyFirst(context: Context): Boolean {
+    fun isDailyFirst(context: Context): Boolean {
         val day = SystemUtil.loadCurrentDay()
         return day != SystemUtil.loadPreviewDay(context)
     }

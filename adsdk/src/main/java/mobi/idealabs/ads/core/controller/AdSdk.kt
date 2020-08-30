@@ -7,49 +7,46 @@ import com.mopub.common.SdkConfiguration
 import com.mopub.common.privacy.ConsentDialogListener
 import com.mopub.mobileads.MoPubErrorCode
 import mobi.idealabs.ads.core.bean.AdPlacement
+import mobi.idealabs.ads.core.bean.IVTUserLevel
 
 
-data class AdSdkInitConfig(
-    val sdkConfiguration: SdkConfiguration, val adPlacements: List<AdPlacement>,
-    val logAble: Boolean = false,
-    val canRetry: Boolean = true,
-    val adPlacementFinder: mobi.idealabs.ads.core.bean.AdPlacementFinder
-)
+typealias AdInitListener = () -> Unit
 
 object AdSdk {
     internal var application: Application? = null
-    internal var adPlacementFinder: mobi.idealabs.ads.core.bean.AdPlacementFinder? = null
     internal var logAble: Boolean = true
-    internal var adPlacements: List<AdPlacement>? = null
     var canRetry: Boolean = true
+    var ivtUserLevelListener: ((IVTUserLevel) -> Unit)? = null
 
     @JvmStatic
     @Synchronized
     fun initAdSdk(
         context: ComponentActivity,
-        adSdkInitConfig: AdSdkInitConfig,
-        adInitListener: mobi.idealabs.ads.core.bean.AdInitListener
+        sdkConfiguration: SdkConfiguration,
+        adSdkInitStrategy: AdSdkInitStrategy,
+        adInitListener: AdInitListener
     ) {
-
-
         if (MoPub.isSdkInitialized()) return
         ActivityLifeManager.initWithActivity(context)
         application = context.application
-        logAble = adSdkInitConfig.logAble
-        canRetry = adSdkInitConfig.canRetry
-        MoPub.initializeSdk(
-            context, adSdkInitConfig.sdkConfiguration
-        ) {
-            sdkInitConfig = adSdkInitConfig.sdkConfiguration
+        logAble = adSdkInitStrategy.logAble
+        canRetry = adSdkInitStrategy.canRetry
+        MoPub.initializeSdk(context, sdkConfiguration) {
+            sdkInitConfig = sdkConfiguration
             AdManager.initWithActivity(context)
-            adPlacementFinder = adSdkInitConfig.adPlacementFinder
-            adPlacements = adSdkInitConfig.adPlacements
+            this.adSdkInitStrategy=adSdkInitStrategy
             adInitListener.invoke()
         }
     }
 
+    private var adSdkInitStrategy: AdSdkInitStrategy? = null
+
+
+    fun findAdPlacementByChanceName(chanceName:String):AdPlacement?{
+        return adSdkInitStrategy?.findAdPlacementByChanceName(chanceName)
+    }
     fun findAdPlacement(adUnitId: String): AdPlacement? {
-        return adPlacements?.find { it.adUnitId == adUnitId }
+        return adSdkInitStrategy?.findAdPlacementByAdUnitId(adUnitId)
     }
 
     internal var sdkInitConfig: SdkConfiguration? = null
@@ -77,5 +74,7 @@ object AdSdk {
         }
         return shouldShow
     }
+
+
 }
 
