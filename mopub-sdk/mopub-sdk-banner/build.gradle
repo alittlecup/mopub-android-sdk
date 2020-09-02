@@ -6,7 +6,7 @@ apply from: '../shared-build.gradle'
 ext {// ext is a gradle closure allowing the declaration of global properties
     PUBLISH_GROUP_ID = "mobi.idealabs"
     PUBLISH_ARTIFACT_ID = 'mopub-sdk-banner'
-    PUBLISH_VERSION = "1.0.0"
+    PUBLISH_VERSION = "1.0.0.1"
 }
 dependencies {
     api project(':mopub-sdk:mopub-sdk-base')

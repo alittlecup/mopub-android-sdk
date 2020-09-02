@@ -4,7 +4,7 @@ apply plugin: 'kotlin-android-extensions'
 ext {// ext is a gradle closure allowing the declaration of global properties
     PUBLISH_GROUP_ID = "mobi.idealabs"
     PUBLISH_ARTIFACT_ID = 'adsdk'
-    PUBLISH_VERSION = "1.0.0"
+    PUBLISH_VERSION = "1.0.0.1"
 }
 apply from: '../maven_aar.gradle'
 android {
@@ -49,46 +49,5 @@ dependencies {
 
     implementation 'com.mopub.mediation:facebookaudiencenetwork:5.6.0.0'
     implementation 'com.mopub.mediation:admob:18.3.0.0'
-
-
 }
 
-task buildAar(dependsOn: [':adsdk:assembleRelease']) {
-    //声明顺序不代表执行顺序，默认是alpha字母从小到大执行
-    finalizedBy ':mopub-sdk:mopub-sdk-base:assembleRelease',
-            ':mopub-sdk:mopub-sdk-banner:assembleRelease',
-            ':mopub-sdk:mopub-sdk-interstitial:assembleRelease',
-            ':mopub-sdk:mopub-sdk-rewardedvideo:assembleRelease',
-            ':mopub-sdk:mopub-sdk-native-static:assembleRelease',
-            ':mopub-sdk:mopub-sdk-native-video:assembleRelease'
-}
-
-task buildSdk(type: Copy, dependsOn: buildAar) {
-
-    from('build/outputs/aar') {
-        include '*-release.aar'
-    }
-    from('../mopub-sdk/mopub-sdk-base/build/outputs/aar') {
-        include '*-release.aar'
-    }
-    from('../mopub-sdk/mopub-sdk-banner/build/outputs/aar') {
-        include '*-release.aar'
-    }
-    from('../mopub-sdk/mopub-sdk-interstitial/build/outputs/aar') {
-        include '*-release.aar'
-    }
-    from('../mopub-sdk/mopub-sdk-rewardedvideo/build/outputs/aar') {
-        include '*-release.aar'
-    }
-    from('../mopub-sdk/mopub-sdk-native-static/build/outputs/aar') {
-        include '*-release.aar'
-    }
-    from('../mopub-sdk/mopub-sdk-native-video/build/outputs/aar') {
-        include '*-release.aar'
-    }
-    into '../aar'
-    doLast {
-        println("sdk构建完成->${destinationDir}")
-    }
-
-}

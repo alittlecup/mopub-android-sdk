@@ -20,6 +20,7 @@ import mobi.idealabs.ads.core.bean.AdType
 import mobi.idealabs.ads.core.controller.AdManager
 import mobi.idealabs.ads.core.controller.AdSdk
 import mobi.idealabs.ads.core.controller.DefaultAdSdkInitStrategy
+import mobi.idealabs.ads.core.controller.IVTAdSdkInitStrategy
 import mobi.idealabs.ads.core.utils.SystemUtil
 
 class MainActivity : AppCompatActivity() {

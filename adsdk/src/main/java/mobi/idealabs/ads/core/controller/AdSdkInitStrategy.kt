@@ -28,11 +28,12 @@ abstract class IVTAdSdkInitStrategy(
     val superiorAdPlacement: List<AdPlacement>,
     val viciousAdPlacement: List<AdPlacement>,
     val worseAdPlacement: List<AdPlacement>,
+    val type: String,
     logAble: Boolean,
     canRetry: Boolean
 ) : AdSdkInitStrategy(logAble, canRetry) {
     override fun findAdPlacementByAdUnitId(adUnityId: String): AdPlacement? {
-        val userLevel = UserLevelRepository.userLevel(AdSdk.application!!)
+        val userLevel = UserLevelRepository.userLevel(AdSdk.application!!,type)
         return when (userLevel) {
             ViciousUser -> viciousAdPlacement
             worseAdPlacement -> worseAdPlacement

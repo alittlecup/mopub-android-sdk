@@ -5,6 +5,7 @@ import com.google.gson.JsonObject
 import io.reactivex.Flowable
 import mobi.idealabs.ads.core.bean.DeviceInfo
 import mobi.idealabs.ads.core.bean.UserLevelResult
+import mobi.idealabs.ads.core.controller.AdSdk
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -37,7 +38,8 @@ object RemoteRepository {
 
     init {
         val httpLogInterceptor = HttpLoggingInterceptor()
-        httpLogInterceptor.level = if (true) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
+        httpLogInterceptor.level =
+            if (AdSdk.logAble) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
         var okHttpClient = OkHttpClient.Builder()
             .addInterceptor(httpLogInterceptor)
             .addInterceptor(EncryptendIntenrceptor())
@@ -67,7 +69,8 @@ interface AdService {
     fun loadCurrentUserAdLevel(
         @Query("bundle") bundle: String,
         @Query("uuid") device: String,
-        @Query("ge_id") geId: String
+        @Query("ge_id") geId: String,
+        @Query("type") type: String
     ): Flowable<UserLevelResult>
 }
 

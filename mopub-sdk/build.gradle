@@ -59,3 +59,52 @@ project.ext.displayName = 'MoPub Android SDK'
 project.ext.projectName = 'mopub-sdk'
 project.ext.uploadName = 'mopub-android-sdk'
 apply from: 'publisher.gradle'
+
+task buildAar(dependsOn: [':mopub-sdk:assembleRelease']) {
+    //声明顺序不代表执行顺序，默认是alpha字母从小到大执行
+    finalizedBy ':mopub-sdk:mopub-sdk-base:assembleRelease',
+            ':mopub-sdk:mopub-sdk-banner:assembleRelease',
+            ':mopub-sdk:mopub-sdk-interstitial:assembleRelease',
+            ':mopub-sdk:mopub-sdk-rewardedvideo:assembleRelease',
+            ':mopub-sdk:mopub-sdk-native-static:assembleRelease',
+            ':mopub-sdk:mopub-sdk-native-video:assembleRelease'
+}
+
+task buildSdk(type: Copy, dependsOn: buildAar) {
+
+    from('build/outputs/aar') {
+        include '*-release.aar'
+    }
+    from('../mopub-sdk/mopub-sdk-base/build/outputs/aar') {
+        include '*-release.aar'
+    }
+    from('../mopub-sdk/mopub-sdk-banner/build/outputs/aar') {
+        include '*-release.aar'
+    }
+    from('../mopub-sdk/mopub-sdk-interstitial/build/outputs/aar') {
+        include '*-release.aar'
+    }
+    from('../mopub-sdk/mopub-sdk-rewardedvideo/build/outputs/aar') {
+        include '*-release.aar'
+    }
+    from('../mopub-sdk/mopub-sdk-native-static/build/outputs/aar') {
+        include '*-release.aar'
+    }
+    from('../mopub-sdk/mopub-sdk-native-video/build/outputs/aar') {
+        include '*-release.aar'
+    }
+    into '../aar'
+    doLast {
+        println("sdk构建完成->${destinationDir}")
+    }
+
+}
+
+task uploadAllMopubAar(){
+    finalizedBy ':mopub-sdk:mopub-sdk-base:uploadArchives',
+            ':mopub-sdk:mopub-sdk-banner:uploadArchives',
+            ':mopub-sdk:mopub-sdk-interstitial:uploadArchives',
+            ':mopub-sdk:mopub-sdk-rewardedvideo:uploadArchives',
+            ':mopub-sdk:mopub-sdk-native-static:uploadArchives',
+            ':mopub-sdk:mopub-sdk-native-video:uploadArchives'
+}

@@ -16,7 +16,7 @@ object AdSdk {
     internal var application: Application? = null
     internal var logAble: Boolean = true
     var canRetry: Boolean = true
-    var ivtUserLevelListener: ((IVTUserLevel) -> Unit)? = null
+    public var ivtUserLevelListener: IVTUserLevelListener? = null
 
     @JvmStatic
     @Synchronized
@@ -34,7 +34,7 @@ object AdSdk {
         MoPub.initializeSdk(context, sdkConfiguration) {
             sdkInitConfig = sdkConfiguration
             AdManager.initWithActivity(context)
-            this.adSdkInitStrategy=adSdkInitStrategy
+            this.adSdkInitStrategy = adSdkInitStrategy
             adInitListener.invoke()
         }
     }
@@ -42,9 +42,10 @@ object AdSdk {
     private var adSdkInitStrategy: AdSdkInitStrategy? = null
 
 
-    fun findAdPlacementByChanceName(chanceName:String):AdPlacement?{
+    fun findAdPlacementByChanceName(chanceName: String): AdPlacement? {
         return adSdkInitStrategy?.findAdPlacementByChanceName(chanceName)
     }
+
     fun findAdPlacement(adUnitId: String): AdPlacement? {
         return adSdkInitStrategy?.findAdPlacementByAdUnitId(adUnitId)
     }
@@ -75,6 +76,9 @@ object AdSdk {
         return shouldShow
     }
 
+    interface IVTUserLevelListener {
+        fun onRemoteLoadSuccess(oldUserLevel: IVTUserLevel, newUserLevel: IVTUserLevel)
+    }
 
 }
 
