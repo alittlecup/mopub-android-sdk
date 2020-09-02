@@ -30,7 +30,7 @@ afterEvaluate { project ->
                 repository(url: getRepositoryUrl()) {
                     authentication(userName: getRepositoryUsername(), password: getRepositoryPassword())
                 }
-                pom.groupId = PUBLISH_GROUP_ID
+                pom.groupId = "mobi.idealabs.ads"
                 pom.artifactId = PUBLISH_ARTIFACT_ID
                 pom.version = PUBLISH_VERSION
                 pom.packaging = 'aar'
