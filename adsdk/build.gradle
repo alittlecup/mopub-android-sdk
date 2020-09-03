@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 Properties properties = new Properties()
-properties.load(project.rootProject.file('local.properties').newDataInputStream())
+properties.load(project.rootProject.file('gradle.properties').newDataInputStream())
 def version = properties.getProperty('adsdk.version')
 ext {// ext is a gradle closure allowing the declaration of global properties
 

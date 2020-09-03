@@ -4,7 +4,7 @@
 
 apply from: '../shared-build.gradle'
 Properties properties = new Properties()
-properties.load(project.rootProject.file('local.properties').newDataInputStream())
+properties.load(project.rootProject.file('gradle.properties').newDataInputStream())
 def version = properties.getProperty('mopub-sdk-rewardedvideo.version')
 ext {// ext is a gradle closure allowing the declaration of global properties
     PUBLISH_GROUP_ID = "mobi.idealabs"
