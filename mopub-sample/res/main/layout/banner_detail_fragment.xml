@@ -91,7 +91,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="10dp"
-        app:moPubAdSize="match_view" />
+    />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/callbacks_recycler_view"

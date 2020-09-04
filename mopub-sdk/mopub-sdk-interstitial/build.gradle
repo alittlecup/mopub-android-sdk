@@ -12,7 +12,7 @@ ext {// ext is a gradle closure allowing the declaration of global properties
     PUBLISH_VERSION = version
 }
 dependencies {
-    api project(':mopub-sdk:mopub-sdk-base')
+    compileOnly project(':mopub-sdk:mopub-sdk-base')
 }
 
 project.description = 'MoPub Android SDK - Interstitial'

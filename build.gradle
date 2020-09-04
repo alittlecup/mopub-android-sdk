@@ -13,12 +13,15 @@ buildscript {
         jcenter()
         google()
         mavenCentral()
+        maven{
+            url "https://maven.idealabs.top/repository/maven-releases"
+        }
         maven { url "https://s3.amazonaws.com/moat-sdk-builds" }
         maven { url 'https://dl.bintray.com/ironsource-mobile/android-sdk' }
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.6.1'
+        classpath 'com.android.tools.build:gradle:3.5.1'
 //        classpath 'com.novoda:bintray-release:0.9.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.kotlin:kotlin-allopen:$kotlin_version"
@@ -32,6 +35,9 @@ allprojects {
         google()
         jcenter()
         mavenCentral()
+        maven{
+            url "https://maven.idealabs.top/repository/maven-releases"
+        }
         maven { url "https://s3.amazonaws.com/moat-sdk-builds" }
         maven { url 'https://dl.bintray.com/ironsource-mobile/android-sdk' }
 

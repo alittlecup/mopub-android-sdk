@@ -8,6 +8,9 @@ repositories {
         name "Tapjoy's maven repo"
         url "https://tapjoy.bintray.com/maven"
     }
+    maven{
+        url "https://maven.idealabs.top/repository/maven-releases"
+    }
     maven {
         url "https://adcolony.bintray.com/AdColony"
     }

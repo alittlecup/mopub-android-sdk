@@ -9,7 +9,7 @@ def version = properties.getProperty('mopub-sdk-base.version')
 ext {// ext is a gradle closure allowing the declaration of global properties
     PUBLISH_GROUP_ID = "mobi.idealabs"
     PUBLISH_ARTIFACT_ID = 'mopub-sdk-base'
-    PUBLISH_VERSION = '1.0.1'
+    PUBLISH_VERSION = version
 }
 repositories {
     flatDir {

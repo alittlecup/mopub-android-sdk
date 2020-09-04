@@ -133,7 +133,7 @@ dependencies {
     implementation 'com.mopub.mediation:unityads:3.3.0.0@aar'
     implementation 'com.mopub.mediation:verizon:1.2.0.1'
     implementation 'com.mopub.mediation:vungle:6.4.11.4'
-    implementation 'com.mopub.mediation:mintegral:13.0.11.0'
+//    implementation 'com.mopub.mediation:mintegral:13.0.11.0'
 
     implementation 'androidx.browser:browser:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
