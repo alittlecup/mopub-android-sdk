@@ -41,6 +41,22 @@ object AdManager {
 
     }
 
+    fun preloadAdPlacementByName(placementName: String, nativeLayoutRes: Int = -1) {
+        val adPlacement = AdSdk.findAdPlacementByName(placementName)
+        if (adPlacement != null) {
+            preloadAdPlacement(adPlacement)
+        }
+    }
+
+    fun isReadyByName(placementName: String): Boolean {
+        val adPlacement = AdSdk.findAdPlacementByName(placementName)
+        return if (adPlacement != null) {
+            isReady(adPlacement)
+        } else {
+            false
+        }
+    }
+
     fun isReady(adPlacement: AdPlacement): Boolean {
         if (!enable) return false
 

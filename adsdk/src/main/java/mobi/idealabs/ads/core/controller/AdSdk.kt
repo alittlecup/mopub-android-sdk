@@ -46,6 +46,10 @@ object AdSdk {
         return adSdkInitStrategy?.findAdPlacementByChanceName(chanceName)
     }
 
+    fun findAdPlacementByName(placementName: String): AdPlacement? {
+        return adSdkInitStrategy?.findAdPlacementByName(placementName)
+    }
+
     fun findAdPlacement(adUnitId: String): AdPlacement? {
         return adSdkInitStrategy?.findAdPlacementByAdUnitId(adUnitId)
     }
