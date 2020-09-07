@@ -23,10 +23,14 @@ class NativeAdAdapter(
         exceptions: Array<out String>?
     ): MethodVisitor {
         val visitMethod = super.visitMethod(access, name, descriptor, signature, exceptions)
-        return NativeAdMethodVisitor(
-            className = className,
-            methodName = name!!, methodVisitor = visitMethod
-        )
+        return if (name == "handleClick" || name == "recordImpression" || name == "<init>") {
+            NativeAdMethodVisitor(
+                className = className,
+                methodName = name, methodVisitor = visitMethod
+            )
+        } else {
+            visitMethod
+        }
     }
 
     override fun visitField(
@@ -65,8 +69,10 @@ class NativeAdMethodVisitor(
         isInterface: Boolean
     ) {
         if (methodName == "handleClick" && name == "makeTrackingHttpRequest") {
+            super.visitMethodInsn(opcode, owner, name, descriptor, isInterface)
             MopubInject.injectClick(className, mv)
         } else if (methodName == "recordImpression" && name == "makeTrackingHttpRequest") {
+            super.visitMethodInsn(opcode, owner, name, descriptor, isInterface)
             MopubInject.injectImpression(className, mv)
         } else if (methodName == "<init>" && name == "getImpressionData") {
             mv.visitVarInsn(ALOAD, 0)
@@ -77,9 +83,11 @@ class NativeAdMethodVisitor(
                 "mAdResponse",
                 "Lcom/mopub/network/AdResponse;"
             )
+            super.visitMethodInsn(opcode, owner, name, descriptor, isInterface)
+        } else {
+            super.visitMethodInsn(opcode, owner, name, descriptor, isInterface)
 
         }
-        super.visitMethodInsn(opcode, owner, name, descriptor, isInterface)
     }
 
 }

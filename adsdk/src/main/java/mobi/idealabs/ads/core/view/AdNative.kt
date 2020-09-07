@@ -9,6 +9,7 @@ import com.mopub.nativeads.*
 import mobi.idealabs.ads.R
 import mobi.idealabs.ads.core.bean.AdErrorCode
 import mobi.idealabs.ads.core.bean.AdNativeListener
+import mobi.idealabs.ads.core.controller.AdNativeController
 
 class NativeNetworkListenerWrapper(private val source: MoPubNative.MoPubNativeNetworkListener? = null) :
     MoPubNative.MoPubNativeNetworkListener {
@@ -40,6 +41,7 @@ class AdNative(
             isLoading = false
             this@AdNative.nativeAd = nativeAd
             adNativeListener?.onNativeLoaded(this@AdNative)
+            nativeAd?.setMoPubNativeEventListener(nativeEventListener)
             if (tempFrameLayout != null) {
                 var showAd = showAd()
                 if (showAd != tempFrameLayout) {
@@ -57,7 +59,7 @@ class AdNative(
             )
         }
     }
-
+    val adNativeListener: AdNativeListener = AdNativeController.adNativeListener
     init {
         val moPubNativeNetworkListener = moPubNativeNetworkListener
         if (moPubNativeNetworkListener is NativeNetworkListenerWrapper) {
@@ -162,7 +164,7 @@ class AdNative(
         adNativeListener?.onNativeDestroy(this)
     }
 
-    var adNativeListener: AdNativeListener? = null
+
 }
 
 

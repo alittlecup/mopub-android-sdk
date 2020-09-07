@@ -14,7 +14,7 @@ object AdNativeController {
 
     private val nativeAdPlacementMap = LinkedHashMap<AdPlacement, AdNative>(8, 0.75f, true)
 
-    private val adNativeListener = object : AdNativeListener {
+    internal val adNativeListener = object : AdNativeListener {
         override fun onNativeDestroy(adNative: AdNative) {
             findAdPlacement(adNative.adUnitId)?.apply {
                 nativeAdPlacementMap.remove(this)
@@ -77,7 +77,6 @@ object AdNativeController {
         val adNative = AdNative(AdSdk.application!!, adPlacement.adUnitId,
             NativeNetworkListenerWrapper()
         )
-        adNative.adNativeListener = adNativeListener
         nativeAdPlacementMap[adPlacement] = adNative
         return adNative
     }

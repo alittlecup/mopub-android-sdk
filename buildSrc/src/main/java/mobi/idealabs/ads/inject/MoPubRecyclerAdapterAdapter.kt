@@ -22,10 +22,14 @@ class MoPubRecyclerAdapterAdapter(
         exceptions: Array<out String>?
     ): MethodVisitor {
         val visitMethod = super.visitMethod(access, name, descriptor, signature, exceptions)
-        return MoPubRecyclerAdapterVisitor(
-            className = className,
-            methodName = name!!, methodVisitor = visitMethod
-        )
+        return if (name == "onBindViewHolder") {
+            MoPubRecyclerAdapterVisitor(
+                className = className,
+                methodName = name, methodVisitor = visitMethod
+            )
+        } else {
+            visitMethod
+        }
     }
 }
 
@@ -44,12 +48,13 @@ class MoPubRecyclerAdapterVisitor(
         isInterface: Boolean
     ) {
         super.visitMethodInsn(opcode, owner, name, descriptor, isInterface)
-        if ((methodName == "onBindViewHolder" && name == "getAdData")) {
-            MopubInject.injectMoPubRecyclerViewBind(className, this)
-        } else if (methodName == "onBindViewHolder" && name == "bindAdView") {
+        if (methodName == "onBindViewHolder" && name == "bindAdView") {
             MopubInject.injectMoPubRecyclerViewShow(className, this)
-
         }
     }
 
+    override fun visitCode() {
+        MopubInject.injectMoPubRecyclerViewBind(className, this)
+        super.visitCode()
+    }
 }

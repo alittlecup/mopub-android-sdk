@@ -1,6 +1,7 @@
 // Copyright 2018-2020 Twitter, Inc.
 // Licensed under the MoPub SDK License Agreement
 // http://www.mopub.com/legal/sdk-license-agreement/
+
 apply from: 'shared-build.gradle'
 ext {// ext is a gradle closure allowing the declaration of global properties
     PUBLISH_GROUP_ID = "mobi.idealabs"
@@ -27,7 +28,7 @@ dependencies {
      'powermock-module-junit4',
      'powermock-module-junit4-rule',
      'powermock-classloading-xstream'].each {
-        testImplementation("org.powermock:${it}:1.7.4") {
+        testImplementation ("org.powermock:${it}:1.7.4") {
             exclude group: 'org.mockito', module: 'mockito-core'
         }
     }
