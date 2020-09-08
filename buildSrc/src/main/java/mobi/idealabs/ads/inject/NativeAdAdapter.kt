@@ -68,13 +68,7 @@ class NativeAdMethodVisitor(
         descriptor: String?,
         isInterface: Boolean
     ) {
-        if (methodName == "handleClick" && name == "makeTrackingHttpRequest") {
-            super.visitMethodInsn(opcode, owner, name, descriptor, isInterface)
-            MopubInject.injectClick(className, mv)
-        } else if (methodName == "recordImpression" && name == "makeTrackingHttpRequest") {
-            super.visitMethodInsn(opcode, owner, name, descriptor, isInterface)
-            MopubInject.injectImpression(className, mv)
-        } else if (methodName == "<init>" && name == "getImpressionData") {
+        if (methodName == "<init>" && name == "getImpressionData") {
             mv.visitVarInsn(ALOAD, 0)
             mv.visitVarInsn(ALOAD, 2)
             mv.visitFieldInsn(
@@ -83,11 +77,19 @@ class NativeAdMethodVisitor(
                 "mAdResponse",
                 "Lcom/mopub/network/AdResponse;"
             )
-            super.visitMethodInsn(opcode, owner, name, descriptor, isInterface)
-        } else {
-            super.visitMethodInsn(opcode, owner, name, descriptor, isInterface)
+        }
+        super.visitMethodInsn(opcode, owner, name, descriptor, isInterface)
+
+    }
+
+    override fun visitCode() {
+        if (methodName == "handleClick") {
+            MopubInject.injectClick(className, mv)
+        } else if (methodName == "recordImpression") {
+            MopubInject.injectImpression(className, mv)
 
         }
+        super.visitCode()
     }
 
 }

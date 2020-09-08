@@ -12,7 +12,7 @@ ext {// ext is a gradle closure allowing the declaration of global properties
     PUBLISH_VERSION = version
 }
 dependencies {
-    implementation project(':mopub-sdk:mopub-sdk-base')
+    compileOnly project(':mopub-sdk:mopub-sdk-base')
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
 }
 

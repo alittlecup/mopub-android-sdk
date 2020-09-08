@@ -7,12 +7,12 @@ Properties properties = new Properties()
 properties.load(project.rootProject.file('gradle.properties').newDataInputStream())
 def version = properties.getProperty('mopub-sdk-banner.version')
 ext {// ext is a gradle closure allowing the declaration of global properties
-    PUBLISH_GROUP_ID = "mobi.idealabs"
+    PUBLISH_GROUP_ID = "mobi.idealabs.ads"
     PUBLISH_ARTIFACT_ID = 'mopub-sdk-banner'
     PUBLISH_VERSION = version
 }
 dependencies {
-    implementation project(':mopub-sdk:mopub-sdk-base')
+    compileOnly project(':mopub-sdk:mopub-sdk-base')
 }
 
 project.description = 'MoPub Android SDK - Banner'
