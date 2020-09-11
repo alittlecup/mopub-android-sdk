@@ -44,7 +44,7 @@ object AdManager {
     fun preloadAdPlacementByName(placementName: String, nativeLayoutRes: Int = -1) {
         val adPlacement = AdSdk.findAdPlacementByName(placementName)
         if (adPlacement != null) {
-            preloadAdPlacement(adPlacement)
+            preloadAdPlacement(adPlacement, nativeLayoutRes)
         }
     }
 
@@ -163,6 +163,13 @@ object AdManager {
             AdType.NATIVE -> AdNativeController.destroyAdPlacement(adPlacement)
         }
 
+    }
+
+    fun destroyAdPlacementByName(placementName: String) {
+        val adPlacement = AdSdk.findAdPlacementByName(placementName)
+        if (adPlacement != null) {
+            destroyAdPlacement(adPlacement)
+        }
     }
 
     var mGlobalAdListener: AdListener? = null
