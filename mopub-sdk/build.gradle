@@ -73,9 +73,9 @@ task buildAar(dependsOn: [':mopub-sdk:assembleRelease']) {
 
 task buildSdk(type: Copy, dependsOn: buildAar) {
 
-    from('build/outputs/aar') {
-        include '*-release.aar'
-    }
+//    from('build/outputs/aar') {
+//        include '*-release.aar'
+//    }
     from('../mopub-sdk/mopub-sdk-base/build/outputs/aar') {
         include '*-release.aar'
     }
