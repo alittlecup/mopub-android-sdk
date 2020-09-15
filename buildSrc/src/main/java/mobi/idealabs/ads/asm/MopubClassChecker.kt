@@ -6,7 +6,7 @@ object MopubClassChecker {
         listOf<AdsInjectPoint>(
             AdsInjectPoint("com.mopub.mobileads.AdViewController", "loadFailUrl"),
             AdsInjectPoint("com.mopub.nativeads.MoPubNative", ""),
-//            AdsInjectPoint("com.mopub.nativeads.MoPubRecyclerAdapter", ""),
+            AdsInjectPoint("com.mopub.nativeads.MoPubRecyclerAdapter", ""),
             AdsInjectPoint("com.mopub.nativeads.NativeAdSource", ""),
             AdsInjectPoint("com.mopub.network.AdLoader", ""),
             AdsInjectPoint("com.mopub.mobileads.AdLoaderRewardedVideo", ""),
