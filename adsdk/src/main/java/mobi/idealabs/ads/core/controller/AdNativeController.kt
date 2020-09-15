@@ -61,7 +61,7 @@ object AdNativeController {
     }
 
     private fun findAdPlacement(adUnitId: String): AdPlacement? {
-        return nativeAdPlacementMap.keys.find { it.adUnitId == adUnitId }
+        return  AdSdk.findAdPlacement(adUnitId)
     }
 
     fun loadAdPlacement(adPlacement: AdPlacement, @LayoutRes layoutRes: Int) {
@@ -74,7 +74,8 @@ object AdNativeController {
     }
 
     fun createAdNative(adPlacement: AdPlacement): AdNative {
-        val adNative = AdNative(AdSdk.application!!, adPlacement.adUnitId,
+        val adNative = AdNative(
+            AdSdk.application!!, adPlacement.adUnitId,
             NativeNetworkListenerWrapper()
         )
         nativeAdPlacementMap[adPlacement] = adNative
