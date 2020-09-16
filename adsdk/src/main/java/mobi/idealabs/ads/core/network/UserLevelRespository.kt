@@ -12,7 +12,7 @@ import mobi.idealabs.ads.core.utils.SystemUtil
 object UserLevelRepository {
     private const val userLevelLocalKey = "ad_user_level_key"
     private const val userLevelTodayUpdate = "ad_user_level_today_update"
-
+    var mockIVTUserLevel: IVTUserLevel = SuperiorUser
     fun userLevel(context: Context, type: String): IVTUserLevel {
         val localUserLevel = loadLocalUserLevel(context)
         val todayUserLevelUpdate =
@@ -25,6 +25,9 @@ object UserLevelRepository {
                 AdSdk.ivtUserLevelListener?.onRemoteLoadSuccess(localUserLevel, it)
                 saveUserLevel(context, it)
             }
+        }
+        if (mockIVTUserLevel != localUserLevel) {
+            return mockIVTUserLevel
         }
         return localUserLevel
 
