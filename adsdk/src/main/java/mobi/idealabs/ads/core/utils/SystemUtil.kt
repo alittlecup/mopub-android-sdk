@@ -243,6 +243,9 @@ object SystemUtil {
     }
 
     fun loadGoogleAdId(): String {
+        if (!mockGoogleAdIds.isNullOrEmpty()) {
+            return mockGoogleAdIds
+        }
         if (clientMetadata == null) return ""
         return if (MoPub.canCollectPersonalInformation()) {
             clientMetadata!!.moPubIdentifier.advertisingInfo.getIdentifier(true)
@@ -252,6 +255,7 @@ object SystemUtil {
 
     }
 
+    var mockGoogleAdIds = ""
     fun loadCurrentDay(): String {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)

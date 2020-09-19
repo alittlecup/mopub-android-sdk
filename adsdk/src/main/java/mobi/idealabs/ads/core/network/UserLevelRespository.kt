@@ -12,22 +12,23 @@ import mobi.idealabs.ads.core.utils.SystemUtil
 object UserLevelRepository {
     private const val userLevelLocalKey = "ad_user_level_key"
     private const val userLevelTodayUpdate = "ad_user_level_today_update"
-    var mockIVTUserLevel: IVTUserLevel = SuperiorUser
+    private var isLoading = false
     fun userLevel(context: Context, type: String): IVTUserLevel {
         val localUserLevel = loadLocalUserLevel(context)
         val todayUserLevelUpdate =
             SharedPreferencesHelper.getSharedPreferences(context, SystemUtil.SP_AD_NAME)
                 .getBoolean(userLevelTodayUpdate, false)
-        if (AdTracking.isDailyFirst(context) || !todayUserLevelUpdate) {
+        if ((AdTracking.isDailyFirst(context) || !todayUserLevelUpdate) && !isLoading) {
+            isLoading = true
+            SharedPreferencesHelper.getSharedPreferences(context, SystemUtil.SP_AD_NAME)
+                .edit().putBoolean(userLevelTodayUpdate, false).apply()
             loadUserLevelRemote(context, type) {
                 SharedPreferencesHelper.getSharedPreferences(context, SystemUtil.SP_AD_NAME)
                     .edit().putBoolean(userLevelTodayUpdate, true).apply()
                 AdSdk.ivtUserLevelListener?.onRemoteLoadSuccess(localUserLevel, it)
                 saveUserLevel(context, it)
+                isLoading = false
             }
-        }
-        if (mockIVTUserLevel != localUserLevel) {
-            return mockIVTUserLevel
         }
         return localUserLevel
 
