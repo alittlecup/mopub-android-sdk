@@ -42,9 +42,8 @@ abstract class IVTAdSdkInitStrategy(
         val userLevel = UserLevelRepository.userLevel(AdSdk.application!!, type)
         return when (userLevel) {
             ViciousUser -> viciousAdPlacement
-            worseAdPlacement -> worseAdPlacement
+            WorseUser -> worseAdPlacement
             UndefinedUser, SuperiorUser -> superiorAdPlacement
-            else -> superiorAdPlacement
         }
     }
 
