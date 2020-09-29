@@ -25,8 +25,9 @@ object UserLevelRepository {
             loadUserLevelRemote(context, type) {
                 SharedPreferencesHelper.getSharedPreferences(context, SystemUtil.SP_AD_NAME)
                     .edit().putBoolean(userLevelTodayUpdate, true).apply()
-                AdSdk.ivtUserLevelListener?.onRemoteLoadSuccess(localUserLevel, it)
-                saveUserLevel(context, it)
+                val resultUserLevel = if (type == "B") SuperiorUser else it
+                saveUserLevel(context, resultUserLevel)
+                AdSdk.ivtUserLevelListener?.onRemoteLoadSuccess(localUserLevel, resultUserLevel)
                 isLoading = false
             }
         }
