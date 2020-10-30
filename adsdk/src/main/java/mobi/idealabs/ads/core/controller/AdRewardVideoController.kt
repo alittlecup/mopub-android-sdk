@@ -29,7 +29,17 @@ internal object AdRewardVideoController {
 
         override fun onRewardedVideoCompleted(adUnitIds: MutableSet<String>, reward: MoPubReward) {
             LogUtil.d("AdRewardVideoController", "onRewardedVideoCompleted: ")
-            findAdPlacementByAdUnit(adUnitId = adUnitIds.first())
+            var adUnitID = if (adUnitIds.isNullOrEmpty()) {
+                AdSdk.findAdPlacementByName("RewardVideo")?.adUnitId
+            } else {
+                adUnitIds.first()
+            }
+            showComplete = true
+
+            if (adUnitID.isNullOrEmpty()) {
+                return
+            }
+            findAdPlacementByAdUnit(adUnitId = adUnitID)
                 ?.apply {
                     this.findCreateListeners(this).forEach {
                         if (it is LifecycleAdPlacementObserver && it.adListener is RewardVideoAdListener) {
@@ -37,7 +47,6 @@ internal object AdRewardVideoController {
                         }
                     }
                 }
-            showComplete = true
         }
 
         override fun onRewardedVideoPlaybackError(adUnitId: String, errorCode: MoPubErrorCode) {
