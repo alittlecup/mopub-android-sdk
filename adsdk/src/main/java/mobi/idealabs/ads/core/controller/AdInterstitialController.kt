@@ -92,7 +92,7 @@ internal object AdInterstitialController {
     private var showTime = -1L
 
     internal fun getAdByAdUnit(adUnitId: String): AdPlacement? {
-        return mInterstitialMap.keys.find { it.adUnitId == adUnitId }
+        return AdSdk.findAdPlacement(adUnitId)
     }
 
     private val interstitialLoadMap =
