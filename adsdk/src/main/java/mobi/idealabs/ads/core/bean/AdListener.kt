@@ -48,12 +48,6 @@ open class DefaultAdListener : AdListener {
     override fun onAdClicked(adPlacement: AdPlacement?) {
     }
 }
-
-interface MopubBannerAdListener : MoPubView.BannerAdListener {
-    fun onBannerLoadStart(banner: MoPubView)
-
-}
-
 interface AdBannerListener {
 
     fun onBannerLoadStart(banner: AdBanner)

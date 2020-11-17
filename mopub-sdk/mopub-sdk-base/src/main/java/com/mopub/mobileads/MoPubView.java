@@ -54,6 +54,7 @@ import static java.lang.Math.ceil;
 public class MoPubView extends FrameLayout {
     public interface BannerAdListener {
         public void onBannerLoaded(@NonNull MoPubView banner);
+        public void onBannerLoadStart(MoPubView banner);
         public void onBannerFailed(MoPubView banner, MoPubErrorCode errorCode);
         public void onBannerClicked(MoPubView banner);
         public void onBannerExpanded(MoPubView banner);
@@ -394,7 +395,7 @@ public class MoPubView extends FrameLayout {
             returnValue = MoPubAdSize.valueOf(moPubAdSizeInt);
         } catch(Resources.NotFoundException rnfe) {
             MoPubLog.log(CUSTOM_WITH_THROWABLE,
-                    "Encountered a problem while setting the MoPubAdSize", 
+                    "Encountered a problem while setting the MoPubAdSize",
                     rnfe);
         } finally {
             a.recycle();

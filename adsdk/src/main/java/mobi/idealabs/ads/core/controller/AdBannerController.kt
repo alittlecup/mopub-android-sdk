@@ -86,7 +86,7 @@ object AdBannerController {
 
         }
     }
-    internal val defaultBannerAdListener = object : MopubBannerAdListener {
+    internal val defaultBannerAdListener = object : MoPubView.BannerAdListener {
 
         override fun onBannerLoaded(banner: MoPubView) {
             LogUtil.d("AdBanner", "onBannerLoaded: ")
