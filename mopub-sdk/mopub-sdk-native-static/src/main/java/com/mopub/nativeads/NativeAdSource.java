@@ -7,6 +7,8 @@ package com.mopub.nativeads;
 import android.app.Activity;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -62,6 +64,10 @@ class NativeAdSource {
 
     @NonNull private final AdRendererRegistry mAdRendererRegistry;
 
+    public boolean hasAvailableAds() {
+        return !mNativeAdCache.isEmpty();
+    }
+
     /**
      * A listener for when ads are available for dequeueing.
      */
@@ -76,6 +82,15 @@ class NativeAdSource {
         this(new ArrayList<TimestampWrapper<NativeAd>>(CACHE_LIMIT),
                 new Handler(),
                 new AdRendererRegistry());
+    }
+
+    private static NativeAdSource nativeAdSource;
+
+    public static NativeAdSource getInstance() {
+        if (nativeAdSource == null) {
+            nativeAdSource = new NativeAdSource();
+        }
+        return nativeAdSource;
     }
 
     @VisibleForTesting
@@ -109,6 +124,7 @@ class NativeAdSource {
                 resetRetryTime();
 
                 mNativeAdCache.add(new TimestampWrapper<NativeAd>(nativeAd));
+                Log.d("FeedNative", "Load Success Native Cache: " + mNativeAdCache.size());
                 if (mNativeAdCache.size() == 1 && mAdSourceListener != null) {
                     mAdSourceListener.onAdsAvailable();
                 }
@@ -120,6 +136,7 @@ class NativeAdSource {
             public void onNativeFail(final NativeErrorCode errorCode) {
                 // Reset the retry time for the next time we dequeue.
                 mRequestInFlight = false;
+                Log.d("FeedNative", "Load Fail Native Cache: " + mNativeAdCache.size());
 
                 // Stopping requests after the max retry count prevents us from using battery when
                 // the user is not interacting with the stream, eg. the app is backgrounded.
@@ -188,8 +205,13 @@ class NativeAdSource {
 
         mRequestParameters = requestParameters;
         mMoPubNative = moPubNative;
-
-        replenishCache();
+        if (hasAvailableAds()) {
+            Log.d("FeedNative", "loadAds: Use Cache");
+            mAdSourceListener.onAdsAvailable();
+        } else {
+            replenishCache();
+            Log.d("FeedNative", "loadAds: Start a Load");
+        }
     }
 
     /**
@@ -204,10 +226,10 @@ class NativeAdSource {
 
         mRequestParameters = null;
 
-        for (final TimestampWrapper<NativeAd> timestampWrapper : mNativeAdCache) {
-            timestampWrapper.mInstance.destroy();
-        }
-        mNativeAdCache.clear();
+//        for (final TimestampWrapper<NativeAd> timestampWrapper : mNativeAdCache) {
+//            timestampWrapper.mInstance.destroy();
+//        }
+//        mNativeAdCache.clear();
 
         mReplenishCacheHandler.removeMessages(0);
         mRequestInFlight = false;
@@ -239,6 +261,7 @@ class NativeAdSource {
             TimestampWrapper<NativeAd> responseWrapper = mNativeAdCache.remove(0);
 
             if (now - responseWrapper.mCreatedTimestamp < EXPIRATION_TIME_MILLISECONDS) {
+                Log.d("FeedNative", "Use Native Cache: " + mNativeAdCache.size());
                 return responseWrapper.mInstance;
             }
         }
@@ -275,6 +298,7 @@ class NativeAdSource {
         if (!mRequestInFlight && mMoPubNative != null && mNativeAdCache.size() < CACHE_LIMIT) {
             mRequestInFlight = true;
             mMoPubNative.makeRequest(mRequestParameters, mSequenceNumber);
+            Log.d("FeedNative", "loadMore");
         }
     }
 

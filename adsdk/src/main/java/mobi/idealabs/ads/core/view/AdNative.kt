@@ -1,5 +1,7 @@
 package mobi.idealabs.ads.core.view
 
+import android.app.Activity
+import android.app.Application
 import android.content.Context
 import android.util.Log
 import android.view.View
@@ -27,11 +29,11 @@ class NativeNetworkListenerWrapper(private val source: MoPubNative.MoPubNativeNe
 }
 
 class AdNative(
-    val context: Context,
+    context: Context,
     val adUnitId: String,
     mopubNativeListener: MoPubNativeNetworkListener
 ) : MoPubNative(context, adUnitId, NativeNetworkListenerWrapper(mopubNativeListener)) {
-
+    private val context = if (context is Activity) context.application else context
 
     private var nativeAd: NativeAd? = null
     private val nativeNetWorkListener = object : MoPubNativeNetworkListener {
@@ -60,6 +62,7 @@ class AdNative(
         }
     }
     val adNativeListener: AdNativeListener = AdNativeController.adNativeListener
+
     init {
         val moPubNativeNetworkListener = moPubNativeNetworkListener
         if (moPubNativeNetworkListener is NativeNetworkListenerWrapper) {
