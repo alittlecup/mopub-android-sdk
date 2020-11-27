@@ -92,7 +92,9 @@ class AdNative(
             val mopubAdRender = createMopubStaticAdRender(layoutRes)
             val facebookAdRender = createFacebookAdRender(layoutRes)
             val googleAdRender = createGoogleAdRender(layoutRes)
+            val smaatoAdRender = createSmaatoAdRender(layoutRes)
             registerAdRenderer(mopubAdRender)
+            registerAdRenderer(smaatoAdRender)
             registerAdRenderer(facebookAdRender as MoPubAdRenderer<*>)
             registerAdRenderer(googleAdRender as MoPubAdRenderer<*>)
             makeRequest()
@@ -123,6 +125,19 @@ class AdNative(
             .build()
         return GooglePlayServicesAdRenderer(viewBinder)
     }
+
+    private fun createSmaatoAdRender(@LayoutRes layoutRes: Int): SmaatoMoPubNativeRenderer {
+        val viewBinder = MediaViewBinder.Builder(layoutRes)
+            .mediaLayoutId(R.id.native_ad_main_image) // bind to your `com.mopub.nativeads.MediaLayout` element
+            .iconImageId(R.id.native_ad_icon_image)
+            .titleId(R.id.native_ad_title)
+            .textId(R.id.native_ad_text)
+            .callToActionId(R.id.native_ad_call_to_action)
+            .privacyInformationIconImageId(R.id.native_ad_privacy_information_icon_image)
+            .build()
+        return SmaatoMoPubNativeRenderer(viewBinder)
+    }
+
 
     private fun createFacebookAdRender(@LayoutRes layoutRes: Int): FacebookAdRenderer {
         val facebookViewBinder = FacebookAdRenderer.FacebookViewBinder.Builder(layoutRes)

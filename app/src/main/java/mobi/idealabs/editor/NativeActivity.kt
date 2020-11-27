@@ -7,6 +7,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mopub.nativeads.*
+import com.smaato.sdk.nativead.NativeAd
+import com.smaato.sdk.nativead.NativeAd.Listener
+import com.smaato.sdk.nativead.NativeAdError
+import com.smaato.sdk.nativead.NativeAdRenderer
+import com.smaato.sdk.nativead.NativeAdRequest
 import mobi.idealabs.ads.core.bean.AdErrorCode
 import mobi.idealabs.ads.core.bean.AdListener
 import mobi.idealabs.ads.core.bean.AdPlacement
@@ -20,6 +25,36 @@ class NativeActivity() : AppCompatActivity() {
         mBinding = DataBindingUtil.setContentView(this, R.layout.native_activity)
         initRecyclerView()
         mBinding.model = this
+
+    }
+
+    private fun loadSmaatoNative() {
+        var nativeAdRequest = NativeAdRequest.builder()
+            .adSpaceId("130783664")
+            .shouldReturnUrlsForImageAssets(false)
+            .build()
+        NativeAd.loadAd(this, nativeAdRequest, object : Listener {
+            override fun onAdLoaded(p0: NativeAd, p1: NativeAdRenderer) {
+                Log.d("NativeActivity", "onAdLoaded: ")
+            }
+
+            override fun onAdFailedToLoad(p0: NativeAd, p1: NativeAdError) {
+                Log.d("NativeActivity", "onAdFailedToLoad: ")
+            }
+
+            override fun onAdImpressed(p0: NativeAd) {
+                Log.d("NativeActivity", "onAdImpressed: ")
+            }
+
+            override fun onAdClicked(p0: NativeAd) {
+                Log.d("NativeActivity", "onAdClicked: ")
+            }
+
+            override fun onTtlExpired(p0: NativeAd) {
+                Log.d("NativeActivity", "onTtlExpired: ")
+            }
+
+        })
     }
 
     val listenerDatas = listOf(
@@ -65,6 +100,8 @@ class NativeActivity() : AppCompatActivity() {
     fun load() {
         //加载Feed 广告
         AdManager.preloadAdPlacement(AdConst.NativeAdPlacement, R.layout.native_layout)
+//        loadSmaatoNative()
+
     }
 
     fun loadFeed() {
@@ -138,6 +175,18 @@ class NativeActivity() : AppCompatActivity() {
         return GooglePlayServicesAdRenderer(viewBinder)
     }
 
+    private fun createSmaatoAdRender(@LayoutRes layoutRes: Int): SmaatoMoPubNativeRenderer {
+        val viewBinder = MediaViewBinder.Builder(layoutRes)
+            .mediaLayoutId(R.id.native_ad_main_image) // bind to your `com.mopub.nativeads.MediaLayout` element
+            .iconImageId(R.id.native_ad_icon_image)
+            .titleId(R.id.native_ad_title)
+            .textId(R.id.native_ad_text)
+            .callToActionId(R.id.native_ad_call_to_action)
+            .privacyInformationIconImageId(R.id.native_ad_privacy_information_icon_image)
+            .build()
+        return SmaatoMoPubNativeRenderer(viewBinder)
+    }
+
     private fun createFacebookAdRender(@LayoutRes layoutRes: Int): FacebookAdRenderer {
         val facebookViewBinder = FacebookAdRenderer.FacebookViewBinder.Builder(layoutRes)
             .titleId(R.id.native_ad_title)
@@ -157,6 +206,7 @@ class NativeActivity() : AppCompatActivity() {
         val facebookAdRenderer = createFacebookAdRender(R.layout.native_layout)
         val mopubAdRender = createMopubStaticAdRender(R.layout.native_layout)
         val googleAdRenderer = createGoogleAdRender(R.layout.native_layout)
+        val smaatoAdRender = createSmaatoAdRender(R.layout.native_layout)
         //设置广告展示位置
         val moPubServerPositioning = MoPubNativeAdPositioning.MoPubClientPositioning()
         moPubServerPositioning.addFixedPosition(5)
@@ -184,6 +234,7 @@ class NativeActivity() : AppCompatActivity() {
         moPubRecyclerAdapter?.registerAdRenderer(facebookAdRenderer as MoPubAdRenderer<*>)
         moPubRecyclerAdapter?.registerAdRenderer(googleAdRenderer as MoPubAdRenderer<*>)
         moPubRecyclerAdapter?.registerAdRenderer(mopubAdRender)
+        moPubRecyclerAdapter?.registerAdRenderer(smaatoAdRender)
 
         mBinding.recyclerView.adapter = moPubRecyclerAdapter
 

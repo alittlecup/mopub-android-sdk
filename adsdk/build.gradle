@@ -53,5 +53,9 @@ dependencies {
 
     implementation 'com.mopub.mediation:facebookaudiencenetwork:5.6.0.0'
     implementation 'com.mopub.mediation:admob:18.3.0.0'
+
+    implementation('com.smaato.android.sdk:mopub-native-adapter:21.5.2') {
+        exclude group: 'com.mopub'//by  group
+    }
 }
 

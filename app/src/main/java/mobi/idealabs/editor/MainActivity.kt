@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.mopub.common.SdkConfiguration
 import com.mopub.common.logging.MoPubLog
+import com.mopub.mobileads.SmaatoAdapterConfiguration
 import com.mopub.simpleadsdemo.AdUnitDataSource
 import com.mopub.simpleadsdemo.MoPubSampleActivity
 import com.mopub.simpleadsdemo.MoPubSampleAdUnit
@@ -123,6 +124,9 @@ class MainActivity : AppCompatActivity() {
                 "mobi.idealabs.editor.SmaatoAdapterConfiguration",
                 mapOf("publishId" to "1100044852")
             )
+            .withAdditionalNetwork("com.mopub.mobileads.InMobiAdapterConfiguration")
+            .withMediatedNetworkConfiguration("com.mopub.mobileads.InMobiAdapterConfiguration",
+                mapOf("accountId" to "6e6f3efe3756430a9d40136f5779c287"))
             .build()
     }
 

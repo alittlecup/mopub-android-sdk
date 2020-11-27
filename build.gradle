@@ -18,6 +18,8 @@ buildscript {
         }
         maven { url "https://s3.amazonaws.com/moat-sdk-builds" }
         maven { url 'https://dl.bintray.com/ironsource-mobile/android-sdk' }
+        maven { url "https://s3.amazonaws.com/smaato-sdk-releases/" }
+
     }
 
     dependencies {
@@ -40,6 +42,8 @@ allprojects {
         }
         maven { url "https://s3.amazonaws.com/moat-sdk-builds" }
         maven { url 'https://dl.bintray.com/ironsource-mobile/android-sdk' }
+        maven { url "https://s3.amazonaws.com/smaato-sdk-releases/" }
+
 
     }
 }
