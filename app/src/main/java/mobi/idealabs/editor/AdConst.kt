@@ -33,7 +33,7 @@ object AdConst {
      */
     const val TestBannerID = "d87903f1752e440e960b2524a9dc1f8c"
     const val TestInterstitialID = "72adf39350884a1eaccf52022b129c28"
-    const val TestNativeID = "80df4331660e4579860ec10036997fb1"
+    const val TestNativeID = "11a17b188668469fb0412708c3d16813"
     const val TestRewardVideoID = "98a687d8ef894d07899e6a8fe3718bcf"
 
     val Banner =

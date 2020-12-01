@@ -99,7 +99,7 @@ class NativeActivity() : AppCompatActivity() {
 
     fun load() {
         //加载Feed 广告
-        AdManager.preloadAdPlacement(AdConst.NativeAdPlacement, R.layout.native_layout)
+        AdManager.preloadAdPlacement(AdConst.NativeAdPlacement)
 //        loadSmaatoNative()
 
     }
@@ -142,7 +142,7 @@ class NativeActivity() : AppCompatActivity() {
 
                 }
 
-            }, nativeLayoutRes = R.layout.native_layout
+            }
         )
     }
 
@@ -234,7 +234,18 @@ class NativeActivity() : AppCompatActivity() {
         moPubRecyclerAdapter?.registerAdRenderer(facebookAdRenderer as MoPubAdRenderer<*>)
         moPubRecyclerAdapter?.registerAdRenderer(googleAdRenderer as MoPubAdRenderer<*>)
         moPubRecyclerAdapter?.registerAdRenderer(mopubAdRender)
-        moPubRecyclerAdapter?.registerAdRenderer(smaatoAdRender)
+        moPubRecyclerAdapter?.registerAdRenderer(smaatoAdRender as MoPubAdRenderer<*>)
+
+        AdManager.registerAdRenderer(
+            facebookAdRenderer as MoPubAdRenderer<*>,
+            AdConst.NativeAdPlacement
+        )
+        AdManager.registerAdRenderer(
+            googleAdRenderer as MoPubAdRenderer<*>,
+            AdConst.NativeAdPlacement
+        )
+        AdManager.registerAdRenderer(mopubAdRender, AdConst.NativeAdPlacement)
+        AdManager.registerAdRenderer(smaatoAdRender as MoPubAdRenderer<*>, AdConst.NativeAdPlacement)
 
         mBinding.recyclerView.adapter = moPubRecyclerAdapter
 
