@@ -28,12 +28,14 @@ object AdTracking {
      */
     val service = RemoteRepository.service
     private var deviceInfo: DeviceInfo? = null
+    private var customer_user_id: String = "";
 
     @SuppressLint("CheckResult")
     fun reportDeviceInfo(context: Context, customer_user_id: String) {
         deviceInfo = createDeviceInfo(context)
         if (deviceInfo == null) return
         deviceInfo!!.CuidIL = customer_user_id
+        this.customer_user_id = customer_user_id
         if (isDailyFirst(context)) {
             service.postDeviceInfo(
                 deviceInfo!!
@@ -167,6 +169,8 @@ object AdTracking {
     @SuppressLint("CheckResult")
     private fun reportEventBody(flowable: Flowable<JsonObject>) {
         flowable.flatMap {
+            it.addProperty("CuidIL", customer_user_id)
+            it.addProperty("AppleVendorIdIL", "")
             service.postEventInfo(it)
 
         }.subscribeOn(Schedulers.io())

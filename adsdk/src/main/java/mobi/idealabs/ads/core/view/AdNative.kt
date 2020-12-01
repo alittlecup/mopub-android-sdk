@@ -74,59 +74,6 @@ class AdNative(
                 adNativeListener.onNativeClicked(this@AdNative)
             }
         }
-
-
-    private fun createMopubStaticAdRender(@LayoutRes layoutRes: Int): MoPubStaticNativeAdRenderer {
-        val viewBinder = ViewBinder.Builder(layoutRes)
-            .mainImageId(R.id.native_ad_main_image)
-            .iconImageId(R.id.native_ad_icon_image)
-            .titleId(R.id.native_ad_title)
-            .callToActionId(R.id.native_ad_call_to_action)
-            .textId(R.id.native_ad_text)
-            .privacyInformationIconImageId(R.id.native_ad_privacy_information_icon_image)
-            .build()
-        return MoPubStaticNativeAdRenderer(viewBinder)
-    }
-
-    private fun createGoogleAdRender(@LayoutRes layoutRes: Int): GooglePlayServicesAdRenderer {
-        val viewBinder = MediaViewBinder.Builder(layoutRes)
-            .mediaLayoutId(R.id.native_ad_media_layout) // bind to your `com.mopub.nativeads.MediaLayout` element
-            .iconImageId(R.id.native_ad_icon_image)
-            .titleId(R.id.native_ad_title)
-            .textId(R.id.native_ad_text)
-            .callToActionId(R.id.native_ad_call_to_action)
-            .privacyInformationIconImageId(R.id.native_ad_privacy_information_icon_image)
-            .build()
-        return GooglePlayServicesAdRenderer(viewBinder)
-    }
-
-    private fun createSmaatoAdRender(@LayoutRes layoutRes: Int): SmaatoMoPubNativeRenderer {
-        val viewBinder = MediaViewBinder.Builder(layoutRes)
-            .mediaLayoutId(R.id.native_ad_main_image) // bind to your `com.mopub.nativeads.MediaLayout` element
-            .iconImageId(R.id.native_ad_icon_image)
-            .titleId(R.id.native_ad_title)
-            .textId(R.id.native_ad_text)
-            .callToActionId(R.id.native_ad_call_to_action)
-            .privacyInformationIconImageId(R.id.native_ad_privacy_information_icon_image)
-            .build()
-        return SmaatoMoPubNativeRenderer(viewBinder)
-    }
-
-
-    private fun createFacebookAdRender(@LayoutRes layoutRes: Int): FacebookAdRenderer {
-        val facebookViewBinder = FacebookAdRenderer.FacebookViewBinder.Builder(layoutRes)
-            .titleId(R.id.native_ad_title)
-            .textId(R.id.native_ad_text)
-            .mediaViewId(R.id.native_ad_fb_media)
-            .adIconViewId(R.id.native_ad_fb_icon_image)
-            .adChoicesRelativeLayoutId(R.id.native_ad_choices_relative_layout)
-            .callToActionId(R.id.native_ad_call_to_action)
-            .build()
-        return FacebookAdRenderer(facebookViewBinder)
-    }
-
-
-
     override fun destroy() {
         adNativeListener.onNativeDestroy(this)
         super.destroy()

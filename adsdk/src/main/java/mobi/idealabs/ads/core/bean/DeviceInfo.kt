@@ -22,6 +22,6 @@ data class DeviceInfo(
     val TimeZoneIL: Long,
     val AppBundleIdIL: String,
     val AppVersionCodeIL: Int,
-    val AppVersionNameIL: String, var CuidIL: String, val AppleVendorIDIL: String = ""
+    val AppVersionNameIL: String, var CuidIL: String, val AppleVendorIdIL: String = ""
 )
 

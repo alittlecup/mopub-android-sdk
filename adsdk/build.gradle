@@ -54,11 +54,6 @@ dependencies {
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.7.1'
     implementation 'com.squareup.retrofit2:converter-gson:2.7.1'
 
-    implementation 'com.mopub.mediation:facebookaudiencenetwork:5.6.0.0'
-    implementation 'com.mopub.mediation:admob:18.3.0.0'
 
-    implementation('com.smaato.android.sdk:mopub-native-adapter:21.5.2') {
-        exclude group: 'com.mopub'//by  group
-    }
 }
 
