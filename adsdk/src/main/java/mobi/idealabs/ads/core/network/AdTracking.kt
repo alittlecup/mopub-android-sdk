@@ -27,14 +27,13 @@ object AdTracking {
      * ad_reward
      */
     val service = RemoteRepository.service
-    var googleAdId: String = ""
     private var deviceInfo: DeviceInfo? = null
 
     @SuppressLint("CheckResult")
-    fun reportDeviceInfo(context: Context) {
-        deviceInfo =
-            createDeviceInfo(context)
+    fun reportDeviceInfo(context: Context, customer_user_id: String) {
+        deviceInfo = createDeviceInfo(context)
         if (deviceInfo == null) return
+        deviceInfo!!.CuidIL = customer_user_id
         if (isDailyFirst(context)) {
             service.postDeviceInfo(
                 deviceInfo!!
@@ -77,7 +76,7 @@ object AdTracking {
             SystemUtil.loadTimeZone(),
             SystemUtil.loadAppBundleId(),
             SystemUtil.loadAppVersionCode(),
-            SystemUtil.loadAppVersionName()
+            SystemUtil.loadAppVersionName(), ""
         )
     }
 
