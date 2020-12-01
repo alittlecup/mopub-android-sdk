@@ -3,6 +3,7 @@ package mobi.idealabs.ads.core.controller
 import android.widget.FrameLayout
 import androidx.core.app.ComponentActivity
 import androidx.lifecycle.LifecycleOwner
+import com.mopub.nativeads.MoPubAdRenderer
 import mobi.idealabs.ads.core.bean.AdListener
 import mobi.idealabs.ads.core.bean.AdPlacement
 import mobi.idealabs.ads.core.bean.AdType
@@ -15,7 +16,7 @@ object AdManager {
     }
 
     fun preloadAdPlacement(
-        adPlacement: AdPlacement, nativeLayoutRes: Int = -1
+        adPlacement: AdPlacement
     ) {
         if (!enable) return
         try {
@@ -29,10 +30,7 @@ object AdManager {
                     adPlacement
                 )
                 AdType.NATIVE -> {
-                    require(nativeLayoutRes != -1) {
-                        "The Native Layout Resource  must > -1"
-                    }
-                    AdNativeController.loadAdPlacement(adPlacement, nativeLayoutRes)
+                    AdNativeController.loadAdPlacement(adPlacement)
                 }
             }
         } catch (e: Exception) {
@@ -41,10 +39,14 @@ object AdManager {
 
     }
 
-    fun preloadAdPlacementByName(placementName: String, nativeLayoutRes: Int = -1) {
+    fun registerAdRenderer(moPubNativeAdRenderer: MoPubAdRenderer<*>, adPlacement: AdPlacement) {
+        AdNativeController.registerAdRenderer(moPubNativeAdRenderer, adPlacement)
+    }
+
+    fun preloadAdPlacementByName(placementName: String) {
         val adPlacement = AdSdk.findAdPlacementByName(placementName)
         if (adPlacement != null) {
-            preloadAdPlacement(adPlacement, nativeLayoutRes)
+            preloadAdPlacement(adPlacement)
         }
     }
 
@@ -78,7 +80,7 @@ object AdManager {
         lifecycleOwner: LifecycleOwner,
         adChanceName: String,
         viewGroup: FrameLayout? = null,
-        adListener: AdListener = DefaultAdListener(), nativeLayoutRes: Int = -1
+        adListener: AdListener = DefaultAdListener()
     ): Boolean {
         if (!enable) return false
         var adPlacement = AdSdk.findAdPlacementByChanceName(adChanceName)
@@ -88,8 +90,7 @@ object AdManager {
                 lifecycleOwner,
                 adPlacement,
                 viewGroup,
-                adListener,
-                nativeLayoutRes
+                adListener
             )
         } ?: false
     }
@@ -98,8 +99,7 @@ object AdManager {
         lifecycleOwner: LifecycleOwner,
         adPlacement: AdPlacement,
         viewGroup: FrameLayout? = null,
-        adListener: AdListener = DefaultAdListener(),
-        nativeLayoutRes: Int = -1
+        adListener: AdListener = DefaultAdListener()
     ): Boolean {
         if (!enable) return false
         return when (adPlacement.adType) {
@@ -133,13 +133,10 @@ object AdManager {
                 require(viewGroup != null) {
                     "The Native Type show must have container viewGroup"
                 }
-                require(nativeLayoutRes != -1) {
-                    "The Native Layout Resource  must > -1"
-                }
+
                 AdNativeController.showAdPlacement(
                     lifecycleOwner,
                     adPlacement,
-                    nativeLayoutRes,
                     viewGroup,
                     adListener
                 )

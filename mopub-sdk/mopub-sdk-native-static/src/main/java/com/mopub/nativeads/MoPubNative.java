@@ -5,8 +5,10 @@
 package com.mopub.nativeads;
 
 import android.content.Context;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import android.text.TextUtils;
 
 import com.mopub.common.AdFormat;
@@ -45,46 +47,57 @@ public class MoPubNative {
 
     public interface MoPubNativeNetworkListener {
         void onNativeLoad(final NativeAd nativeAd);
+
         void onNativeFail(final NativeErrorCode errorCode);
     }
 
     static final MoPubNativeNetworkListener EMPTY_NETWORK_LISTENER =
             new MoPubNativeNetworkListener() {
-        @Override
-        public void onNativeLoad(@NonNull final NativeAd nativeAd) {
-            // If this listener is invoked, it means that MoPubNative instance has been destroyed
-            // so destroy any leftover incoming NativeAds
-            nativeAd.destroy();
-        }
-        @Override
-        public void onNativeFail(final NativeErrorCode errorCode) {
-        }
-    };
+                @Override
+                public void onNativeLoad(@NonNull final NativeAd nativeAd) {
+                    // If this listener is invoked, it means that MoPubNative instance has been destroyed
+                    // so destroy any leftover incoming NativeAds
+                    nativeAd.destroy();
+                }
+
+                @Override
+                public void onNativeFail(final NativeErrorCode errorCode) {
+                }
+            };
 
     // Highly recommended to be an Activity since 3rd party networks need it
-    @NonNull private final WeakReference<Context> mContext;
-    @NonNull private final String mAdUnitId;
-    @NonNull private MoPubNativeNetworkListener mMoPubNativeNetworkListener;
+    @NonNull
+    private final WeakReference<Context> mContext;
+    @NonNull
+    protected final String mAdUnitId;
+    @NonNull
+    private MoPubNativeNetworkListener mMoPubNativeNetworkListener;
 
     // For small sets TreeMap, takes up less memory than HashMap
-    @NonNull private Map<String, Object> mLocalExtras = new TreeMap<String, Object>();
-    @Nullable private AdLoader mAdLoader;
-    @Nullable private CustomEventNativeAdapter mNativeAdapter;
-    @NonNull private final AdLoader.Listener mVolleyListener;
-    @Nullable private Request mNativeRequest;
-    @NonNull AdRendererRegistry mAdRendererRegistry;
+    @NonNull
+    private Map<String, Object> mLocalExtras = new TreeMap<String, Object>();
+    @Nullable
+    private AdLoader mAdLoader;
+    @Nullable
+    private CustomEventNativeAdapter mNativeAdapter;
+    @NonNull
+    private final AdLoader.Listener mVolleyListener;
+    @Nullable
+    private Request mNativeRequest;
+    @NonNull
+    AdRendererRegistry mAdRendererRegistry;
 
     public MoPubNative(@NonNull final Context context,
-            @NonNull final String adUnitId,
-            @NonNull final MoPubNativeNetworkListener moPubNativeNetworkListener) {
+                       @NonNull final String adUnitId,
+                       @NonNull final MoPubNativeNetworkListener moPubNativeNetworkListener) {
         this(context, adUnitId, new AdRendererRegistry(), moPubNativeNetworkListener);
     }
 
     @VisibleForTesting
     public MoPubNative(@NonNull final Context context,
-            @NonNull final String adUnitId,
-            @NonNull AdRendererRegistry adRendererRegistry,
-            @NonNull final MoPubNativeNetworkListener moPubNativeNetworkListener) {
+                       @NonNull final String adUnitId,
+                       @NonNull AdRendererRegistry adRendererRegistry,
+                       @NonNull final MoPubNativeNetworkListener moPubNativeNetworkListener) {
         Preconditions.checkNotNull(context, "context may not be null.");
         Preconditions.checkNotNull(adUnitId, "AdUnitId may not be null.");
         Preconditions.checkNotNull(adRendererRegistry, "AdRendererRegistry may not be null.");
@@ -142,7 +155,7 @@ public class MoPubNative {
     }
 
     public void makeRequest() {
-        makeRequest((RequestParameters)null);
+        makeRequest((RequestParameters) null);
     }
 
     public void makeRequest(@Nullable final RequestParameters requestParameters) {
@@ -150,7 +163,7 @@ public class MoPubNative {
     }
 
     public void makeRequest(@Nullable final RequestParameters requestParameters,
-            @Nullable Integer sequenceNumber) {
+                            @Nullable Integer sequenceNumber) {
         final Context context = getContextOrDestroy();
         if (context == null) {
             return;
@@ -231,15 +244,15 @@ public class MoPubNative {
                             return;
                         }
 
-                        if(mAdLoader!=null) {
+                        if (mAdLoader != null) {
                             mAdLoader.creativeDownloadSuccess();
                         }
 
                         mMoPubNativeNetworkListener.onNativeLoad(new NativeAd(context,
-                                        response,
-                                        mAdUnitId,
-                                        nativeAd,
-                                        renderer)
+                                response,
+                                mAdUnitId,
+                                nativeAd,
+                                renderer)
                         );
                     }
 
@@ -318,7 +331,7 @@ public class MoPubNative {
     @VisibleForTesting
     @Deprecated
     @NonNull
-    MoPubNativeNetworkListener getMoPubNativeNetworkListener() {
+    public MoPubNativeNetworkListener getMoPubNativeNetworkListener() {
         return mMoPubNativeNetworkListener;
     }
 }

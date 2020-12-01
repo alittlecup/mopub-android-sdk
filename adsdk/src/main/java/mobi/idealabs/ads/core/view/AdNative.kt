@@ -12,6 +12,7 @@ import mobi.idealabs.ads.R
 import mobi.idealabs.ads.core.bean.AdErrorCode
 import mobi.idealabs.ads.core.bean.AdNativeListener
 import mobi.idealabs.ads.core.controller.AdNativeController
+import mobi.idealabs.ads.core.controller.AdNativeController.adNativeListener
 
 class NativeNetworkListenerWrapper(private val source: MoPubNative.MoPubNativeNetworkListener? = null) :
     MoPubNative.MoPubNativeNetworkListener {
@@ -40,28 +41,19 @@ class AdNative(
 
         override fun onNativeLoad(nativeAd: NativeAd?) {
             Log.d("AdNative", "onNativeLoad: $nativeAd")
-            isLoading = false
             this@AdNative.nativeAd = nativeAd
-            adNativeListener?.onNativeLoaded(this@AdNative)
+            adNativeListener.onNativeLoaded(this@AdNative)
             nativeAd?.setMoPubNativeEventListener(nativeEventListener)
-            if (tempFrameLayout != null) {
-                var showAd = showAd()
-                if (showAd != tempFrameLayout) {
-                    tempFrameLayout!!.addView(showAd, FrameLayout.LayoutParams(-1, -1))
-                }
-            }
         }
 
         override fun onNativeFail(errorCode: NativeErrorCode?) {
             Log.d("AdNative", "onNativeFail: ")
-            isLoading = false
-            adNativeListener?.onNativeFailed(
+            adNativeListener.onNativeFailed(
                 this@AdNative,
                 AdErrorCode(errorCode?.name, errorCode?.intCode)
             )
         }
     }
-    val adNativeListener: AdNativeListener = AdNativeController.adNativeListener
 
     init {
         val moPubNativeNetworkListener = moPubNativeNetworkListener
@@ -74,33 +66,15 @@ class AdNative(
         object : NativeAd.MoPubNativeEventListener {
             override fun onImpression(view: View?) {
                 Log.d("AdNative", "onImpression: $view")
-                adNativeListener?.onNativeShown(this@AdNative)
+                adNativeListener.onNativeShown(this@AdNative)
             }
 
             override fun onClick(view: View?) {
                 Log.d("AdNative", "onClick: $view")
-                adNativeListener?.onNativeClicked(this@AdNative)
+                adNativeListener.onNativeClicked(this@AdNative)
             }
         }
 
-
-    private var isLoading = false
-
-
-    fun loadAd(@LayoutRes layoutRes: Int) {
-        if (!isReady() && !isLoading) {
-            val mopubAdRender = createMopubStaticAdRender(layoutRes)
-            val facebookAdRender = createFacebookAdRender(layoutRes)
-            val googleAdRender = createGoogleAdRender(layoutRes)
-            val smaatoAdRender = createSmaatoAdRender(layoutRes)
-            registerAdRenderer(mopubAdRender)
-            registerAdRenderer(smaatoAdRender)
-            registerAdRenderer(facebookAdRender as MoPubAdRenderer<*>)
-            registerAdRenderer(googleAdRender as MoPubAdRenderer<*>)
-            makeRequest()
-            isLoading = true
-        }
-    }
 
     private fun createMopubStaticAdRender(@LayoutRes layoutRes: Int): MoPubStaticNativeAdRenderer {
         val viewBinder = ViewBinder.Builder(layoutRes)
@@ -151,37 +125,12 @@ class AdNative(
         return FacebookAdRenderer(facebookViewBinder)
     }
 
-    var tempFrameLayout: FrameLayout? = null
 
-    fun showAd(): View? {
-        return if (isReady()) {
-            val adapterHelper = AdapterHelper(context, 0, 3)
-            val adView = adapterHelper.getAdView(
-                null,
-                null,
-                nativeAd
-            )
-            nativeAd?.setMoPubNativeEventListener(nativeEventListener)
-            adView
-        } else {
-            if (tempFrameLayout == null) {
-                tempFrameLayout = FrameLayout(context)
-            }
-            tempFrameLayout
-        }
+
+    override fun destroy() {
+        adNativeListener.onNativeDestroy(this)
+        super.destroy()
     }
-
-    fun isReady(): Boolean {
-        return nativeAd != null && !nativeAd?.isDestroyed!!
-    }
-
-    fun destroyAd() {
-        tempFrameLayout = null
-        destroy()
-        nativeAd?.destroy()
-        adNativeListener?.onNativeDestroy(this)
-    }
-
 
 }
 

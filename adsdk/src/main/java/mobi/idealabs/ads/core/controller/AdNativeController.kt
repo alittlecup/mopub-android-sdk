@@ -1,23 +1,26 @@
 package mobi.idealabs.ads.core.controller
 
-import android.view.ViewGroup
+import android.util.Log
+import android.view.View
 import android.widget.FrameLayout
-import androidx.annotation.LayoutRes
 import androidx.lifecycle.LifecycleOwner
+import com.mopub.nativeads.AdapterHelper
+import com.mopub.nativeads.MoPubAdRenderer
+import com.mopub.nativeads.NativeAd
+import com.mopub.nativeads.NativeAdSource
 import mobi.idealabs.ads.core.bean.*
 import mobi.idealabs.ads.core.network.AdTracking
 import mobi.idealabs.ads.core.view.AdNative
 import mobi.idealabs.ads.core.view.NativeNetworkListenerWrapper
+import androidx.core.view.isVisible as isVisible
 
 
 object AdNativeController {
 
-    private val nativeAdPlacementMap = LinkedHashMap<AdPlacement, AdNative>(8, 0.75f, true)
 
     internal val adNativeListener = object : AdNativeListener {
         override fun onNativeDestroy(adNative: AdNative) {
             findAdPlacement(adNative.adUnitId)?.apply {
-                nativeAdPlacementMap.remove(this)
                 this.clearListeners()
                 AdManager.mGlobalAdListener?.onAdDismissed(this)
                 this.findActiveListeners(this).forEach { it.onAdDismissed(this) }
@@ -60,36 +63,25 @@ object AdNativeController {
 
     }
 
+
     private fun findAdPlacement(adUnitId: String): AdPlacement? {
-        return  AdSdk.findAdPlacement(adUnitId)
+        return AdSdk.findAdPlacement(adUnitId)
     }
 
-    fun loadAdPlacement(adPlacement: AdPlacement, @LayoutRes layoutRes: Int) {
+    fun loadAdPlacement(adPlacement: AdPlacement) {
         if (!AdManager.enable) return
-        var adNative = nativeAdPlacementMap[adPlacement]
-        if (adNative == null) {
-            adNative = createAdNative(adPlacement)
-        }
-        adNative.loadAd(layoutRes)
+        var nativeAdSource = getNativeAdSource(adPlacement)
+        nativeAdSource.loadAds(AdSdk.application!!, adPlacement.adUnitId, null)
     }
 
-    fun createAdNative(adPlacement: AdPlacement): AdNative {
-        val adNative = AdNative(
-            AdSdk.application!!, adPlacement.adUnitId,
-            NativeNetworkListenerWrapper()
-        )
-        nativeAdPlacementMap[adPlacement] = adNative
-        return adNative
-    }
 
     fun showAdPlacement(
         lifecycleOwner: LifecycleOwner,
-        adPlacement: AdPlacement, @LayoutRes layoutRes: Int,
+        adPlacement: AdPlacement,
         parent: FrameLayout,
         adListener: AdListener
     ): Boolean {
-        var moPubNative = nativeAdPlacementMap[adPlacement]
-
+        var nativeAdSource = getNativeAdSource(adPlacement)
         AdTracking.reportAdChance(
             EventMeta(
                 "",
@@ -107,48 +99,50 @@ object AdNativeController {
                 adListener
             )
         )
-        if (moPubNative == null) {
-            moPubNative = createAdNative(adPlacement)
-        }
-        var result = false
-        if (!isReady(adPlacement)) {
-            loadAdPlacement(adPlacement, layoutRes)
-        } else {
-            result = true
-        }
-        var showAd = moPubNative.showAd()
-        if (showAd?.parent != parent) {
-            var viewParent = showAd?.parent
-            if (viewParent != null) {
-                (viewParent as ViewGroup).removeView(showAd)
-            }
-            parent.addView(showAd, FrameLayout.LayoutParams(-1, -1))
-        }
 
+        var result = nativeAdSource.hasAvailableAds(adPlacement.adUnitId)
+        var adSourceListener = nativeAdSource.adSourceListener
+        nativeAdSource.setAdSourceListener {
+            nativeAdSource.adSourceListener = adSourceListener
+            if (parent.isVisible) {
+                var nativeAd = nativeAdSource.dequeueAd(adPlacement.adUnitId)
+                if (nativeAd != null) {
+                    var nativeAdView = getNativeAdView(nativeAd)
+                    parent.removeAllViews()
+                    parent.addView(nativeAdView, FrameLayout.LayoutParams(-1, -1))
+                }
+            }
+        }
+        loadAdPlacement(adPlacement)
         return result
+    }
+
+
+    private fun getNativeAdView(nativeAd: NativeAd): View {
+        var adapterHelper = AdapterHelper(AdSdk.application!!, 0, 3)
+        return adapterHelper.getAdView(null, null, nativeAd)
+    }
+
+
+    private fun getNativeAdSource(adPlacement: AdPlacement): NativeAdSource {
+        return NativeAdSource.getInstance()
+    }
+
+    internal fun isReady(adPlacement: AdPlacement): Boolean {
+        return getNativeAdSource(adPlacement).hasAvailableAds(adPlacement.adUnitId)
+    }
+
+    internal fun destroyAdPlacement(adPlacement: AdPlacement) {
+        getNativeAdSource(adPlacement).clear()
+        getNativeAdSource(adPlacement).adSourceListener = null
 
     }
 
-    fun isReady(adPlacement: AdPlacement): Boolean {
-        var moPubNative = nativeAdPlacementMap[adPlacement]
-        return moPubNative != null && moPubNative.isReady()
-    }
-
-    fun destroyAdPlacement(adPlacement: AdPlacement) {
-        var mode = adPlacement.mode
-        var adNative = nativeAdPlacementMap[adPlacement]
-
-        when (mode) {
-            PlacementMode.DESTROY -> {
-                adNative?.destroyAd()
-            }
-            PlacementMode.FORCE_REFRESH -> {
-                adNative?.destroyAd()
-            }
-            PlacementMode.REBUILD -> {
-                adNative?.destroyAd()
-            }
-        }
-
+    internal fun registerAdRenderer(
+        moPubNativeAdRenderer: MoPubAdRenderer<*>,
+        adPlacement: AdPlacement
+    ) {
+        var nativeAdSource = getNativeAdSource(adPlacement)
+        nativeAdSource.registerAdRenderer(moPubNativeAdRenderer)
     }
 }
