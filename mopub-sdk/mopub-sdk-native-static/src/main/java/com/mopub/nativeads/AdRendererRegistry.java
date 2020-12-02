@@ -16,7 +16,8 @@ import java.util.ArrayList;
  */
 public class AdRendererRegistry {
 
-    @NonNull private final ArrayList<MoPubAdRenderer> mMoPubAdRenderers;
+    @NonNull
+    private final ArrayList<MoPubAdRenderer> mMoPubAdRenderers;
 
     public AdRendererRegistry() {
         mMoPubAdRenderers = new ArrayList<MoPubAdRenderer>();
@@ -35,6 +36,12 @@ public class AdRendererRegistry {
         return mMoPubAdRenderers.size();
     }
 
+    public void removeRenderer(MoPubAdRenderer moPubAdRenderer) {
+        if (mMoPubAdRenderers.contains(moPubAdRenderer)) {
+            mMoPubAdRenderers.remove(moPubAdRenderer);
+        }
+    }
+
     @NonNull
     public Iterable<MoPubAdRenderer> getRendererIterable() {
         return mMoPubAdRenderers;
@@ -47,7 +54,7 @@ public class AdRendererRegistry {
      *
      * @param nativeAd The {@link NativeAd} to render.
      * @return The integer representing the view type of the first renderer registered that
-     *         supports rendering the {@link NativeAd}.
+     * supports rendering the {@link NativeAd}.
      */
     public int getViewTypeForAd(@NonNull final NativeAd nativeAd) {
         Preconditions.checkNotNull(nativeAd);
