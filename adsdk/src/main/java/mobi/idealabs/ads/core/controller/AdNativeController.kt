@@ -1,18 +1,13 @@
 package mobi.idealabs.ads.core.controller
 
-import android.util.Log
 import android.view.View
 import android.widget.FrameLayout
+import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
-import com.mopub.nativeads.AdapterHelper
-import com.mopub.nativeads.MoPubAdRenderer
-import com.mopub.nativeads.NativeAd
-import com.mopub.nativeads.NativeAdSource
+import com.mopub.nativeads.*
 import mobi.idealabs.ads.core.bean.*
 import mobi.idealabs.ads.core.network.AdTracking
 import mobi.idealabs.ads.core.view.AdNative
-import mobi.idealabs.ads.core.view.NativeNetworkListenerWrapper
-import androidx.core.view.isVisible as isVisible
 
 
 object AdNativeController {
@@ -107,6 +102,12 @@ object AdNativeController {
             if (parent.isVisible) {
                 var nativeAd = nativeAdSource.dequeueAd(adPlacement.adUnitId)
                 if (nativeAd != null) {
+                    var moPubAdRenderer = nativeAd.moPubAdRenderer
+                    var adRender =
+                        adRendererRegistry.rendererIterable.find { it.javaClass == moPubAdRenderer.javaClass }
+                    if (adRender != null) {
+                        nativeAd.moPubAdRenderer = adRender
+                    }
                     var nativeAdView = getNativeAdView(nativeAd)
                     parent.removeAllViews()
                     parent.addView(nativeAdView, FrameLayout.LayoutParams(-1, -1))
@@ -138,11 +139,19 @@ object AdNativeController {
 
     }
 
+    private val adRendererRegistry = AdRendererRegistry();
+
     internal fun registerAdRenderer(
-        moPubNativeAdRenderer: MoPubAdRenderer<*>,
-        adPlacement: AdPlacement
+        moPubNativeAdRenderer: MoPubAdRenderer<*>
     ) {
-        var nativeAdSource = getNativeAdSource(adPlacement)
-        nativeAdSource.registerAdRenderer(moPubNativeAdRenderer)
+        val iterator = adRendererRegistry.rendererIterable.iterator()
+        while (iterator.hasNext()) {
+            val next = iterator.next()
+            if (next.javaClass == moPubNativeAdRenderer.javaClass) {
+                iterator.remove()
+                break
+            }
+        }
+        adRendererRegistry.registerAdRenderer(moPubNativeAdRenderer)
     }
 }

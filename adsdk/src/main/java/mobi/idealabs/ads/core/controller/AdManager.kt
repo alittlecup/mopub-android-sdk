@@ -39,8 +39,8 @@ object AdManager {
 
     }
 
-    fun registerAdRenderer(moPubNativeAdRenderer: MoPubAdRenderer<*>, adPlacement: AdPlacement) {
-        AdNativeController.registerAdRenderer(moPubNativeAdRenderer, adPlacement)
+    fun registerAdRenderer(moPubNativeAdRenderer: MoPubAdRenderer<*>) {
+        AdNativeController.registerAdRenderer(moPubNativeAdRenderer)
     }
 
     fun preloadAdPlacementByName(placementName: String) {
