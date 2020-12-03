@@ -26,6 +26,7 @@ import com.mopub.nativeads.PositioningSource.PositioningListener;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.WeakHashMap;
 
 import static com.mopub.common.logging.MoPubLog.SdkLogEvent.CUSTOM;
@@ -127,7 +128,7 @@ public class MoPubStreamAdPlacer {
      */
     public MoPubStreamAdPlacer(@NonNull final Activity activity,
                                @NonNull final MoPubServerPositioning adPositioning) {
-        this(activity,NativeAdSource.getInstance(), new ServerPositioningSource(activity));
+        this(activity, NativeAdSource.getInstance(), new ServerPositioningSource(activity));
     }
 
     /**
@@ -157,7 +158,7 @@ public class MoPubStreamAdPlacer {
         mPositioningSource = positioningSource;
         mAdSource = adSource;
         mPlacementData = PlacementData.empty();
-
+        adRendererRegistry = new AdRendererRegistry();
         mNativeAdMap = new WeakHashMap<>();
         mViewMap = new HashMap<>();
 
@@ -177,6 +178,8 @@ public class MoPubStreamAdPlacer {
         mVisibleRangeEnd = 0;
     }
 
+    private AdRendererRegistry adRendererRegistry;
+
     /**
      * Registers an ad renderer for rendering a specific native ad format in your stream.
      * Note that if multiple ad renderers support a specific native ad format, the first
@@ -191,7 +194,7 @@ public class MoPubStreamAdPlacer {
         if (!NoThrow.checkNotNull(adRenderer, "Cannot register a null adRenderer")) {
             return;
         }
-
+        adRendererRegistry.registerAdRenderer(adRenderer);
         mAdSource.registerAdRenderer(adRenderer);
     }
 
@@ -422,7 +425,13 @@ public class MoPubStreamAdPlacer {
         if (nativeAd == null) {
             return null;
         }
-
+        Iterator<MoPubAdRenderer> iterator = mAdSource.mAdRendererRegistry.getRendererIterable().iterator();
+        while (iterator.hasNext()) {
+            MoPubAdRenderer next = iterator.next();
+            if (next.getClass() == nativeAd.getMoPubAdRenderer().getClass()) {
+                nativeAd.setMoPubAdRenderer(next);
+            }
+        }
         final View view = (convertView != null) ?
                 convertView : nativeAd.createAdView(mActivity, parent);
         bindAdView(nativeAd, view);
@@ -519,7 +528,15 @@ public class MoPubStreamAdPlacer {
         if (nativeAd == null) {
             return CONTENT_VIEW_TYPE;
         }
-
+        Iterator<MoPubAdRenderer> iterator = adRendererRegistry.getRendererIterable().iterator();
+        int i = 1;
+        while (iterator.hasNext()) {
+            MoPubAdRenderer next = iterator.next();
+            if (next.getClass() == nativeAd.getMoPubAdRenderer().getClass()) {
+                return i;
+            }
+            i++;
+        }
         return mAdSource.getViewTypeForAd(nativeAd);
     }
 

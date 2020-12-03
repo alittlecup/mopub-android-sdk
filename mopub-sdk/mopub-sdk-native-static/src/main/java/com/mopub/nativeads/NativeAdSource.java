@@ -78,7 +78,7 @@ public class NativeAdSource {
     private MoPubNative mMoPubNative;
 
     @NonNull
-    private final AdRendererRegistry mAdRendererRegistry;
+    protected final AdRendererRegistry mAdRendererRegistry;
 
     public boolean hasAvailableAds(String adUnitId) {
         return !getNativeAdCache(adUnitId).isEmpty();
