@@ -425,7 +425,7 @@ public class MoPubStreamAdPlacer {
         if (nativeAd == null) {
             return null;
         }
-        Iterator<MoPubAdRenderer> iterator = mAdSource.mAdRendererRegistry.getRendererIterable().iterator();
+        Iterator<MoPubAdRenderer> iterator = adRendererRegistry.getRendererIterable().iterator();
         while (iterator.hasNext()) {
             MoPubAdRenderer next = iterator.next();
             if (next.getClass() == nativeAd.getMoPubAdRenderer().getClass()) {

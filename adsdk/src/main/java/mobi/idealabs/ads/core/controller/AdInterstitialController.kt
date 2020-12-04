@@ -25,7 +25,7 @@ internal object AdInterstitialController {
                 ?.apply {
                     AdManager.mGlobalAdListener?.onAdLoaded(this)
 
-                    this.findActiveListeners(this).forEach { it.onAdLoaded(this) }
+                    this.findCreateListeners(this).forEach { it.onAdLoaded(this) }
                 }
 
         }
@@ -36,7 +36,7 @@ internal object AdInterstitialController {
             getAdByAdUnit((interstitial as AdInterstitial).adsUnitId)
                 ?.apply {
                     AdManager.mGlobalAdListener?.onAdShown(this)
-                    this.findActiveListeners(this).forEach { it.onAdShown(this) }
+                    this.findCreateListeners(this).forEach { it.onAdShown(this) }
                 }
             showTime = System.currentTimeMillis()
 
@@ -58,7 +58,7 @@ internal object AdInterstitialController {
                             this,
                             AdErrorCode.convertMopubError(errorCode)
                         )
-                        this.findActiveListeners(this)
+                        this.findCreateListeners(this)
                             .forEach {
                                 it.onAdFailed(
                                     this,
@@ -75,7 +75,7 @@ internal object AdInterstitialController {
                 ?.apply {
                     destroyAdPlacement(this)
                     AdManager.mGlobalAdListener?.onAdDismissed(this)
-                    this.findActiveListeners(this).forEach { it.onAdDismissed(this) }
+                    this.findCreateListeners(this).forEach { it.onAdDismissed(this) }
                 }
         }
 
@@ -85,7 +85,7 @@ internal object AdInterstitialController {
                 ?.apply {
                     AdManager.mGlobalAdListener?.onAdClicked(this)
 
-                    this.findActiveListeners(this).forEach { it.onAdClicked(this) }
+                    this.findCreateListeners(this).forEach { it.onAdClicked(this) }
                 }
         }
     }
