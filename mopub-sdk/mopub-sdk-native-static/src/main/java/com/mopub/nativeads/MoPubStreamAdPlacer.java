@@ -200,7 +200,7 @@ public class MoPubStreamAdPlacer {
 
     @Nullable
     public MoPubAdRenderer getAdRendererForViewType(int viewType) {
-        return mAdSource.getAdRendererForViewType(viewType);
+        return adRendererRegistry.getRendererForViewType(viewType);
     }
 
     /**
@@ -251,7 +251,7 @@ public class MoPubStreamAdPlacer {
             return;
         }
 
-        if (mAdSource.getAdRendererCount() == 0) {
+        if (adRendererRegistry.getAdRendererCount() == 0) {
             MoPubLog.log(CUSTOM, "You must register at least 1 ad renderer by calling registerAdRenderer " +
                     "before loading ads");
             return;
@@ -425,13 +425,11 @@ public class MoPubStreamAdPlacer {
         if (nativeAd == null) {
             return null;
         }
-        Iterator<MoPubAdRenderer> iterator = adRendererRegistry.getRendererIterable().iterator();
-        while (iterator.hasNext()) {
-            MoPubAdRenderer next = iterator.next();
-            if (next.getClass() == nativeAd.getMoPubAdRenderer().getClass()) {
-                nativeAd.setMoPubAdRenderer(next);
-            }
+        MoPubAdRenderer rendererForAd = adRendererRegistry.getRendererForAd(nativeAd.getBaseNativeAd());
+        if (rendererForAd != null) {
+            nativeAd.setMoPubAdRenderer(rendererForAd);
         }
+
         final View view = (convertView != null) ?
                 convertView : nativeAd.createAdView(mActivity, parent);
         bindAdView(nativeAd, view);
@@ -453,6 +451,10 @@ public class MoPubStreamAdPlacer {
         if (!adView.equals(mappedView)) {
             clearNativeAd(mappedView);
             clearNativeAd(adView);
+            MoPubAdRenderer rendererForAd = adRendererRegistry.getRendererForAd(nativeAd.getBaseNativeAd());
+            if (rendererForAd != null) {
+                nativeAd.setMoPubAdRenderer(rendererForAd);
+            }
             prepareNativeAd(nativeAd, adView);
             nativeAd.renderAdView(adView);
         }
@@ -507,7 +509,7 @@ public class MoPubStreamAdPlacer {
      * @see #getAdViewType
      */
     public int getAdViewTypeCount() {
-        return mAdSource.getAdRendererCount();
+        return adRendererRegistry.getAdRendererCount();
     }
 
     /**

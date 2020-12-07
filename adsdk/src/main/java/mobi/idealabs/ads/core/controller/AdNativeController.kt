@@ -63,11 +63,14 @@ object AdNativeController {
         return AdSdk.findAdPlacement(adUnitId)
     }
 
-    fun loadAdPlacement(adPlacement: AdPlacement) {
+    fun loadAdPlacement(adPlacement: AdPlacement, remoteListener: Boolean = true) {
         if (!AdManager.enable) return
         var nativeAdSource = getNativeAdSource(adPlacement)
         adRendererRegistry.rendererIterable.forEach {
             nativeAdSource.registerAdRenderer(it)
+        }
+        if (remoteListener) {
+            nativeAdSource.adSourceListener = null;
         }
         nativeAdSource.loadAds(AdSdk.application!!, adPlacement.adUnitId, null)
     }
@@ -99,15 +102,12 @@ object AdNativeController {
         )
 
         var result = nativeAdSource.hasAvailableAds(adPlacement.adUnitId)
-        var adSourceListener = nativeAdSource.adSourceListener
         nativeAdSource.setAdSourceListener {
-            nativeAdSource.adSourceListener = adSourceListener
+            nativeAdSource.adSourceListener = null;
             if (parent.isVisible) {
                 var nativeAd = nativeAdSource.dequeueAd(adPlacement.adUnitId)
                 if (nativeAd != null) {
-                    var moPubAdRenderer = nativeAd.moPubAdRenderer
-                    var adRender =
-                        adRendererRegistry.rendererIterable.find { it.javaClass == moPubAdRenderer.javaClass }
+                    var adRender = adRendererRegistry.getRendererForAd(nativeAd.baseNativeAd)
                     if (adRender != null) {
                         nativeAd.moPubAdRenderer = adRender
                     }
@@ -117,7 +117,7 @@ object AdNativeController {
                 }
             }
         }
-        loadAdPlacement(adPlacement)
+        loadAdPlacement(adPlacement, false)
         return result
     }
 
