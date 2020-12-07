@@ -29,7 +29,21 @@ public class AdRendererRegistry {
      * one registered will be used.
      */
     public void registerAdRenderer(@NonNull final MoPubAdRenderer moPubAdRenderer) {
-        mMoPubAdRenderers.add(moPubAdRenderer);
+        int preRenderIndex = -1;
+        if (!mMoPubAdRenderers.isEmpty()) {
+            for (MoPubAdRenderer adRenderer : mMoPubAdRenderers) {
+                if (adRenderer.getClass() == moPubAdRenderer.getClass()) {
+                    preRenderIndex = mMoPubAdRenderers.indexOf(adRenderer);
+                    break;
+                }
+            }
+        }
+        if (preRenderIndex != -1) {
+            mMoPubAdRenderers.remove(preRenderIndex);
+            mMoPubAdRenderers.add(preRenderIndex, moPubAdRenderer);
+        } else {
+            mMoPubAdRenderers.add(moPubAdRenderer);
+        }
     }
 
     public int getAdRendererCount() {

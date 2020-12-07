@@ -23,8 +23,11 @@ class NativeActivity() : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = DataBindingUtil.setContentView(this, R.layout.native_activity)
-        initRecyclerView()
         mBinding.model = this
+        for (x in 0..100) {
+            listenerDatas.add(ListenerData("Native List Ad ${x}"))
+        }
+        initRecyclerView()
 
     }
 
@@ -57,49 +60,24 @@ class NativeActivity() : AppCompatActivity() {
         })
     }
 
-    val listenerDatas = listOf(
+    val listenerDatas = mutableListOf(
         ListenerData("onAdLoadSucceed"),
         ListenerData("onAdLoadFailed"),
         ListenerData("onAdShown"),
         ListenerData("onAdDismissed"),
-        ListenerData("onAdClicked"),
-
-        ListenerData("Native List Ad"),
-        ListenerData("Native List Ad"),
-        ListenerData("Native List Ad"),
-        ListenerData("Native List Ad"),
-        ListenerData("Native List Ad"),
-        ListenerData("Native List Ad"),
-        ListenerData("Native List Ad"),
-        ListenerData("Native List Ad"),
-        ListenerData("Native List Ad"),
-        ListenerData("Native List Ad"),
-        ListenerData("Native List Ad"),
-        ListenerData("Native List Ad"),
-        ListenerData("Native List Ad"),
-        ListenerData("Native List Ad"),
-        ListenerData("Native List Ad"),
-        ListenerData("Native List Ad"),
-        ListenerData("Native List Ad"),
-        ListenerData("Native List Ad"),
-        ListenerData("Native List Ad"),
-        ListenerData("Native List Ad"),
-        ListenerData("Native List Ad"),
-        ListenerData("Native List Ad"),
-        ListenerData("Native List Ad"),
-        ListenerData("Native List Ad"),
-        ListenerData("Native List Ad"),
-        ListenerData("Native List Ad"),
-        ListenerData("Native List Ad"),
-        ListenerData("Native List Ad"),
-        ListenerData("Native List Ad"),
-        ListenerData("Native List Ad")
+        ListenerData("onAdClicked")
     )
+
+
     val adapter = SimpleTextItem(listenerDatas)
 
     fun load() {
         //加载Feed 广告
         AdManager.preloadAdPlacement(AdConst.NativeAdPlacement)
+        moPubRecyclerAdapter?.registerAdRenderer(createFacebookAdRender(R.layout.native_layout))
+        moPubRecyclerAdapter?.registerAdRenderer(createGoogleAdRender(R.layout.native_layout))
+        moPubRecyclerAdapter?.registerAdRenderer(createSmaatoAdRender(R.layout.native_layout))
+        moPubRecyclerAdapter?.registerAdRenderer(createMopubStaticAdRender(R.layout.native_layout))
 //        loadSmaatoNative()
 
     }
@@ -209,10 +187,12 @@ class NativeActivity() : AppCompatActivity() {
         val smaatoAdRender = createSmaatoAdRender(R.layout.native_layout)
         //设置广告展示位置
         val moPubServerPositioning = MoPubNativeAdPositioning.MoPubClientPositioning()
-        moPubServerPositioning.addFixedPosition(5)
-        moPubServerPositioning.addFixedPosition(10)
-        moPubServerPositioning.addFixedPosition(15)
-        moPubServerPositioning.addFixedPosition(20)
+        for (x in 0..100) {
+            if (x % 5 == 0) {
+                moPubServerPositioning.addFixedPosition(x)
+            }
+        }
+
         //创建adapter
         moPubRecyclerAdapter =
             MoPubRecyclerAdapter(
@@ -231,21 +211,10 @@ class NativeActivity() : AppCompatActivity() {
             }
         })
         //注册视图渲染器
+        moPubRecyclerAdapter?.registerAdRenderer(mopubAdRender)
         moPubRecyclerAdapter?.registerAdRenderer(facebookAdRenderer as MoPubAdRenderer<*>)
         moPubRecyclerAdapter?.registerAdRenderer(googleAdRenderer as MoPubAdRenderer<*>)
-        moPubRecyclerAdapter?.registerAdRenderer(mopubAdRender)
         moPubRecyclerAdapter?.registerAdRenderer(smaatoAdRender as MoPubAdRenderer<*>)
-
-        AdManager.registerAdRenderer(
-            facebookAdRenderer as MoPubAdRenderer<*>,
-            AdConst.NativeAdPlacement
-        )
-        AdManager.registerAdRenderer(
-            googleAdRenderer as MoPubAdRenderer<*>,
-            AdConst.NativeAdPlacement
-        )
-        AdManager.registerAdRenderer(mopubAdRender, AdConst.NativeAdPlacement)
-        AdManager.registerAdRenderer(smaatoAdRender as MoPubAdRenderer<*>, AdConst.NativeAdPlacement)
 
         mBinding.recyclerView.adapter = moPubRecyclerAdapter
 

@@ -195,14 +195,6 @@ public class NativeAdSource {
      * one registered will be used.
      */
     public void registerAdRenderer(@NonNull final MoPubAdRenderer moPubNativeAdRenderer) {
-        Iterator<MoPubAdRenderer> iterator = mAdRendererRegistry.getRendererIterable().iterator();
-        while (iterator.hasNext()) {
-            MoPubAdRenderer next = iterator.next();
-            if (next.getClass() == moPubNativeAdRenderer.getClass()) {
-                iterator.remove();
-                break;
-            }
-        }
         mAdRendererRegistry.registerAdRenderer(moPubNativeAdRenderer);
         if (mMoPubNative != null) {
             mMoPubNative.registerAdRenderer(moPubNativeAdRenderer);

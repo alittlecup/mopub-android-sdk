@@ -146,6 +146,8 @@ dependencies {
         implementation project(':mopub-sdk')
     } else {
         compileOnly fileTree(dir: '../adsdk/libs', include: ['*.aar'])
+        compileOnly project(":mopub-sdk:mopub-sdk-native-static")
+
 
     }
     // Instrumentation testing-only dependencies

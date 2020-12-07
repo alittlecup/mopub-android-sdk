@@ -66,6 +66,9 @@ object AdNativeController {
     fun loadAdPlacement(adPlacement: AdPlacement) {
         if (!AdManager.enable) return
         var nativeAdSource = getNativeAdSource(adPlacement)
+        adRendererRegistry.rendererIterable.forEach {
+            nativeAdSource.registerAdRenderer(it)
+        }
         nativeAdSource.loadAds(AdSdk.application!!, adPlacement.adUnitId, null)
     }
 
