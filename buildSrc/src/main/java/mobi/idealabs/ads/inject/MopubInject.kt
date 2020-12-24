@@ -192,5 +192,34 @@ object MopubInject {
      * NativeAd->recordImpression(makeTrackingHttpRequest)
      * AdLoaderRewardedVideo->trackImpression()
      */
-
+    fun injectAdViewControllerBannerStart(methodVisitor:MethodVisitor){
+        methodVisitor.visitVarInsn(ALOAD, 0)
+        methodVisitor.visitFieldInsn(
+            GETFIELD,
+            "com/mopub/mobileads/AdViewController",
+            "mMoPubView",
+            "Lcom/mopub/mobileads/MoPubView;"
+        )
+        methodVisitor.visitMethodInsn(
+            INVOKEVIRTUAL,
+            "com/mopub/mobileads/MoPubView",
+            "getBannerAdListener",
+            "()Lcom/mopub/mobileads/MoPubView\$BannerAdListener;",
+            false
+        )
+        methodVisitor.visitVarInsn(ALOAD, 0)
+        methodVisitor.visitFieldInsn(
+            GETFIELD,
+            "com/mopub/mobileads/AdViewController",
+            "mMoPubView",
+            "Lcom/mopub/mobileads/MoPubView;"
+        )
+        methodVisitor.visitMethodInsn(
+            INVOKEINTERFACE,
+            "com/mopub/mobileads/MoPubView\$BannerAdListener",
+            "onBannerLoadStart",
+            "(Lcom/mopub/mobileads/MoPubView;)V",
+            true
+        )
+    }
 }

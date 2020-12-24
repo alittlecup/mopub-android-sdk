@@ -10,7 +10,6 @@ import static com.mopub.mobileads.MoPubView.BannerAdListener;
 
 public class DefaultBannerAdListener implements BannerAdListener {
     @Override public void onBannerLoaded(@NonNull MoPubView banner) { }
-    @Override public void onBannerLoadStart(MoPubView banner) { }
     @Override public void onBannerFailed(MoPubView banner, MoPubErrorCode errorCode) { }
     @Override public void onBannerClicked(MoPubView banner) { }
     @Override public void onBannerExpanded(MoPubView banner) { }

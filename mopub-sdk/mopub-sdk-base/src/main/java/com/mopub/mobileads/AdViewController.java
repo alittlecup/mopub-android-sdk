@@ -245,9 +245,6 @@ public class AdViewController {
 
     private void internalLoadAd() {
         mAdWasLoaded = true;
-        if(mMoPubView!=null && mMoPubView.getBannerAdListener()!=null){
-            mMoPubView.getBannerAdListener().onBannerLoadStart(mMoPubView);
-        }
         if (TextUtils.isEmpty(mAdUnitId)) {
             MoPubLog.log(CUSTOM, "Can't load an ad in this ad view because the ad unit ID is not set. " +
                     "Did you forget to call setAdUnitId()?");
