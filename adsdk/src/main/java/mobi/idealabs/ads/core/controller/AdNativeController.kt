@@ -101,11 +101,11 @@ object AdNativeController {
             )
         )
 
-        var result = nativeAdSource.hasAvailableAds(adPlacement.adUnitId)
+        var result = nativeAdSource.hasAvailableAds()
         nativeAdSource.setAdSourceListener {
-            nativeAdSource.adSourceListener = null;
+            nativeAdSource.adSourceListener = null
             if (parent.isVisible) {
-                var nativeAd = nativeAdSource.dequeueAd(adPlacement.adUnitId)
+                var nativeAd = nativeAdSource.dequeueAd()
                 if (nativeAd != null) {
                     var adRender = adRendererRegistry.getRendererForAd(nativeAd.baseNativeAd)
                     if (adRender != null) {
@@ -133,7 +133,7 @@ object AdNativeController {
     }
 
     internal fun isReady(adPlacement: AdPlacement): Boolean {
-        return getNativeAdSource(adPlacement).hasAvailableAds(adPlacement.adUnitId)
+        return getNativeAdSource(adPlacement).hasAvailableAds()
     }
 
     internal fun destroyAdPlacement(adPlacement: AdPlacement) {

@@ -1,24 +1,51 @@
 package mobi.idealabs.ads.asm
 
+import mobi.idealabs.ads.inject.*
+import org.gradle.wrapper.Logger
+import org.objectweb.asm.ClassVisitor
+import org.objectweb.asm.ClassWriter
+import java.io.Console
+
 
 object MopubClassChecker {
-    val mopubModules: List<AdsInjectPoint> by lazy {
-        listOf<AdsInjectPoint>(
-            AdsInjectPoint("com.mopub.mobileads.AdViewController", "loadFailUrl"),
-            AdsInjectPoint("com.mopub.nativeads.MoPubNative", ""),
-            AdsInjectPoint("com.mopub.mobileads.MoPubView\$BannerAdListener", ""),
-            AdsInjectPoint("com.mopub.mobileads.DefaultBannerAdListener", ""),
-//            AdsInjectPoint("com.mopub.nativeads.MoPubRecyclerAdapter", ""),
-            AdsInjectPoint("com.mopub.nativeads.NativeAdSource", ""),
-            AdsInjectPoint("com.mopub.network.AdLoader", ""),
-            AdsInjectPoint("com.mopub.mobileads.AdLoaderRewardedVideo", ""),
-            AdsInjectPoint("com.mopub.mobileads.MoPubRewardedVideoManager", ""),
-            AdsInjectPoint("com.mopub.mobileads.CustomEventBannerAdapter", ""),
-            AdsInjectPoint("com.mopub.mobileads.RewardedAdsLoaders", ""),
-            AdsInjectPoint("com.mopub.network.RequestRateTracker", "registerRateLimit"),
-            AdsInjectPoint("com.mopub.nativeads.NativeAd", "")
-//            AdsInjectPoint("com.mopub.nativeads.MoPubRecyclerAdapter", "")
-//            AdsInjectPoint("com.mopub.nativeads.NativeAdSource", ""),
+
+    val mopubModules: List<AdsInjectPoint<*>> by lazy {
+        listOf<AdsInjectPoint<*>>(
+            AdsInjectPoint("com.mopub.mobileads.AdViewController", AdViewControllerAdapter::class),
+            AdsInjectPoint("com.mopub.nativeads.MoPubNative", MoPubNativeAdapter::class),
+            AdsInjectPoint(
+                "com.mopub.mobileads.MoPubView\$BannerAdListener",
+                MopubViewBannerAdListenerAdapter::class
+            ),
+            AdsInjectPoint(
+                "com.mopub.mobileads.DefaultBannerAdListener",
+                MopubViewBannerAdListenerAdapter::class
+            ),
+//            AdsInjectPoint("com.mopub.nativeads.MoPubRecyclerAdapter",MoPubRecyclerAdapterAdapter::class),
+            AdsInjectPoint("com.mopub.nativeads.NativeAdSource", NativeAdSourceAdapter::class),
+            AdsInjectPoint("com.mopub.nativeads.NativeAdSource\$AdSourceListener", NativeAdSourceNativeAdSourceAdapterAdapter::class),
+            AdsInjectPoint("com.mopub.network.AdLoader", AdLoaderAdapter::class),
+            AdsInjectPoint(
+                "com.mopub.mobileads.AdLoaderRewardedVideo",
+                AdLoaderRewardedVideoAdapter::class
+            ),
+            AdsInjectPoint(
+                "com.mopub.mobileads.MoPubRewardedVideoManager",
+                MoPubRewardVideoManagerAdapter::class
+            ),
+            AdsInjectPoint(
+                "com.mopub.mobileads.CustomEventBannerAdapter",
+                CustomEventBannerAdapterAdapter::class
+            ),
+            AdsInjectPoint(
+                "com.mopub.mobileads.RewardedAdsLoaders",
+                RewardedAdsLoadersAdapter::class
+            ),
+            AdsInjectPoint(
+                "com.mopub.network.RequestRateTracker",
+                RequestRateTrackerAdapter::class
+            ),
+            AdsInjectPoint("com.mopub.nativeads.NativeAd", NativeAdAdapter::class)
         )
     }
 
@@ -42,9 +69,18 @@ object MopubClassChecker {
         return classPathName
     }
 
-
-    fun isModifyClassMethod(methodName: String?): Boolean {
-        return false
+    fun getFileClassVisitor(fileName: String, classWriter: ClassWriter): ClassVisitor {
+        var adsInjectPoint = mopubModules.find {
+            fileName == it.packagePath
+        }
+        var classVisitor = if (adsInjectPoint == null) {
+            MopubMethodAdapter(classWriter)
+        } else {
+            var injectClass = adsInjectPoint.injectClass
+            var forName = Class.forName(injectClass.qualifiedName)
+            forName.constructors[0].newInstance(fileName.removeSuffix(".class"), classWriter) as ClassVisitor
+        }
+        println("file : $fileName -----> ClassVisitor: ${classVisitor.javaClass.simpleName}") 
+        return classVisitor;
     }
-
 }

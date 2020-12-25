@@ -6,9 +6,8 @@ import org.objectweb.asm.Opcodes
 
 class RequestRateTrackerAdapter(
     val className: String,
-    api: Int = Opcodes.ASM7,
     classVisitor: ClassVisitor?
-) : ClassVisitor(api, classVisitor) {
+) : ClassVisitor( Opcodes.ASM7, classVisitor) {
     init {
         println("adViewController: $className")
     }

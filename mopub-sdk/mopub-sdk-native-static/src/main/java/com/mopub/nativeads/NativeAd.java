@@ -5,10 +5,8 @@
 package com.mopub.nativeads;
 
 import android.content.Context;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -29,22 +27,22 @@ import static com.mopub.nativeads.BaseNativeAd.NativeEventListener;
  * This class represents a native ad instance returned from the MoPub Ad Server, MoPub Exchange, or
  * a mediated native ad network. This class can be used to create and render a {@link View} that
  * displays a native ad, tracking impressions and clicks for it.
- * <p>
+ *
  * Using {@link MoPubStreamAdPlacer}, you can automatically have {@link NativeAd}s rendered into
  * {@link View}s and inserted into your app's content stream without manipulating this class
  * directly.
- * <p>
+ *
  * In general you should get instances of {@link NativeAd} from {@link MoPubNative} instances in its
  * {@link MoPubNative.MoPubNativeNetworkListener#onAdLoad(AdResponse)} callback
  * and should not construct them directly.
- * <p>
+ *
  * When you have a {@link NativeAd} instance and wish to show a view you should:
- * <p>
+ *
  * 1. Call {@link #createAdView(Context, ViewGroup)} to inflate a {@link View} that can show this ad.
  * 2. Just before the ad is shown to the user, call {@link #prepare(View)}.
  * 3. Call {@link #renderAdView(View)} with a compatible {@link View} to render the ad data into the view.
  * 4. When the ad view is no longer shown to the user, call {@link #clear(View)}. You can later
- * call {@link #prepare(View)} again if the ad will be shown to users.
+ *    call {@link #prepare(View)} again if the ad will be shown to users.
  * 5. When the ad will never be shown again, call {@link #destroy()}.
  */
 public class NativeAd {
@@ -54,37 +52,28 @@ public class NativeAd {
      */
     public interface MoPubNativeEventListener {
         void onImpression(final View view);
-
         void onClick(final View view);
     }
 
-    @NonNull
-    private final Context mContext;
-    @NonNull
-    private final BaseNativeAd mBaseNativeAd;
-    @NonNull
-    private MoPubAdRenderer mMoPubAdRenderer;
-    @NonNull
-    private final Set<String> mImpressionTrackers;
-    @NonNull
-    private final Set<String> mClickTrackers;
-    @NonNull
-    private final String mAdUnitId;
-    @Nullable
-    private ImpressionData mImpressionData;
-    @Nullable
-    private MoPubNativeEventListener mMoPubNativeEventListener;
+    @NonNull private final Context mContext;
+    @NonNull private final BaseNativeAd mBaseNativeAd;
+    @NonNull private  MoPubAdRenderer mMoPubAdRenderer;
+    @NonNull private final Set<String> mImpressionTrackers;
+    @NonNull private final Set<String> mClickTrackers;
+    @NonNull private final String mAdUnitId;
+    @Nullable private ImpressionData mImpressionData;
+    @Nullable private MoPubNativeEventListener mMoPubNativeEventListener;
 
     private boolean mRecordedImpression;
     private boolean mIsClicked;
     private boolean mIsDestroyed;
 
     public NativeAd(@NonNull final Context context,
-                    @NonNull final List<String> moPubImpressionTrackerUrls,
-                    @NonNull final String moPubClickTrackerUrl,
-                    @NonNull final String adUnitId,
-                    @NonNull final BaseNativeAd baseNativeAd,
-                    @NonNull final MoPubAdRenderer moPubAdRenderer) {
+            @NonNull final List<String> moPubImpressionTrackerUrls,
+            @NonNull final String moPubClickTrackerUrl,
+            @NonNull final String adUnitId,
+            @NonNull final BaseNativeAd baseNativeAd,
+            @NonNull final MoPubAdRenderer moPubAdRenderer) {
         mContext = context.getApplicationContext();
 
         mAdUnitId = adUnitId;
@@ -118,7 +107,7 @@ public class NativeAd {
              @NonNull final AdResponse adResponse,
              @NonNull final String adUnitId,
              @NonNull final BaseNativeAd baseNativeAd,
-             @NonNull final MoPubAdRenderer moPubAdRenderer) {
+             @NonNull final MoPubAdRenderer moPubAdRenderer){
         this(context, adResponse.getImpressionTrackingUrls(), adResponse.getClickTrackingUrl(), adUnitId, baseNativeAd, moPubAdRenderer);
         mImpressionData = adResponse.getImpressionData();
     }
@@ -182,8 +171,8 @@ public class NativeAd {
         return mMoPubAdRenderer;
     }
 
-    public void setMoPubAdRenderer(MoPubAdRenderer moPubAdRenderer) {
-        mMoPubAdRenderer = moPubAdRenderer;
+    public void setMoPubAdRenderer(MoPubAdRenderer adRenderer) {
+        mMoPubAdRenderer = adRenderer;
     }
 
     // Lifecycle Handlers

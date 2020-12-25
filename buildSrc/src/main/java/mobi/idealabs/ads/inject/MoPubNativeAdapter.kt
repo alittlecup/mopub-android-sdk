@@ -1,14 +1,14 @@
 package mobi.idealabs.ads.inject
 
 import org.objectweb.asm.ClassVisitor
+import org.objectweb.asm.FieldVisitor
 import org.objectweb.asm.MethodVisitor
 import org.objectweb.asm.Opcodes
 
 class MoPubNativeAdapter(
     val className: String,
-    api: Int = Opcodes.ASM7,
     classVisitor: ClassVisitor?
-) : ClassVisitor(api, classVisitor) {
+) : ClassVisitor(Opcodes.ASM7, classVisitor) {
     init {
         println("adViewController: $className")
     }
@@ -29,6 +29,21 @@ class MoPubNativeAdapter(
             NativeAdSourceMethodVisitor(className, name, methodVisitor)
         } else {
             methodVisitor
+        }
+    }
+
+    override fun visitField(
+        access: Int,
+        name: String?,
+        descriptor: String?,
+        signature: String?,
+        value: Any?
+    ): FieldVisitor {
+        return if (name == "mAdUnitId") {
+            super.visitField(Opcodes.ACC_PROTECTED, name, descriptor, signature, value)
+        } else {
+            super.visitField(access, name, descriptor, signature, value)
+
         }
     }
 

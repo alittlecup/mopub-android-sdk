@@ -7,9 +7,8 @@ import org.objectweb.asm.Opcodes
 
 class AdLoaderAdapter(
     val className: String,
-    api: Int = Opcodes.ASM7,
     classVisitor: ClassVisitor?
-) : ClassVisitor(api, classVisitor) {
+) : ClassVisitor(Opcodes.ASM7, classVisitor) {
     init {
         println("adLoader: $className")
     }

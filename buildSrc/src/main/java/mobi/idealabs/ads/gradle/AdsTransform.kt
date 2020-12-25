@@ -157,7 +157,7 @@ class AdsTransform(val project: Project) : Transform() {
                 Format.DIRECTORY
             )
             println("dir output： $dest")
-            FileUtils.copyDirectory(input.file, dest)
+            FileUtils.copyDirectory(input.file, dest) 
         }
     }
 
@@ -166,7 +166,7 @@ class AdsTransform(val project: Project) : Transform() {
         val classReader = ClassReader(soruceByte)
         val classWriter = ClassWriter(classReader, 0)
         //创建类访问器   并交给它去处理
-        val adapter = generateAdapter(fileName, classWriter)
+        val adapter = MopubClassChecker.getFileClassVisitor(fileName, classWriter)
         classReader.accept(adapter, ClassReader.SKIP_FRAMES)
         val byteArray = classWriter.toByteArray()
         val filePath = buildTransformSrc() + fileName
@@ -186,47 +186,7 @@ class AdsTransform(val project: Project) : Transform() {
         fileOutputStream.close()
         return byteArray
     }
-
-    private fun generateAdapter(fileName: String, classWriter: ClassWriter) =
-        if (fileName.contains("AdViewController")) AdViewControllerAdapter(
-            classVisitor = classWriter,
-            className = fileName.removeSuffix(".class")
-        ) else if (fileName.contains("MoPubNative") || fileName.contains("NativeAdSource")) MoPubNativeAdapter(
-            classVisitor = classWriter,
-            className = fileName.removeSuffix(".class")
-        ) else if (fileName.contains("NativeAd")) NativeAdAdapter(
-            classVisitor = classWriter,
-            className = fileName.removeSuffix(".class")
-        ) else if (fileName.contains("AdLoaderRewardedVideo")) AdLoaderRewardedVideoAdapter(
-            classVisitor = classWriter,
-            className = fileName.removeSuffix(".class")
-        ) else if (fileName.contains("MoPubRecyclerAdapter")) MoPubRecyclerAdapterAdapter(
-            classVisitor = classWriter,
-            className = fileName.removeSuffix(".class")
-        )else if (fileName.contains("BannerAdListener")) MopubViewBannerAdListenerAdapter(
-            classVisitor = classWriter,
-            className = fileName.removeSuffix(".class")
-        )
-        else if (fileName.contains("CustomEventBannerAdapter")) CustomEventBannerAdapterAdapter(
-            classVisitor = classWriter,
-            className = fileName.removeSuffix(".class")
-        ) else if (fileName.contains("MoPubRewardedVideoManager")) MoPubRewardVideoManagerAdapter(
-            classVisitor = classWriter,
-            className = fileName.removeSuffix(".class")
-        ) else if (fileName.contains("RewardedAdsLoaders")) RewardedAdsLoadersAdapter(
-            classVisitor = classWriter,
-            className = fileName.removeSuffix(".class")
-        ) else if (fileName.contains("RequestRateTracker")) RequestRateTrackerAdapter(
-            classVisitor = classWriter,
-            className = fileName.removeSuffix(".class")
-        ) else if (fileName.contains("AdLoader")) AdLoaderAdapter(
-            classVisitor = classWriter,
-            className = fileName.removeSuffix(".class")
-        ) else MopubMethodAdapter(
-            api = Opcodes.ASM7,
-            classVisitor = classWriter
-        )
-
+    
     private fun isProcessClass(name: String): Boolean {
         return MopubClassChecker.isModifyClass(name)
 

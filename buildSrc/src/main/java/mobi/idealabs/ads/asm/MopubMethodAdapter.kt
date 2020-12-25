@@ -11,10 +11,9 @@ import java.util.*
  * 最后返回修改后的字节数组
  */
 open class MopubMethodAdapter constructor(
-    api: Int = Opcodes.ASM7,
     classVisitor: ClassVisitor?
 ) :
-    ClassVisitor(api, classVisitor), Opcodes {
+    ClassVisitor(Opcodes.ASM7, classVisitor), Opcodes {
 
 
     /**
@@ -55,15 +54,8 @@ open class MopubMethodAdapter constructor(
         signature: String?,
         exceptions: Array<String>?
     ): MethodVisitor? {
-        val visitMethod = if (name == "registerRateLimit") {
-            super.visitMethod(Opcodes.ACC_PUBLIC, name, descriptor, signature, exceptions)
-        } else {
-            super.visitMethod(access, name, descriptor, signature, exceptions)
-        }
-        return if (MopubClassChecker.isModifyClassMethod(name)) {
-            MopubMethodVisitor(methodVisitor = visitMethod)
-        } else {
-            visitMethod
-        }
+        
+        return super.visitMethod(access, name, descriptor, signature, exceptions)
+
     }
 }

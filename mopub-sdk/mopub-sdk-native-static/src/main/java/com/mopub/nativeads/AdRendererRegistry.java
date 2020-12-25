@@ -16,8 +16,7 @@ import java.util.ArrayList;
  */
 public class AdRendererRegistry {
 
-    @NonNull
-    private final ArrayList<MoPubAdRenderer> mMoPubAdRenderers;
+    @NonNull private final ArrayList<MoPubAdRenderer> mMoPubAdRenderers;
 
     public AdRendererRegistry() {
         mMoPubAdRenderers = new ArrayList<MoPubAdRenderer>();
@@ -29,31 +28,11 @@ public class AdRendererRegistry {
      * one registered will be used.
      */
     public void registerAdRenderer(@NonNull final MoPubAdRenderer moPubAdRenderer) {
-        int preRenderIndex = -1;
-        if (!mMoPubAdRenderers.isEmpty()) {
-            for (MoPubAdRenderer adRenderer : mMoPubAdRenderers) {
-                if (adRenderer.getClass() == moPubAdRenderer.getClass()) {
-                    preRenderIndex = mMoPubAdRenderers.indexOf(adRenderer);
-                    break;
-                }
-            }
-        }
-        if (preRenderIndex != -1) {
-            mMoPubAdRenderers.remove(preRenderIndex);
-            mMoPubAdRenderers.add(preRenderIndex, moPubAdRenderer);
-        } else {
-            mMoPubAdRenderers.add(moPubAdRenderer);
-        }
+        mMoPubAdRenderers.add(moPubAdRenderer);
     }
 
     public int getAdRendererCount() {
         return mMoPubAdRenderers.size();
-    }
-
-    public void removeRenderer(MoPubAdRenderer moPubAdRenderer) {
-        if (mMoPubAdRenderers.contains(moPubAdRenderer)) {
-            mMoPubAdRenderers.remove(moPubAdRenderer);
-        }
     }
 
     @NonNull
@@ -68,7 +47,7 @@ public class AdRendererRegistry {
      *
      * @param nativeAd The {@link NativeAd} to render.
      * @return The integer representing the view type of the first renderer registered that
-     * supports rendering the {@link NativeAd}.
+     *         supports rendering the {@link NativeAd}.
      */
     public int getViewTypeForAd(@NonNull final NativeAd nativeAd) {
         Preconditions.checkNotNull(nativeAd);

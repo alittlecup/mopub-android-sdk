@@ -8,9 +8,8 @@ import org.objectweb.asm.Opcodes.*
 
 class MoPubRewardVideoManagerAdapter(
     val className: String,
-    api: Int = Opcodes.ASM7,
     classVisitor: ClassVisitor?
-) : ClassVisitor(api, classVisitor) {
+) : ClassVisitor( Opcodes.ASM7, classVisitor) {
     init {
         println("NativeAd: $className")
     }

@@ -1,7 +1,15 @@
 package mobi.idealabs.ads.asm
 
-data class AdsInjectPoint(val clazzName: String, val funcName: String) {
+import kotlin.reflect.KClass
+
+data class AdsInjectPoint<T : org.objectweb.asm.ClassVisitor>(
+    val clazzName: String,
+    var injectClass: KClass<T>
+) {
     val classPath = "${clazzName.replaceBeforeLast(".", "").replace(".", "")}.class"
     val packagePath = "${clazzName.replace(".", "/")}.class"
+    override fun toString(): String {
+        return "AdsInjectPoint(clazzName='$clazzName', injectClass=$injectClass, classPath='$classPath', packagePath='$packagePath')"
+    }
 
-}
+}   
