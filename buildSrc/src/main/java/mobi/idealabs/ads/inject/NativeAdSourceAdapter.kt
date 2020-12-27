@@ -1,9 +1,10 @@
 package mobi.idealabs.ads.inject
 
-import org.objectweb.asm.ClassVisitor
-import org.objectweb.asm.FieldVisitor
-import org.objectweb.asm.MethodVisitor
-import org.objectweb.asm.Opcodes
+import com.sun.org.apache.bcel.internal.generic.ALOAD
+import com.sun.org.apache.bcel.internal.generic.ARETURN
+import com.sun.org.apache.bcel.internal.generic.GETFIELD
+import org.objectweb.asm.*
+
 
 class NativeAdSourceAdapter(
     val className: String,
@@ -20,12 +21,21 @@ class NativeAdSourceAdapter(
         signature: String?,
         exceptions: Array<out String>?
     ): MethodVisitor {
-        val methodVisitor = if (name == "setAdSourceListener") {
-            super.visitMethod(Opcodes.ACC_PUBLIC, name, descriptor, signature, exceptions)
-        } else {
-            super.visitMethod(access, name, descriptor, signature, exceptions)
+        val methodVisitor =
+            if (name == "setAdSourceListener" || name == "registerAdRenderer" || name == "clear" || name == "dequeueAd") {
+                super.visitMethod(Opcodes.ACC_PUBLIC, name, descriptor, signature, exceptions)
+            } else {
+                super.visitMethod(access, name, descriptor, signature, exceptions)
+
+            }
+        return when (name) {
+            "loadAds" -> {
+                NativeAdSourceMethodVisitor(className, name, methodVisitor)
+            }
+            else -> {
+                methodVisitor
+            }
         }
-        return methodVisitor
     }
 
     override fun visitInnerClass(
@@ -39,8 +49,8 @@ class NativeAdSourceAdapter(
             super.visitInnerClass(
                 name,
                 outerName,
-                innerName,Opcodes.ACC_PUBLIC or access
-                
+                innerName, Opcodes.ACC_PUBLIC or access
+
             )
         } else {
             super.visitInnerClass(name, outerName, innerName, access)
@@ -79,45 +89,41 @@ class NativeAdSourceAdapter(
 
         }
     }
-
-
 }
 
-//class NativeAdSourceMethodVisitor(
-//    val className: String,
-//    val methodName: String,
-//    methodVisitor: MethodVisitor
-//) :
-//    MethodVisitor(Opcodes.ASM7, methodVisitor) {
-//    override fun visitMethodInsn(
-//        opcode: Int,
-//        owner: String?,
-//        name: String?,
-//        descriptor: String?,
-//        isInterface: Boolean
-//    ) {
-//        println("name: -> $name--$owner")
-//        if (methodName == "loadAds" && name == "<init>" && owner?.contains("MoPubNative") == true) {
-//            super.visitMethodInsn(
-//                opcode,
-//                "mobi/idealabs/ads/core/view/AdNative",
-//                name,
-//                descriptor,
-//                isInterface
-//            )
-//        } else {
-//            super.visitMethodInsn(opcode, owner, name, descriptor, isInterface)
-//
-//        }
-//    }
-//
-//    override fun visitTypeInsn(opcode: Int, type: String?) {
-//        println("type in: $type")
-//        if (type == "com/mopub/nativeads/MoPubNative") {
-//            super.visitTypeInsn(opcode, "mobi/idealabs/ads/core/view/AdNative")
-//        } else {
-//            super.visitTypeInsn(opcode, type)
-//
-//        }
-//    }
+class NativeAdSourceMethodVisitor(
+    val className: String,
+    val methodName: String,
+    methodVisitor: MethodVisitor
+) :
+    MethodVisitor(Opcodes.ASM7, methodVisitor) {
+    override fun visitMethodInsn(
+        opcode: Int,
+        owner: String?,
+        name: String?,
+        descriptor: String?,
+        isInterface: Boolean
+    ) {
+        if (methodName == "loadAds" && name == "<init>" && owner?.contains("MoPubNative") == true) {
+            super.visitMethodInsn(
+                opcode,
+                "mobi/idealabs/ads/core/view/AdNative",
+                name,
+                descriptor,
+                isInterface
+            )
+        } else {
+            super.visitMethodInsn(opcode, owner, name, descriptor, isInterface)
 
+        }
+    }
+
+    override fun visitTypeInsn(opcode: Int, type: String?) {
+        if (type == "com/mopub/nativeads/MoPubNative") {
+            super.visitTypeInsn(opcode, "mobi/idealabs/ads/core/view/AdNative")
+        } else {
+            super.visitTypeInsn(opcode, type)
+
+        }
+    }
+}

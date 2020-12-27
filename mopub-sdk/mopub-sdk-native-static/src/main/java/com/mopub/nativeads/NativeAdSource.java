@@ -72,7 +72,7 @@ class NativeAdSource {
     /**
      * A listener for when ads are available for dequeueing.
      */
-  public  interface AdSourceListener {
+    interface AdSourceListener {
         /**
          * Called when the number of items available for goes from 0 to more than 0.
          */
@@ -167,7 +167,7 @@ class NativeAdSource {
      * Note that if multiple ad renderers support a specific native ad format, the first
      * one registered will be used.
      */
-    public void registerAdRenderer(@NonNull final MoPubAdRenderer moPubNativeAdRenderer) {
+    void registerAdRenderer(@NonNull final MoPubAdRenderer moPubNativeAdRenderer) {
         mAdRendererRegistry.registerAdRenderer(moPubNativeAdRenderer);
         if (mMoPubNative != null) {
             mMoPubNative.registerAdRenderer(moPubNativeAdRenderer);
@@ -190,10 +190,10 @@ class NativeAdSource {
     public AdSourceListener getAdSourceListener() {
         return mAdSourceListener;
     }
-
-    public void loadAds(@NonNull final Context activity,
-                        @NonNull final String adUnitId,
-                        final RequestParameters requestParameters) {
+    
+    void loadAds(@NonNull final Context activity,
+            @NonNull final String adUnitId,
+            final RequestParameters requestParameters) {
         loadAds(requestParameters, new MoPubNative(activity, adUnitId, mMoPubNativeNetworkListener));
     }
 
@@ -222,7 +222,7 @@ class NativeAdSource {
     /**
      * Clears the ad source, removing any currently queued ads.
      */
-    public void clear() {
+    void clear() {
         // This will cleanup listeners to stop callbacks from handling old ad units
         if (mMoPubNative != null) {
             mMoPubNative.destroy();
@@ -253,7 +253,7 @@ class NativeAdSource {
      * @return Ad ad item that should be rendered into a view.
      */
     @Nullable
-    public NativeAd dequeueAd() {
+    NativeAd dequeueAd() {
         final long now = SystemClock.uptimeMillis();
 
         // Starting an ad request takes several millis. Post for performance reasons.
