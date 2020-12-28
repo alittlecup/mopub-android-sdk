@@ -72,7 +72,7 @@ class NativeAdSource {
     /**
      * A listener for when ads are available for dequeueing.
      */
-    interface AdSourceListener {
+   public interface AdSourceListener {
         /**
          * Called when the number of items available for goes from 0 to more than 0.
          */

@@ -1,8 +1,5 @@
 package mobi.idealabs.ads.inject
 
-import com.sun.org.apache.bcel.internal.generic.ALOAD
-import com.sun.org.apache.bcel.internal.generic.ARETURN
-import com.sun.org.apache.bcel.internal.generic.GETFIELD
 import org.objectweb.asm.*
 
 
@@ -22,7 +19,7 @@ class NativeAdSourceAdapter(
         exceptions: Array<out String>?
     ): MethodVisitor {
         val methodVisitor =
-            if (name == "setAdSourceListener" || name == "registerAdRenderer" || name == "clear" || name == "dequeueAd") {
+            if (name == "setAdSourceListener" || name == "registerAdRenderer" || name == "clear" || name == "dequeueAd"|| name == "loadAds") {
                 super.visitMethod(Opcodes.ACC_PUBLIC, name, descriptor, signature, exceptions)
             } else {
                 super.visitMethod(access, name, descriptor, signature, exceptions)
