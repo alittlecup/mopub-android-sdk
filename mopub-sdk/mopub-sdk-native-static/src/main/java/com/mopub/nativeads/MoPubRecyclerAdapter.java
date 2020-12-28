@@ -28,7 +28,7 @@ import static com.mopub.nativeads.MoPubRecyclerAdapter.ContentChangeStrategy.INS
 import static com.mopub.nativeads.MoPubRecyclerAdapter.ContentChangeStrategy.KEEP_ADS_FIXED;
 
 
-public final class MoPubRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public  class MoPubRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     // RecyclerView ad views will have negative types to avoid colliding with original view types.
     static final int NATIVE_AD_VIEW_TYPE_BASE = -56;
 
@@ -66,7 +66,7 @@ public final class MoPubRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
     }
 
     @VisibleForTesting
-    MoPubRecyclerAdapter(@NonNull final MoPubStreamAdPlacer streamAdPlacer,
+    public MoPubRecyclerAdapter(@NonNull final MoPubStreamAdPlacer streamAdPlacer,
             @NonNull final RecyclerView.Adapter originalAdapter,
             @NonNull final VisibilityTracker visibilityTracker) {
         mViewPositionMap = new WeakHashMap<>();

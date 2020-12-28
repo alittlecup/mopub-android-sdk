@@ -11,7 +11,7 @@ import com.mopub.nativeads.MoPubNativeAdPositioning.MoPubClientPositioning;
 /**
  * Allows asynchronously requesting positioning information.
  */
-interface PositioningSource {
+public interface PositioningSource {
 
     interface PositioningListener {
         void onLoad(@NonNull MoPubClientPositioning positioning);

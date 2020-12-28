@@ -12,11 +12,11 @@ import com.mopub.nativeads.MoPubNativeAdPositioning.MoPubClientPositioning;
 /**
  * Returns a preset client positioning object.
  */
-class ClientPositioningSource implements PositioningSource {
+public class ClientPositioningSource implements PositioningSource {
     @NonNull private final Handler mHandler = new Handler();
     @NonNull private final MoPubClientPositioning mPositioning;
 
-    ClientPositioningSource(@NonNull MoPubClientPositioning positioning) {
+ public    ClientPositioningSource(@NonNull MoPubClientPositioning positioning) {
         mPositioning = MoPubNativeAdPositioning.clone(positioning);
     }
 

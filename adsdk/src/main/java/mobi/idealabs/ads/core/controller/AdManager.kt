@@ -171,5 +171,7 @@ object AdManager {
 
     var mGlobalAdListener: AdListener? = null
 
-
+    public fun enableSecondNativeCache(adUnitId: String) {
+        NativeAdSourceManager.enableSecondNativeAdSource(adUnitId);
+    }
 }

@@ -47,6 +47,7 @@ class MainActivity : AppCompatActivity() {
         AdSdk.initAdSdk(this, sdkConfiguration, createDefaultAdSdkInitStrategy()) {
             toast(" Ads initSuccess ")
             insertAdsAdPlacement()
+            AdManager.enableSecondNativeCache(AdConst.NativeAdPlacement.adUnitId)
             AdManager.mGlobalAdListener = object : AdListener {
                 override fun onAdStartLoad(adPlacement: AdPlacement?) {
                     toast("START_LOAD $adPlacement")

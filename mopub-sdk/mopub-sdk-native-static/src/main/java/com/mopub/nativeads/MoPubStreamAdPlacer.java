@@ -114,7 +114,7 @@ public class MoPubStreamAdPlacer {
      */
     public MoPubStreamAdPlacer(@NonNull final Activity activity,
                                @NonNull final MoPubServerPositioning adPositioning) {
-        this(activity, NativeAdSource.getInstance(), new ServerPositioningSource(activity));
+        this(activity, new NativeAdSource(), new ServerPositioningSource(activity));
     }
 
     /**
@@ -128,11 +128,11 @@ public class MoPubStreamAdPlacer {
             @NonNull final MoPubClientPositioning adPositioning) {
         // MoPubClientPositioning is mutable, so we must take care not to hold a
         // reference to it that might be subsequently modified by the caller.
-        this(activity, NativeAdSource.getInstance(), new ClientPositioningSource(adPositioning));
+        this(activity, new NativeAdSource(), new ClientPositioningSource(adPositioning));
     }
 
     @VisibleForTesting
-    MoPubStreamAdPlacer(@NonNull final Activity activity,
+   public MoPubStreamAdPlacer(@NonNull final Activity activity,
             @NonNull final NativeAdSource adSource,
             @NonNull final PositioningSource positioningSource) {
         Preconditions.checkNotNull(activity, "activity is not allowed to be null");

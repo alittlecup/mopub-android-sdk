@@ -16,6 +16,7 @@ import mobi.idealabs.ads.core.bean.AdErrorCode
 import mobi.idealabs.ads.core.bean.AdListener
 import mobi.idealabs.ads.core.bean.AdPlacement
 import mobi.idealabs.ads.core.controller.AdManager
+import mobi.idealabs.ads.core.controller.NativeAdRecyclerAdapter
 import mobi.idealabs.editor.databinding.NativeActivityBinding
 
 class NativeActivity() : AppCompatActivity() {
@@ -73,11 +74,12 @@ class NativeActivity() : AppCompatActivity() {
 
     fun load() {
         //加载Feed 广告
+        AdManager.registerAdRenderer(createFacebookAdRender(R.layout.native_layout))
+        AdManager.registerAdRenderer(createGoogleAdRender(R.layout.native_layout))
+        AdManager.registerAdRenderer(createSmaatoAdRender(R.layout.native_layout))
+        AdManager.registerAdRenderer(createMopubStaticAdRender(R.layout.native_layout))
         AdManager.preloadAdPlacement(AdConst.NativeAdPlacement)
-        moPubRecyclerAdapter?.registerAdRenderer(createFacebookAdRender(R.layout.native_layout))
-        moPubRecyclerAdapter?.registerAdRenderer(createGoogleAdRender(R.layout.native_layout))
-        moPubRecyclerAdapter?.registerAdRenderer(createSmaatoAdRender(R.layout.native_layout))
-        moPubRecyclerAdapter?.registerAdRenderer(createMopubStaticAdRender(R.layout.native_layout))
+
 //        loadSmaatoNative()
 
     }
@@ -195,7 +197,8 @@ class NativeActivity() : AppCompatActivity() {
 
         //创建adapter
         moPubRecyclerAdapter =
-            MoPubRecyclerAdapter(
+            NativeAdRecyclerAdapter(
+                AdConst.TestNativeID,
                 this,
                 adapter,
                 moPubServerPositioning

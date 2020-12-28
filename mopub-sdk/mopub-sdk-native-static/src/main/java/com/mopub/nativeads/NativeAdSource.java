@@ -79,20 +79,12 @@ class NativeAdSource {
         void onAdsAvailable();
     }
 
-    NativeAdSource() {
+    public NativeAdSource() {
         this(new ArrayList<TimestampWrapper<NativeAd>>(CACHE_LIMIT),
                 new Handler(),
                 new AdRendererRegistry());
     }
-
-    private static NativeAdSource nativeAdSource;
-
-    public static NativeAdSource getInstance() {
-        if (nativeAdSource == null) {
-            nativeAdSource = new NativeAdSource();
-        }
-        return nativeAdSource;
-    }
+    
 
     @VisibleForTesting
     NativeAdSource(@NonNull final List<TimestampWrapper<NativeAd>> nativeAdCache,
@@ -123,9 +115,9 @@ class NativeAdSource {
                 mRequestInFlight = false;
                 mSequenceNumber++;
                 resetRetryTime();
-
                 mNativeAdCache.add(new TimestampWrapper<NativeAd>(nativeAd));
                 if (mNativeAdCache.size() == 1 && mAdSourceListener != null) {
+                    Log.d("FeedNative"+NativeAdSource.this, "onNativeLoad: "+mNativeAdCache.size());
                     mAdSourceListener.onAdsAvailable();
                 }
 
@@ -136,6 +128,7 @@ class NativeAdSource {
             public void onNativeFail(final NativeErrorCode errorCode) {
                 // Reset the retry time for the next time we dequeue.
                 mRequestInFlight = false;
+                Log.d("FeedNative"+NativeAdSource.this, "onNativeFail: "+mNativeAdCache.size());
 
                 // Stopping requests after the max retry count prevents us from using battery when
                 // the user is not interacting with the stream, eg. the app is backgrounded.
@@ -211,11 +204,11 @@ class NativeAdSource {
         if (hasAvailableAds()) {
             if (mAdSourceListener != null) {
                 mAdSourceListener.onAdsAvailable();
-                Log.d("FeedNative", "loadAds: Use Cache");
+                Log.d("FeedNative"+this, "loadAds: Use Cache");
             }
         } else {
             replenishCache();
-            Log.d("FeedNative", "loadAds: Start a Load");
+            Log.d("FeedNative"+this, "loadAds: Start a Load");
         }
     }
 
@@ -266,7 +259,7 @@ class NativeAdSource {
             TimestampWrapper<NativeAd> responseWrapper = mNativeAdCache.remove(0);
 
             if (now - responseWrapper.mCreatedTimestamp < EXPIRATION_TIME_MILLISECONDS) {
-                Log.d("FeedNative", "Use Native Cache: " + mNativeAdCache.size());
+                Log.d("FeedNative"+this, "Use Native Cache: " + mNativeAdCache.size());
                 return responseWrapper.mInstance;
             }
         }

@@ -11,7 +11,7 @@ import mobi.idealabs.ads.core.view.AdNative
 
 
 object AdNativeController {
-
+    private val activeAdIdNativeAdSource = HashMap<String, NativeAdSource>()
 
     internal val adNativeListener = object : AdNativeListener {
         override fun onNativeDestroy(adNative: AdNative) {
@@ -66,13 +66,22 @@ object AdNativeController {
     fun loadAdPlacement(adPlacement: AdPlacement, remoteListener: Boolean = true) {
         if (!AdManager.enable) return
         var nativeAdSource = getNativeAdSource(adPlacement)
+        var secondNativeAdSource: NativeAdSource? = null
+        if (NativeAdSourceManager.isEnableSecondCache(adUnitId = adPlacement.adUnitId)) {
+            secondNativeAdSource =
+                NativeAdSourceManager.getSecondNativeAdSource(adPlacement.adUnitId)
+        }
         adRendererRegistry.rendererIterable.forEach {
             nativeAdSource.registerAdRenderer(it)
+            secondNativeAdSource?.registerAdRenderer(it)
         }
         if (remoteListener) {
-            nativeAdSource.adSourceListener = null;
+            nativeAdSource.adSourceListener = null
+            secondNativeAdSource?.adSourceListener = null
+
         }
         nativeAdSource.loadAds(AdSdk.application!!, adPlacement.adUnitId, null)
+        secondNativeAdSource?.loadAds(AdSdk.application!!, adPlacement.adUnitId, null)
     }
 
 
@@ -82,7 +91,6 @@ object AdNativeController {
         parent: FrameLayout,
         adListener: AdListener
     ): Boolean {
-        var nativeAdSource = getNativeAdSource(adPlacement)
         AdTracking.reportAdChance(
             EventMeta(
                 "",
@@ -100,7 +108,15 @@ object AdNativeController {
                 adListener
             )
         )
-
+        var nativeAdSource = getNativeAdSource(adPlacement)
+        val adUnitId = adPlacement.adUnitId
+        if (NativeAdSourceManager.getSecondNativeAdSource(adUnitId = adUnitId)
+                ?.hasAvailableAds() == true
+        ) {
+            nativeAdSource =
+                NativeAdSourceManager.getSecondNativeAdSource(adUnitId = adUnitId)!!
+            activeAdIdNativeAdSource[adUnitId] = nativeAdSource
+        }
         var result = nativeAdSource.hasAvailableAds()
         nativeAdSource.setAdSourceListener {
             nativeAdSource.adSourceListener = null
@@ -129,17 +145,20 @@ object AdNativeController {
 
 
     private fun getNativeAdSource(adPlacement: AdPlacement): NativeAdSource {
-        return NativeAdSource.getInstance()
+        return NativeAdSourceManager.getNativeAdSource(adPlacement.adUnitId)
     }
 
     internal fun isReady(adPlacement: AdPlacement): Boolean {
-        return getNativeAdSource(adPlacement).hasAvailableAds()
+        var hasAvailableAds = getNativeAdSource(adPlacement).hasAvailableAds()
+        if (hasAvailableAds) return true
+        return NativeAdSourceManager.getSecondNativeAdSource(adPlacement.adUnitId)
+            ?.hasAvailableAds() ?: false
     }
 
     internal fun destroyAdPlacement(adPlacement: AdPlacement) {
-        getNativeAdSource(adPlacement).clear()
-        getNativeAdSource(adPlacement).adSourceListener = null
-
+        var nativeAdSource = activeAdIdNativeAdSource[adPlacement.adUnitId]
+        nativeAdSource?.clear()
+        nativeAdSource?.adSourceListener = null
     }
 
     private val adRendererRegistry = AdRendererRegistry();
