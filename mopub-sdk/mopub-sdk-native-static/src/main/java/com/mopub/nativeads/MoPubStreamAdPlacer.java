@@ -515,8 +515,16 @@ public class MoPubStreamAdPlacer {
         if (nativeAd == null) {
             return CONTENT_VIEW_TYPE;
         }
-
-        return adRendererRegistry.getViewTypeForAd(nativeAd);
+        Iterator<MoPubAdRenderer> iterator = adRendererRegistry.getRendererIterable().iterator();
+        int i = 1;
+        while (iterator.hasNext()) {
+            MoPubAdRenderer next = iterator.next();
+            if (next.getClass() == nativeAd.getMoPubAdRenderer().getClass()) {
+                return i;
+            }
+            i++;
+        }
+        return mAdSource.getViewTypeForAd(nativeAd);
     }
 
     /**

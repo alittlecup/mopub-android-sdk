@@ -116,8 +116,8 @@ class NativeAdSource {
                 mSequenceNumber++;
                 resetRetryTime();
                 mNativeAdCache.add(new TimestampWrapper<NativeAd>(nativeAd));
+                Log.d("FeedNative"+NativeAdSource.this, "onNativeLoad: "+mNativeAdCache.size());
                 if (mNativeAdCache.size() == 1 && mAdSourceListener != null) {
-                    Log.d("FeedNative"+NativeAdSource.this, "onNativeLoad: "+mNativeAdCache.size());
                     mAdSourceListener.onAdsAvailable();
                 }
 
@@ -187,6 +187,7 @@ class NativeAdSource {
     void loadAds(@NonNull final Context activity,
             @NonNull final String adUnitId,
             final RequestParameters requestParameters) {
+        if(mRetryInFlight)return;
         loadAds(requestParameters, new MoPubNative(activity, adUnitId, mMoPubNativeNetworkListener));
     }
 
