@@ -56,6 +56,7 @@ public class MoPubView extends FrameLayout {
         public void onBannerLoaded(@NonNull MoPubView banner);
         public void onBannerFailed(MoPubView banner, MoPubErrorCode errorCode);
         public void onBannerClicked(MoPubView banner);
+        public void onBannerLoadStart(MoPubView banner);
         public void onBannerExpanded(MoPubView banner);
         public void onBannerCollapsed(MoPubView banner);
     }

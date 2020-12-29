@@ -19,8 +19,8 @@ android {
 }
 
 dependencies {
-    implementation project(':mopub-sdk:mopub-sdk-native-static')
-    implementation project(':mopub-sdk:mopub-sdk-base')
+    compileOnly project(':mopub-sdk:mopub-sdk-native-static')
+    compileOnly project(':mopub-sdk:mopub-sdk-base')
     api 'com.google.android.exoplayer:exoplayer:2.11.0'
 }
 

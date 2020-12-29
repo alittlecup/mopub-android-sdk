@@ -13,14 +13,6 @@ object MopubClassChecker {
         listOf<AdsInjectPoint<*>>(
             AdsInjectPoint("com.mopub.mobileads.AdViewController", AdViewControllerAdapter::class),
             AdsInjectPoint("com.mopub.nativeads.MoPubNative", MoPubNativeAdapter::class),
-            AdsInjectPoint(
-                "com.mopub.mobileads.MoPubView\$BannerAdListener",
-                MopubViewBannerAdListenerAdapter::class
-            ),
-            AdsInjectPoint(
-                "com.mopub.mobileads.DefaultBannerAdListener",
-                MopubViewBannerAdListenerAdapter::class
-            ),
             AdsInjectPoint("com.mopub.nativeads.MoPubRecyclerAdapter",MoPubRecyclerAdapterAdapter::class),
             AdsInjectPoint("com.mopub.nativeads.NativeAdSource", NativeAdSourceAdapter::class),
             AdsInjectPoint("com.mopub.nativeads.NativeAdSource\$AdSourceListener", NativeAdSourceNativeAdSourceAdapterAdapter::class),

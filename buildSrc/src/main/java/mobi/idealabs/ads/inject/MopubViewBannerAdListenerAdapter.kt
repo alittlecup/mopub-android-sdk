@@ -1,9 +1,7 @@
 package mobi.idealabs.ads.inject
 
-import com.sun.org.apache.bcel.internal.generic.RETURN
 import org.objectweb.asm.ClassVisitor
 import org.objectweb.asm.Label
-import org.objectweb.asm.MethodVisitor
 import org.objectweb.asm.Opcodes
 
 
@@ -15,6 +13,27 @@ class MopubViewBannerAdListenerAdapter(
         println("adLoader: $className")
     }
     
+    override fun visitEnd() {
+        var methodVisitor = cv.visitMethod(
+            Opcodes.ACC_PUBLIC or Opcodes.ACC_ABSTRACT,
+            "onBannerLoadStart",
+            "(Lcom/mopub/mobileads/MoPubView;)V",
+            null,
+            null
+        )
+        methodVisitor.visitEnd()
+        super.visitEnd()
+    }
+}
+
+class DefaultBannerAdListenerAdapter(
+    val className: String,
+    classVisitor: ClassVisitor?
+) : ClassVisitor(Opcodes.ASM7, classVisitor) {
+    init {
+        println("adLoader: $className")
+    }
+
     override fun visitEnd() {
         var methodVisitor = cv.visitMethod(
             Opcodes.ACC_PUBLIC,
@@ -50,3 +69,5 @@ class MopubViewBannerAdListenerAdapter(
         super.visitEnd()
     }
 }
+
+

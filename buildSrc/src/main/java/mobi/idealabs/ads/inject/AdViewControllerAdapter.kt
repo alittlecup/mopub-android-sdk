@@ -50,11 +50,4 @@ class AdViewControllerMethodVisitor(
 
         super.visitMethodInsn(opcode, owner, name, descriptor, isInterface)
     }
-
-    override fun visitCode() {
-        if (methodName == "internalLoadAd") {
-            MopubInject.injectAdViewControllerBannerStart(mv)
-        }
-        super.visitCode()
-    }
 }

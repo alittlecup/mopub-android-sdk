@@ -1,5 +1,6 @@
 package mobi.idealabs.ads.core.controller
 
+import android.util.Log
 import android.widget.FrameLayout
 import androidx.core.app.ComponentActivity
 import androidx.lifecycle.LifecycleOwner
@@ -34,7 +35,7 @@ object AdManager {
                 }
             }
         } catch (e: Exception) {
-
+            Log.d("AdManager", "preloadAdPlacement: "+e)
         }
 
     }
