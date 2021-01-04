@@ -5,7 +5,7 @@ import org.objectweb.asm.ClassVisitor
 import org.objectweb.asm.MethodVisitor
 import org.objectweb.asm.Opcodes
 
-class AdViewControllerAdapter(
+public class AdViewControllerAdapter(
     val className: String,
     classVisitor: ClassVisitor?
 ) : ClassVisitor(Opcodes.ASM7, classVisitor) {

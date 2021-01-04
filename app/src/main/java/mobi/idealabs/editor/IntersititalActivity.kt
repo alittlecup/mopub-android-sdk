@@ -28,7 +28,7 @@ class IntersititalActivity : AppCompatActivity() {
 
     fun show() {
         load()
-        AdManager.showAdChange(
+        AdManager.showAdChance(
             this, AdConst.InterstitialAdPlacement.name,
             adListener = object : AdListener {
                 override fun onAdStartLoad(adPlacement: AdPlacement?) {

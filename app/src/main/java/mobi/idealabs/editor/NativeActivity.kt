@@ -89,7 +89,7 @@ class NativeActivity() : AppCompatActivity() {
     }
 
     fun show() {
-        AdManager.showAdChange(
+        AdManager.showAdChance(
             this,
             AdConst.NativeAdPlacement.name,
             mBinding.adContainer,

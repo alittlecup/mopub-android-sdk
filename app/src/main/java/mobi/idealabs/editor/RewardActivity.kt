@@ -26,7 +26,7 @@ class RewardActivity : AppCompatActivity() {
     }
 
     fun show() {
-        AdManager.showAdChange(
+        AdManager.showAdChance(
             this,
             AdConst.RewardVideoAdPlacement.name,
             adListener = object : BannerAdListener {

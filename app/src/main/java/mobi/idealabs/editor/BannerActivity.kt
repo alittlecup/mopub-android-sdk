@@ -35,7 +35,7 @@ class BannerActivity : AppCompatActivity() {
     }
 
     fun show() {
-        AdManager.showAdChange(
+        AdManager.showAdChance(
             this,
             AdConst.BannerAdPlacement.name,
             mBinding.adContainer,

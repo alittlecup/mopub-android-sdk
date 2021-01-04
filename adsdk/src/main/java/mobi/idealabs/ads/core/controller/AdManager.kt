@@ -77,7 +77,7 @@ object AdManager {
         }
     }
 
-    fun showAdChange(
+    fun showAdChance(
         lifecycleOwner: LifecycleOwner,
         adChanceName: String,
         viewGroup: FrameLayout? = null,
