@@ -4,13 +4,14 @@ import android.app.Activity
 import androidx.recyclerview.widget.RecyclerView
 import com.mopub.common.VisibilityTracker
 import com.mopub.nativeads.*
+import org.jetbrains.annotations.NotNull
 
 
 public class NativeAdRecyclerAdapter : MoPubRecyclerAdapter {
     private var adUnitId: String = ""
 
     constructor(
-        adUnitId: String,
+        @NotNull adUnitId: String,
         activity: Activity,
         originalAdapter: RecyclerView.Adapter<*>,
         adPositioning: MoPubNativeAdPositioning.MoPubClientPositioning

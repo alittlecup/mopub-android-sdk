@@ -31,11 +31,12 @@ object AdSdk {
         application = context.application
         logAble = adSdkInitStrategy.logAble
         canRetry = adSdkInitStrategy.canRetry
+        sdkInitConfig = sdkConfiguration
+        this.adSdkInitStrategy = adSdkInitStrategy
         MoPub.initializeSdk(context, sdkConfiguration) {
-            sdkInitConfig = sdkConfiguration
             AdManager.initWithActivity(context)
-            this.adSdkInitStrategy = adSdkInitStrategy
             adInitListener.invoke()
+
         }
     }
 

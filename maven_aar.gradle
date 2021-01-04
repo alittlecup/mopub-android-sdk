@@ -48,7 +48,7 @@ afterEvaluate { project ->
     }
     task androidSourcesJar(type: Jar) {
         classifier = 'sources'
-        from android.sourceSets.main.java.sourceFiles
+        from android.sourceSets.main.java.srcDirs
     }
 
     //解决 JavaDoc 中文注释生成失败的问题
@@ -58,7 +58,6 @@ afterEvaluate { project ->
         options.addStringOption('charSet', 'UTF-8')
     }
     artifacts {
-//        archives androidSourcesJar
-//        archives androidJavadocsJar
+        archives androidSourcesJar
     }
 }
