@@ -420,8 +420,14 @@ public  class MoPubRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         Object adResponse = mStreamAdPlacer.getAdData(position);
+        if (mAdLoadedListener instanceof AdsNativeAdFeedListener) {
+            ((AdsNativeAdFeedListener) mAdLoadedListener).onAdBindView(position);
+        }
         if (adResponse != null) {
             mStreamAdPlacer.bindAdView((NativeAd) adResponse, holder.itemView);
+            if (mAdLoadedListener instanceof AdsNativeAdFeedListener) {
+                ((AdsNativeAdFeedListener) mAdLoadedListener).onAdShown(position);
+            }
             return;
         }
 

@@ -2,11 +2,9 @@
 // Licensed under the MoPub SDK License Agreement
 // http://www.mopub.com/legal/sdk-license-agreement/
 
-package mobi.idealabs.ads.core.bean;
+package com.mopub.nativeads;
 
 import androidx.annotation.Keep;
-
-import com.mopub.nativeads.MoPubNativeAdLoadedListener;
 
 @Keep
 public interface AdsNativeAdFeedListener extends MoPubNativeAdLoadedListener {
