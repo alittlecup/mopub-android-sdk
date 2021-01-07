@@ -74,12 +74,12 @@ class NativeActivity() : AppCompatActivity() {
 
     fun load() {
         //加载Feed 广告
-        AdManager.registerAdRenderer(createFacebookAdRender(R.layout.native_layout))
-        AdManager.registerAdRenderer(createGoogleAdRender(R.layout.native_layout))
-        AdManager.registerAdRenderer(createSmaatoAdRender(R.layout.native_layout))
-        AdManager.registerAdRenderer(createMopubStaticAdRender(R.layout.native_layout))
-        AdManager.preloadAdPlacement(AdConst.NativeAdPlacement)
-
+//        AdManager.registerAdRenderer(createFacebookAdRender(R.layout.native_layout))
+//        AdManager.registerAdRenderer(createGoogleAdRender(R.layout.native_layout))
+//        AdManager.registerAdRenderer(createSmaatoAdRender(R.layout.native_layout))
+//        AdManager.registerAdRenderer(createMopubStaticAdRender(R.layout.native_layout))
+//        AdManager.preloadAdPlacement(AdConst.NativeAdPlacement)
+        moPubRecyclerAdapter?.clearAds()
 //        loadSmaatoNative()
 
     }
@@ -189,7 +189,7 @@ class NativeActivity() : AppCompatActivity() {
         val smaatoAdRender = createSmaatoAdRender(R.layout.native_layout)
         //设置广告展示位置
         val moPubServerPositioning = MoPubNativeAdPositioning.MoPubClientPositioning()
-        for (x in 0..100) {
+        for (x in 5..100) {
             if (x % 5 == 0) {
                 moPubServerPositioning.addFixedPosition(x)
             }

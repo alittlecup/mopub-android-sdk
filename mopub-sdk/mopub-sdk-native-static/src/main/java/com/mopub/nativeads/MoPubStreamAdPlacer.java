@@ -214,6 +214,7 @@ public class MoPubStreamAdPlacer {
      * @param adUnitId The ad unit ID to use when loading ads.
      */
     public void loadAds(@NonNull final String adUnitId) {
+        cleared = false;
         loadAds(adUnitId, /* requestParameters */ null);
     }
 
@@ -358,8 +359,16 @@ public class MoPubStreamAdPlacer {
      * When ads are cleared, {@link MoPubNativeAdLoadedListener#onAdRemoved} will be called for each
      * ad that is removed from the stream.
      */
+    private boolean cleared = false;
+
     public void clearAds() {
         removeAdsInRange(0, mItemCount);
+        mNeedsPlacement = false;
+        cleared = true;
+        this.mPlacementHandler.removeMessages(0);
+        this.mPlacementHandler.removeCallbacks(mPlacementRunnable);
+        mPlacementData.clearAds();
+        mAdSource.setAdSourceListener(null);
         mAdSource.clear();
     }
 
@@ -657,7 +666,7 @@ public class MoPubStreamAdPlacer {
 
     private void notifyNeedsPlacement() {
         // Avoid posting if this method has already been called.
-        if (mNeedsPlacement) {
+        if (mNeedsPlacement || cleared) {
             return;
         }
         mNeedsPlacement = true;
