@@ -25,7 +25,7 @@ object AdBannerController {
             LogUtil.d("AdBanner", "onBannerLoadStart: $banner")
             chanceTime = System.currentTimeMillis()
             getAdByAdUnit(banner.adUnitId)?.apply {
-                this.findActiveListeners(this).lastOrNull()?.let {
+                this.findCreateListeners(this).lastOrNull()?.let {
                     if (it is LifecycleAdPlacementObserver && it.adListener is BannerAdListener) {
                         it.adListener.onBannerAdStartLoad(this)
                     }
