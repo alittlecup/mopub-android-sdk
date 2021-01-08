@@ -52,51 +52,6 @@ class NativeAdAdapter(
             super.visitField(access, name, descriptor, signature, value)
         }
     }
-
-    override fun visitEnd() {
-      var  methodVisitor = cv.visitMethod(
-            ACC_PUBLIC,
-            "setMoPubAdRenderer",
-            "(Lcom/mopub/nativeads/MoPubAdRenderer;)V",
-            null,
-            null
-        )
-        methodVisitor.visitCode()
-        val label0 = Label()
-        methodVisitor.visitLabel(label0)
-        methodVisitor.visitVarInsn(ALOAD, 0)
-        methodVisitor.visitVarInsn(ALOAD, 1)
-        methodVisitor.visitFieldInsn(
-            PUTFIELD,
-            "com/mopub/nativeads/NativeAd",
-            "mMoPubAdRenderer",
-            "Lcom/mopub/nativeads/MoPubAdRenderer;"
-        )
-        val label1 = Label()
-        methodVisitor.visitLabel(label1)
-        methodVisitor.visitInsn(RETURN)
-        val label2 = Label()
-        methodVisitor.visitLabel(label2)
-        methodVisitor.visitLocalVariable(
-            "this",
-            "Lcom/mopub/nativeads/NativeAd;",
-            null,
-            label0,
-            label2,
-            0
-        )
-        methodVisitor.visitLocalVariable(
-            "adRenderer",
-            "Lcom/mopub/nativeads/MoPubAdRenderer;",
-            null,
-            label0,
-            label2,
-            1
-        )
-        methodVisitor.visitMaxs(2, 2)
-        methodVisitor.visitEnd()
-        super.visitEnd()
-    }
 }
 
 class NativeAdMethodVisitor(
