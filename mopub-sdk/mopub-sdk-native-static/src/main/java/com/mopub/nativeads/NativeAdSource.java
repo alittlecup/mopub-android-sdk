@@ -45,25 +45,38 @@ class NativeAdSource {
 
     private static final int EXPIRATION_TIME_MILLISECONDS = AD_EXPIRATION_DELAY;
     private static final int MAXIMUM_RETRY_TIME_MILLISECONDS = 5 * 60 * 1000; // 5 minutes.
-    @VisibleForTesting static final int[] RETRY_TIME_ARRAY_MILLISECONDS = new int[]{1000, 3000, 5000, 25000, 60000, MAXIMUM_RETRY_TIME_MILLISECONDS};
+    @VisibleForTesting
+    static final int[] RETRY_TIME_ARRAY_MILLISECONDS = new int[]{1000, 3000, 5000, 25000, 60000, MAXIMUM_RETRY_TIME_MILLISECONDS};
 
-    @NonNull private final List<TimestampWrapper<NativeAd>> mNativeAdCache;
-    @NonNull private final Handler mReplenishCacheHandler;
-    @NonNull private final Runnable mReplenishCacheRunnable;
-    @NonNull private final MoPubNativeNetworkListener mMoPubNativeNetworkListener;
+    @NonNull
+    private final List<TimestampWrapper<NativeAd>> mNativeAdCache;
+    @NonNull
+    private final Handler mReplenishCacheHandler;
+    @NonNull
+    private final Runnable mReplenishCacheRunnable;
+    @NonNull
+    private final MoPubNativeNetworkListener mMoPubNativeNetworkListener;
 
-    @VisibleForTesting boolean mRequestInFlight;
-    @VisibleForTesting boolean mRetryInFlight;
-    @VisibleForTesting int mSequenceNumber;
-    @VisibleForTesting int mCurrentRetries;
+    @VisibleForTesting
+    boolean mRequestInFlight;
+    @VisibleForTesting
+    boolean mRetryInFlight;
+    @VisibleForTesting
+    int mSequenceNumber;
+    @VisibleForTesting
+    int mCurrentRetries;
 
-    @Nullable private AdSourceListener mAdSourceListener;
+    @Nullable
+    private AdSourceListener mAdSourceListener;
 
     // We will need collections of these when we support multiple ad units.
-    @Nullable private RequestParameters mRequestParameters;
-    @Nullable private MoPubNative mMoPubNative;
+    @Nullable
+    private RequestParameters mRequestParameters;
+    @Nullable
+    private MoPubNative mMoPubNative;
 
-    @NonNull private final AdRendererRegistry mAdRendererRegistry;
+    @NonNull
+    private final AdRendererRegistry mAdRendererRegistry;
 
     public boolean hasAvailableAds() {
         return !mNativeAdCache.isEmpty();
@@ -72,7 +85,7 @@ class NativeAdSource {
     /**
      * A listener for when ads are available for dequeueing.
      */
-   public interface AdSourceListener {
+    public interface AdSourceListener {
         /**
          * Called when the number of items available for goes from 0 to more than 0.
          */
@@ -84,12 +97,12 @@ class NativeAdSource {
                 new Handler(),
                 new AdRendererRegistry());
     }
-    
+
 
     @VisibleForTesting
     NativeAdSource(@NonNull final List<TimestampWrapper<NativeAd>> nativeAdCache,
-            @NonNull final Handler replenishCacheHandler,
-            @NonNull AdRendererRegistry adRendererRegistry) {
+                   @NonNull final Handler replenishCacheHandler,
+                   @NonNull AdRendererRegistry adRendererRegistry) {
         mNativeAdCache = nativeAdCache;
         mReplenishCacheHandler = replenishCacheHandler;
         mReplenishCacheRunnable = new Runnable() {
@@ -116,7 +129,7 @@ class NativeAdSource {
                 mSequenceNumber++;
                 resetRetryTime();
                 mNativeAdCache.add(new TimestampWrapper<NativeAd>(nativeAd));
-                Log.d("FeedNative"+NativeAdSource.this, "onNativeLoad: "+mNativeAdCache.size());
+                Log.d("FeedNative" + NativeAdSource.this, "onNativeLoad: " + mNativeAdCache.size());
                 if (mNativeAdCache.size() == 1 && mAdSourceListener != null) {
                     mAdSourceListener.onAdsAvailable();
                 }
@@ -128,7 +141,7 @@ class NativeAdSource {
             public void onNativeFail(final NativeErrorCode errorCode) {
                 // Reset the retry time for the next time we dequeue.
                 mRequestInFlight = false;
-                Log.d("FeedNative"+NativeAdSource.this, "onNativeFail: "+mNativeAdCache.size());
+                Log.d("FeedNative" + NativeAdSource.this, "onNativeFail: " + mNativeAdCache.size());
 
                 // Stopping requests after the max retry count prevents us from using battery when
                 // the user is not interacting with the stream, eg. the app is backgrounded.
@@ -183,17 +196,17 @@ class NativeAdSource {
     public AdSourceListener getAdSourceListener() {
         return mAdSourceListener;
     }
-    
+
     void loadAds(@NonNull final Context activity,
-            @NonNull final String adUnitId,
-            final RequestParameters requestParameters) {
-        if(mRetryInFlight)return;
+                 @NonNull final String adUnitId,
+                 final RequestParameters requestParameters) {
+        if (mRetryInFlight) return;
         loadAds(requestParameters, new MoPubNative(activity, adUnitId, mMoPubNativeNetworkListener));
     }
 
     @VisibleForTesting
     void loadAds(final RequestParameters requestParameters,
-             final MoPubNative moPubNative) {
+                 final MoPubNative moPubNative) {
         clear();
 
         for (MoPubAdRenderer renderer : mAdRendererRegistry.getRendererIterable()) {
@@ -205,17 +218,22 @@ class NativeAdSource {
         if (hasAvailableAds()) {
             if (mAdSourceListener != null) {
                 mAdSourceListener.onAdsAvailable();
-                Log.d("FeedNative"+this, "loadAds: Use Cache");
+                Log.d("FeedNative" + this, "loadAds: Use Cache");
             }
         } else {
             replenishCache();
-            Log.d("FeedNative"+this, "loadAds: Start a Load");
+            Log.d("FeedNative" + this, "loadAds: Start a Load");
         }
     }
 
     /**
      * Clears the ad source, removing any currently queued ads.
      */
+    void destroy() {
+        clear();
+        mAdRendererRegistry.clear();
+    }
+
     void clear() {
         // This will cleanup listeners to stop callbacks from handling old ad units
         if (mMoPubNative != null) {
@@ -260,7 +278,7 @@ class NativeAdSource {
             TimestampWrapper<NativeAd> responseWrapper = mNativeAdCache.remove(0);
 
             if (now - responseWrapper.mCreatedTimestamp < EXPIRATION_TIME_MILLISECONDS) {
-                Log.d("FeedNative"+this, "Use Native Cache: " + mNativeAdCache.size());
+                Log.d("FeedNative" + this, "Use Native Cache: " + mNativeAdCache.size());
                 return responseWrapper.mInstance;
             }
         }

@@ -129,7 +129,7 @@ public class MoPubNative {
             mNativeRequest = null;
         }
         mAdLoader = null;
-
+        mAdRendererRegistry.clear();
         mMoPubNativeNetworkListener = EMPTY_NETWORK_LISTENER;
     }
 

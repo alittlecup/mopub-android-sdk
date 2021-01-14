@@ -383,8 +383,9 @@ public class MoPubStreamAdPlacer {
      */
     public void destroy() {
         mPlacementHandler.removeMessages(0);
-        mAdSource.clear();
+        mAdSource.destroy();
         mPlacementData.clearAds();
+        adRendererRegistry.clear();
     }
 
     /**

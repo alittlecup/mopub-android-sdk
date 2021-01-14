@@ -16,7 +16,8 @@ import java.util.ArrayList;
  */
 public class AdRendererRegistry {
 
-    @NonNull private final ArrayList<MoPubAdRenderer> mMoPubAdRenderers;
+    @NonNull
+    private final ArrayList<MoPubAdRenderer> mMoPubAdRenderers;
 
     public AdRendererRegistry() {
         mMoPubAdRenderers = new ArrayList<MoPubAdRenderer>();
@@ -90,5 +91,9 @@ public class AdRendererRegistry {
         } catch (IndexOutOfBoundsException e) {
             return null;
         }
+    }
+
+    public void clear() {
+        mMoPubAdRenderers.clear();
     }
 }
