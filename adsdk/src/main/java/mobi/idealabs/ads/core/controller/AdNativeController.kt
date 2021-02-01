@@ -17,6 +17,7 @@ object AdNativeController {
         override fun onNativeDestroy(adNative: AdNative) {
             findAdPlacement(adNative.adUnitId)?.apply {
                 this.clearListeners()
+                adRendererRegistry.clear()
                 AdManager.mGlobalAdListener?.onAdDismissed(this)
                 this.findActiveListeners(this).forEach { it.onAdDismissed(this) }
             }
@@ -71,7 +72,7 @@ object AdNativeController {
             secondNativeAdSource =
                 NativeAdSourceManager.getSecondNativeAdSource(adPlacement.adUnitId)
         }
-        adRendererRegistry.rendererIterable.forEach {
+        mockRendererRegistry.rendererIterable.forEach {
             nativeAdSource.registerAdRenderer(it)
             secondNativeAdSource?.registerAdRenderer(it)
         }
@@ -158,10 +159,20 @@ object AdNativeController {
     internal fun destroyAdPlacement(adPlacement: AdPlacement) {
         var nativeAdSource = activeAdIdNativeAdSource[adPlacement.adUnitId]
         nativeAdSource?.clear()
+        adRendererRegistry.clear()
         nativeAdSource?.adSourceListener = null
     }
 
-    private val adRendererRegistry = AdRendererRegistry();
+    private val adRendererRegistry = AdRendererRegistry()
+    private val mockRendererRegistry = AdRendererRegistry()
+    
+    internal fun registerMockAdRenderer(moPubNativeAdRenderer: List<MoPubAdRenderer<*>>){
+        if(moPubNativeAdRenderer.isNotEmpty()){
+            moPubNativeAdRenderer.forEach { 
+                mockRendererRegistry.registerAdRenderer(it)
+            }
+        }
+    }
 
     internal fun registerAdRenderer(
         moPubNativeAdRenderer: MoPubAdRenderer<*>

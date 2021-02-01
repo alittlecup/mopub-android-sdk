@@ -49,8 +49,8 @@ internal object AdInterstitialController {
             LogUtil.d("AdInterstitial", "onInterstitialFailed: ")
             getAdByAdUnit((interstitial as AdInterstitial).adsUnitId)
                 ?.apply {
-                    if (interstitialLoadMap[interstitial] == true && AdSdk.canRetry) {
-                        interstitialLoadMap[interstitial] = false
+                    if (interstitialLoadMap[interstitial.hashCode()] == true && AdSdk.canRetry) {
+                        interstitialLoadMap.remove(interstitial.hashCode())
                         RequestRateTracker.getInstance().registerRateLimit(adUnitId, null, null)
                         interstitial.load()
                     } else {
@@ -95,8 +95,7 @@ internal object AdInterstitialController {
         return AdSdk.findAdPlacement(adUnitId)
     }
 
-    private val interstitialLoadMap =
-        mutableMapOf<MoPubInterstitial, Boolean>()//boolean  表示加载失败后是否再次加载
+    private val interstitialLoadMap = mutableMapOf<Int, Boolean>()//boolean  表示加载失败后是否再次加载
 
 
     fun loadAdPlacement(adPlacement: AdPlacement) {
@@ -114,7 +113,7 @@ internal object AdInterstitialController {
     private fun loadAdInterstitialInternal(adInterstitial: AdInterstitial) {
         if (!adInterstitial.isReady) {
             adInterstitial.load()
-            interstitialLoadMap[adInterstitial] = true
+            interstitialLoadMap[adInterstitial.hashCode()] = true
         }
     }
 

@@ -44,6 +44,10 @@ object AdManager {
         AdNativeController.registerAdRenderer(moPubNativeAdRenderer)
     }
 
+    fun registerMockAdRenderer(moPubNativeAdRenderer: List<MoPubAdRenderer<*>>) {
+        AdNativeController.registerMockAdRenderer(moPubNativeAdRenderer)
+    }
+
     fun preloadAdPlacementByName(placementName: String) {
         val adPlacement = AdSdk.findAdPlacementByName(placementName)
         if (adPlacement != null) {

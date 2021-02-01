@@ -45,7 +45,7 @@ object AdConst {
     private val RewardedPlayable =
         if (debug) "98a687d8ef894d07899e6a8fe3718bcf" else "fb3dc841b39846a4a0b477615c7bd4a6"
     private val Native =
-        if (debug) "80df4331660e4579860ec10036997fb1" else "fd868fbb49ac4975b61f9001f4ad4fa1"
+        if (debug) "11a17b188668469fb0412708c3d16813" else "fd868fbb49ac4975b61f9001f4ad4fa1"
 
 
     val BannerAdPlacement =

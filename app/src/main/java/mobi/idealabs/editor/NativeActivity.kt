@@ -74,11 +74,15 @@ class NativeActivity() : AppCompatActivity() {
 
     fun load() {
         //加载Feed 广告
-//        AdManager.registerAdRenderer(createFacebookAdRender(R.layout.native_layout))
-//        AdManager.registerAdRenderer(createGoogleAdRender(R.layout.native_layout))
-//        AdManager.registerAdRenderer(createSmaatoAdRender(R.layout.native_layout))
-//        AdManager.registerAdRenderer(createMopubStaticAdRender(R.layout.native_layout))
-//        AdManager.preloadAdPlacement(AdConst.NativeAdPlacement)
+        AdManager.registerMockAdRenderer(
+            listOf(
+                createFacebookAdRender(R.layout.native_layout),
+                createGoogleAdRender(R.layout.native_layout),
+                createSmaatoAdRender(R.layout.native_layout),
+                createMopubStaticAdRender(R.layout.native_layout)
+            )
+        )
+        AdManager.preloadAdPlacement(AdConst.NativeAdPlacement)
         moPubRecyclerAdapter?.clearAds()
 //        loadSmaatoNative()
 
