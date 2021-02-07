@@ -5,8 +5,10 @@
 package com.mopub.nativeads;
 
 import android.content.Context;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -52,28 +54,37 @@ public class NativeAd {
      */
     public interface MoPubNativeEventListener {
         void onImpression(final View view);
+
         void onClick(final View view);
     }
 
-    @NonNull private final Context mContext;
-    @NonNull private final BaseNativeAd mBaseNativeAd;
-    @NonNull private  MoPubAdRenderer mMoPubAdRenderer;
-    @NonNull private final Set<String> mImpressionTrackers;
-    @NonNull private final Set<String> mClickTrackers;
-    @NonNull private final String mAdUnitId;
-    @Nullable private ImpressionData mImpressionData;
-    @Nullable private MoPubNativeEventListener mMoPubNativeEventListener;
+    @NonNull
+    private final Context mContext;
+    @NonNull
+    private final BaseNativeAd mBaseNativeAd;
+    @NonNull
+    private MoPubAdRenderer mMoPubAdRenderer;
+    @NonNull
+    private final Set<String> mImpressionTrackers;
+    @NonNull
+    private final Set<String> mClickTrackers;
+    @NonNull
+    private final String mAdUnitId;
+    @Nullable
+    private ImpressionData mImpressionData;
+    @Nullable
+    private MoPubNativeEventListener mMoPubNativeEventListener;
 
     private boolean mRecordedImpression;
     private boolean mIsClicked;
     private boolean mIsDestroyed;
 
     public NativeAd(@NonNull final Context context,
-            @NonNull final List<String> moPubImpressionTrackerUrls,
-            @NonNull final String moPubClickTrackerUrl,
-            @NonNull final String adUnitId,
-            @NonNull final BaseNativeAd baseNativeAd,
-            @NonNull final MoPubAdRenderer moPubAdRenderer) {
+                    @NonNull final List<String> moPubImpressionTrackerUrls,
+                    @NonNull final String moPubClickTrackerUrl,
+                    @NonNull final String adUnitId,
+                    @NonNull final BaseNativeAd baseNativeAd,
+                    @NonNull final MoPubAdRenderer moPubAdRenderer) {
         mContext = context.getApplicationContext();
 
         mAdUnitId = adUnitId;
@@ -107,7 +118,7 @@ public class NativeAd {
              @NonNull final AdResponse adResponse,
              @NonNull final String adUnitId,
              @NonNull final BaseNativeAd baseNativeAd,
-             @NonNull final MoPubAdRenderer moPubAdRenderer){
+             @NonNull final MoPubAdRenderer moPubAdRenderer) {
         this(context, adResponse.getImpressionTrackingUrls(), adResponse.getClickTrackingUrl(), adUnitId, baseNativeAd, moPubAdRenderer);
         mImpressionData = adResponse.getImpressionData();
     }
@@ -212,7 +223,7 @@ public class NativeAd {
         if (mIsDestroyed) {
             return;
         }
-
+        mMoPubAdRenderer = null;
         mBaseNativeAd.destroy();
         mIsDestroyed = true;
     }
