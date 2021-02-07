@@ -37,7 +37,7 @@ android {
 }
 
 dependencies {
-    api fileTree(dir: 'libs', include: ['*.aar'])
+    compileOnly fileTree(dir: 'libs', include: ['*.aar'])
 //    api project(":mopub-sdk:mopub-sdk-native-static")
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
 

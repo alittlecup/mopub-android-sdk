@@ -17,7 +17,6 @@ object AdNativeController {
         override fun onNativeDestroy(adNative: AdNative) {
             findAdPlacement(adNative.adUnitId)?.apply {
                 this.clearListeners()
-                adRendererRegistry.clear()
                 AdManager.mGlobalAdListener?.onAdDismissed(this)
                 this.findActiveListeners(this).forEach { it.onAdDismissed(this) }
             }
